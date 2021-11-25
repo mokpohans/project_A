@@ -11,8 +11,11 @@ for i in place:
         pass
     else:
         print(i)
-        count_list= count_list + 1
-        place_list.insert(count_list,i)
+        count_list = count_list + 1
+        place_list.insert(count_list, i)
 
 print(place_list)
 
+#원본 CSV파일에서 발전소 위치 각각 표를 만듬
+for i in range(0, len(place_list)):
+    globals()["Place_{}".format(i + 1)] = Testdata[Testdata.장소 == place_list[i]]
