@@ -1,19 +1,6 @@
 import tkinter
 from tkinter import ttk
 
-class tempmenu: # 임시 메뉴 판
-    _parent = None
-    def __init__(self, parent):
-        self._parent = parent
-
-        self.measureinfoBtn = ttk.Button(self._parent, text='계측정보')
-        self.reportBtn = ttk.Button(self._parent, text='보고서')
-        self.deviceerrorBtn = ttk.Button(self._parent, text='장애목록')
-
-    def create(self):
-        self.measureinfoBtn.pack()
-        self.reportBtn.pack()
-        self.deviceerrorBtn.pack()
 
 class tempweather: # 임시 날씨 판
     _parent = None
@@ -42,18 +29,22 @@ class tempweather: # 임시 날씨 판
 
 class linearmenu: # 실험중
     _parent = None
-    _buttons = 0
-    _buttonlist = [None]
-    def __init__(self, parent, buttons=0, buttonlist=[None]):
-        self._parent = parent
-        self._buttons = buttons
-        self._buttonlist = buttonlist
 
-        self.linearmenu = ttk.Label(self._parent, anchor='w')
-        if(self._buttons != 0):
-            for num in range(0, buttons+1, 1):
-                pass
-            pass
+    def __init__(self, parent):
+        self._parent = parent
+
+        self.menus = ttk.Panedwindow(self._parent, width=1000, height=100, orient='horizontal')
+        self.measureinfoBtn = ttk.Button(self._parent, text='계측정보')
+        self.reportBtn = ttk.Button(self._parent, text='보고서')
+        self.deviceerrorBtn = ttk.Button(self._parent, text='장애목록')
+
+        self.menus.add(self.measureinfoBtn, weight=1)
+        self.menus.add(self.reportBtn, weight=1)
+        self.menus.add(self.deviceerrorBtn, weight=1)
+
+    def create(self):
+        pass
+        self.menus.pack()
 
 class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상)
     pass

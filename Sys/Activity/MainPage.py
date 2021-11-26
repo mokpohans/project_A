@@ -7,23 +7,21 @@ from Sys.Components import AdditionalWidgets
 class Mainpage:
     def __init__(self, page):
         self._mainpage = page
+        self._mainpage.update()
         self._display_width = self._mainpage.winfo_screenwidth()
         self._display_height = self._mainpage.winfo_screenheight()
         self._window_width = self._mainpage.winfo_width()
         self._window_height = self._mainpage.winfo_height()
-        self._window_cells = self._mainpage.winfo_cells()
-        self._display_cells = self._mainpage.winfo_screencells()
+
         print(self._display_width)
         print(self._display_height)
         print(self._window_width)
         print(self._window_height)
-        print(self._window_cells)
-        print(self._display_cells)
 
     def operate(self):
         #### 베이스 틀
             ### 메뉴, 시간, 날씨 포함하는 베이스 레이블
-        self.menu_base_label = ttk.Label(self._mainpage, width=self._display_width)
+        self.menu_base_label = ttk.Label(self._mainpage, width=self._window_width)
             ### 시간, 발전소 선택 베이스 레이블
         self.middle_base_label = ttk.Label(self._mainpage) # 좌->우 순서
             ## 날씨 표현 레이블
@@ -31,39 +29,26 @@ class Mainpage:
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self.content_base_label = ttk.Label(self._mainpage)
 
-        self.menu_base_label.pack(expand=True, side='left', anchor='w')
+        self.menu_base_label.pack(expand=True)
         self.middle_base_label.pack(expand=True, anchor=tkinter.W)
         self.weather_describe_label.pack(expand=True)
         self.content_base_label.pack(expand=True)
 
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
-        self.menu_label = ttk.Label(self.menu_base_label, width=self._display_width)
-    #테스팅
+        self.menu_label = ttk.Label(self.menu_base_label, width=self._window_width)
+        self.menus = AdditionalWidgets.linearmenu(self.menu_label)
 
-        self.tempmenus = AdditionalWidgets.tempmenu(self.menu_label)
-
-        # self.measureinfoBtn = ttk.Button(self.menu_label, text='계측정보')
-        # self.reportBtn = ttk.Button(self.menu_label, text='보고서')
-        # self.deviceerrorlistBtn = ttk.Button(self.menu_label, text='장애목록')
-    #테스팅
             # 시간 관련 베이스 레이블
         self.time_base_label = ttk.Label(self.middle_base_label)
             # 발전소 선택 레이블
         self.plant_select_label = ttk.Label(self.middle_base_label)
 
-        self.menu_label.pack(expand=True, anchor='w', side=tkinter.LEFT)
+        self.menu_label.pack(expand=True, anchor='w', side='left')
         self.time_base_label.pack(expand=True, anchor='w')
         self.plant_select_label.pack(expand=True)
-        
-    #테스팅
-        # self.tempmenus = AdditionalWidgets.tempmenu(self.menu_label)
-        self.tempmenus.create()
 
-        # self.measureinfoBtn.pack(expand=True)
-        # self.reportBtn.pack(expand=True)
-        # self.deviceerrorlistBtn.pack(expand=True)
-    #테스팅
+        self.menus.create()
 
         ### 컨텐츠 베이스 채우기
             ## 발전 상태 레이블

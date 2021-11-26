@@ -9,11 +9,6 @@ main_window = tkinter.Tk()
 screen_width = main_window.winfo_screenwidth()
 screen_height = main_window.winfo_screenheight()
 
-print(screen_width)
-print(screen_height)
-print(main_window.winfo_width())
-print(main_window.winfo_height())
-
 default_width = 1280    # 디폴트 너비, 높이
 default_height = 960
 
