@@ -1,3 +1,5 @@
+import datetime
+
 import pandas as pd
 #import matplotlib.pyplot as plt
 global Invert_list
@@ -20,12 +22,18 @@ def Invert(Data):
 
 #날짜를 리스트로 만드는 함수
 def Date(Data):
-    date = pd.DatetimeIndex(Data['측정일시'])
-    date_year = [i for i in len(date.year)]
-    date_month = date.month
-    date_day = date.day
+    __date_lsit = ['year', 'month', 'day']
 
-    print(date)
+    for j in __date_lsit:
+        __date = eval("pd.DatetimeIndex(Data['측정일시'])." + j) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
+        globals()["date_{}".format(j)] = [__date[i] for i in range(1, len(__date)-1) if __date[i]!= __date[i+1]] # 년, 월, 일 별로 리스트 생성
+        if len(globals()["date_{}".format(j)]) == 0: # 리스트가 비어있을 때
+            globals()["date_{}".format(j)].append(__date[0]) # 리스트에 최초값 추가
+        print(globals()["date_{}".format(j)])
+
+    date_time = datetime.datetime(date_.year[0] + date_.month[0] + date_.day[0])
+    __data = Data[Data.측정일시 == date_time]
+    print(__data)
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
 pd.set_option('display.max_columns', None) #생략되는 행없이 출력
@@ -47,5 +55,5 @@ for i in place:
 
 # 원본 CSV파일에서 발전소 위치 각각 표를 만듬
 for i in range(0, len(place_list)): # 원본파일이 데이터가 많아서 장소별로 DataFrame을 생성
-    globals()["Place_{}".format(i + 1)] = Testdata[Testdata.장소 == place_list[i]] # 자동변수할당 하여 Place_1, Place_2, ... , Place_10를 생성
+    globals()["Place_{}".format(i + 1)] = Testdata[Testdata.장소 == place_list[i]] # 자동변수할당 하여 Place_1, Place_2, ... , Place_10라는 Datafrrame 생성
 
