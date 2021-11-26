@@ -1,5 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 global Invert_list
 
 # 표 컬럼중 인버터와 관련된 컬럼 리스트
@@ -18,7 +18,14 @@ def Invert(Data):
         print(i, " 전체 평균 :", data_Allmean, " 최대값 :", data_Max,
               " 최소값 :", data_Min, " 중앙값 :", data_Median, "\n")
 
+#날짜를 리스트로 만드는 함수
+def Date(Data):
+    date = pd.DatetimeIndex(Data['측정일시'])
+    date_year = [i for i in len(date.year)]
+    date_month = date.month
+    date_day = date.day
 
+    print(date)
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
 pd.set_option('display.max_columns', None) #생략되는 행없이 출력
