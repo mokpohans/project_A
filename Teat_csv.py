@@ -1,8 +1,6 @@
 import datetime
-
 import pandas as pd
 #import matplotlib.pyplot as plt
-global Invert_list
 
 # 표 컬럼중 인버터와 관련된 컬럼 리스트
 Invert_list= ["인버터전압(R상)", "인버터전압(S상)", "인버터전압(T상)",
@@ -24,23 +22,27 @@ def Invert(Data):
 def Date(Data):
     __date_lsit = ['year', 'month', 'day']
 
-    for j in __date_lsit:
-        __date = eval("pd.DatetimeIndex(Data['측정일시'])." + j) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
-        globals()["date_{}".format(j)] = [__date[i] for i in range(1, len(__date)-1) if __date[i]!= __date[i+1]] # 년, 월, 일 별로 리스트 생성
-        if len(globals()["date_{}".format(j)]) == 0: # 리스트가 비어있을 때
-            globals()["date_{}".format(j)].append(__date[0]) # 리스트에 최초값 추가
-        print(globals()["date_{}".format(j)])
+    for j in range(0,3):
+        __date = eval("pd.DatetimeIndex(Data['측정일시'])." + __date_lsit[j]) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
+        globals()['date_{}'.format(j)] = [__date[i] for i in range(1, len(__date)-1)
+                                          if __date[i]!= __date[i + 1]] # 년, 월, 일 별로 리스트 생성
+        if len(globals()['date_{}'.format(j)]) == 0: # 리스트가 비어있을 때
+            globals()['date_{}'.format(j)].append(__date[0]) # 리스트에 최초값 추가
+        print(globals()['date_{}'.format(j)])
 
-    date_time = datetime.datetime(date_.year[0] + date_.month[0] + date_.day[0])
-    __data = Data[Data.측정일시 == date_time]
-    print(__data)
+    date_time = datetime.datetime(int(date_0[0]), int(date_1[0]), int(date_2[0]))
+    __data = [pd.to_datetime(Data.측정일시) == date]
+    sas=datetime.date(2021, 8, 1)
+
+    sas_data = Data.측정일시 == sas
+    print(sas_data)
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
 pd.set_option('display.max_columns', None) #생략되는 행없이 출력
 # pd.set_option('display.max_rows', None)
 
 # github에 저장되어있는 csv파일을 불러오는 코드
-Testdata = pd.read_csv('https://media.githubusercontent.com/media/mokpohans/project_A/master/CSV/%ED%95%9C%EA%B5%AD%EC%A7%80%EC%97%AD%EB%82%9C%EB%B0%A9%EA%B3%B5%EC%82%AC_%EC%9D%B8%EB%B2%84%ED%84%B0%EB%B3%84%20%EB%B6%84%EB%8B%A8%EC%9C%84%20%ED%83%9C%EC%96%91%EA%B4%91%EB%B0%9C%EC%A0%84%20%EC%A0%95%EB%B3%B4_20210831.csv', encoding='CP949')
+Testdata = pd.read_csv('CSV/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv', encoding='CP949')
 
 # CSV파일에서 장소 열에서 발전소 위치를 중복없이 리스트로 만드는 코드
 place = Testdata.장소 # if문에서 비교를 위한 '장소'열의 값을 place에 저장
