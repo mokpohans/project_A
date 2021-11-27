@@ -1,7 +1,7 @@
 #   GUI 메인 화면 구성입니다.
-import tkinter
+import tkinter as tk
 from tkinter import ttk
-from Sys.Components import AdditionalWidgets
+from Sys.Components import AdditionalWidgets as adwz
 
 
 class Mainpage:
@@ -18,6 +18,7 @@ class Mainpage:
         print(self._window_width)
         print(self._window_height)
 
+
     def operate(self):
         #### 베이스 틀
             ### 메뉴, 시간, 날씨 포함하는 베이스 레이블
@@ -30,14 +31,14 @@ class Mainpage:
         self.content_base_label = ttk.Label(self._mainpage)
 
         self.menu_base_label.pack(expand=True)
-        self.middle_base_label.pack(expand=True, anchor=tkinter.W)
+        self.middle_base_label.pack(expand=True, anchor=tk.W)
         self.weather_describe_label.pack(expand=True)
         self.content_base_label.pack(expand=True)
 
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_label, width=self._window_width)
-        self.menus = AdditionalWidgets.linearmenu(self.menu_label)
+        self.menus = adwz.linearmenu(self.menu_label)
 
             # 시간 관련 베이스 레이블
         self.time_base_label = ttk.Label(self.middle_base_label)

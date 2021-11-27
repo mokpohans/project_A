@@ -1,4 +1,4 @@
-import tkinter
+import tkinter as tk
 from tkinter import ttk
 
 
@@ -27,8 +27,8 @@ class tempweather: # 임시 날씨 판
         self.second_combobox = ttk.Combobox(self.timesetlabel, )
         self.second_label = ttk.Label(self.timesetlabel, text='초')
 
-class linearmenu: # 실험중
-    _parent = None
+class linearmenu: # 현재 사용하는 메뉴 판
+    _parent = None  # 프로젝트 거의 완성될 때 쯤 수정하거나, 프로젝트 끝나고 더 깔끔하게 업데이트 할 것.
 
     def __init__(self, parent):
         self._parent = parent
@@ -59,7 +59,7 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         self._type = type
         self._key_text = key_text
         self._value_text=value_text
-        self.KVlabel = ttk.Label(self._parent, anchor=tkinter.W)
+        self.KVlabel = ttk.Label(self._parent, anchor=tk.W)
 
         if(self._type == 'editable'):
             self._key_label = ttk.Label(self.KVlabel, text=self._key_text)
