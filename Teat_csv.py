@@ -29,36 +29,31 @@ def Date(Data):
     global  year, month, day
 
     __date_lsit = ['year', 'month', 'day']
-    times = ['0:00', '23:59']
     Data['측정일시'] = pd.to_datetime(Data['측정일시'], format="%Y-%m-%d %H:%M") # Data의 측정일시는 object타입 임으로 Datetime타입으로 바꿔준다
-    print(Data.dtypes)
+#    print(Data.dtypes)
     for j in range(0,3):
         __date = eval("pd.DatetimeIndex(Data['측정일시'])." + __date_lsit[j]) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
         globals()['date_{}'.format(j)] = [__date[i] for i in range(1, len(__date)-1)
                                           if __date[i]!= __date[i + 1]] # 년, 월, 일 별로 리스트 생성
         if len(globals()['date_{}'.format(j)]) == 0: # 리스트가 비어있을 때
             globals()['date_{}'.format(j)].append(__date[0]) # 리스트에 최초값 추가
-        print(globals()['date_{}'.format(j)])
+#        print(globals()['date_{}'.format(j)])
 
     year, month, day = 0, 0, 0
-    #for val in range(len(Data)):
-    time_1 = str(date_0[year]) + "-" + str(date_1[month]) + "-" + str(date_2[day])# + " " +str(times[0])
-    time_2 = str(date_0[year]) + "-" + str(date_1[month]) + "-" + str(date_2[day]+1)# + " " +str(times[1])
-    time_min = datetime.datetime.strptime(time_1, '%Y-%m-%d')
-    time_max = datetime.datetime.strptime(time_2, '%Y-%m-%d')
-    print(time_min)
-    print(time_max)
+    time_1 = str(date_0[year]) + "-" + str(date_1[month]) + "-" + str(date_2[day])
 
-    __Date = Data[Data["측정일시"].isin(pd.date_range('2021-08-01 0:00', '2021-08-01 23:59'))]
-    print(Data)
-        # if date_all == __Date:
-        #     globals()["Date_{}-{}-{}".format(year, month, day)] = Data.측정일시[val]
-        # else:
-        #     if Next_Date():
-        #         break
-        #     else:
-        #         pass
-        # print(globals()["Date_{}-{}-{}".format(year, month, day)])
+    for val in range(0, len(Data)):
+        __Date = Data['측정일시'][val].strftime('%Y-%m-%d')
+
+        if time_1 == __Date:
+            globals()["Date_{}-{}-{}".format(year, month, day)] = globals()["Date_{}-{}-{}".format(year, month, day-1)].append(Data.loc[val])
+            print(globals()["Date_{}-{}-{}".format(year, month, day - 1)])
+        else:
+            if Next_Date():
+                break
+            else:
+                pass
+
 
     #date_time = datetime.datetime(int(date_0[0]), int(date_1[0]), int(date_2[0]))
     #__data = [pd.to_datetime(Data.측정일시) == date]
