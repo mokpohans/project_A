@@ -25,14 +25,14 @@ class Mainpage:
         self.menu_base_label = ttk.Label(self._mainpage, width=self._window_width)
             ### 시간, 발전소 선택 베이스 레이블
         self.middle_base_label = ttk.Label(self._mainpage) # 좌->우 순서
-            ## 날씨 표현 레이블
-        self.weather_describe_label = ttk.Label(self._mainpage)
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self.content_base_label = ttk.Label(self._mainpage)
 
-        self.menu_base_label.pack(expand=True)
+        self.menu_base_label.pack(expand=True, anchor=tk.E)
         self.middle_base_label.pack(expand=True, anchor=tk.W)
-        self.weather_describe_label.pack(expand=True)
+        ## 날씨 표현 레이블
+        # self.weather_describe_label = ttk.Label(self._mainpage)
+        # self.weather_describe_label.pack(expand=True)
         self.content_base_label.pack(expand=True)
 
         ### 메뉴 베이스 채우기
@@ -42,14 +42,25 @@ class Mainpage:
 
             # 시간 관련 베이스 레이블
         self.time_base_label = ttk.Label(self.middle_base_label)
+#테스팅
+        # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
+        # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
+        self.test_clock = adwz.temp_digitalclock(self.time_base_label, width=int(self._window_width/2), height=int(self._window_height/24))
+#테스팅
+
             # 발전소 선택 레이블
         self.plant_select_label = ttk.Label(self.middle_base_label)
 
-        self.menu_label.pack(expand=True, anchor='w', side='left')
-        self.time_base_label.pack(expand=True, anchor='w')
+        self.menu_label.pack(expand=True, anchor=tk.W)
+        self.time_base_label.pack(expand=True, anchor=tk.W)
         self.plant_select_label.pack(expand=True)
 
         self.menus.create()
+#테스팅
+        # self.timepart.create()
+        # self.timeprint.create()
+        self.test_clock.create()
+#테스팅
 
         ### 컨텐츠 베이스 채우기
             ## 발전 상태 레이블
