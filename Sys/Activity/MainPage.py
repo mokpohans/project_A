@@ -42,10 +42,11 @@ class Mainpage:
 
             # 시간 관련 베이스 레이블
         self.time_base_label = ttk.Label(self.middle_base_label)
+        self.temp_menus = adwz.tmep_linearmenu(self.time_base_label, 3)
 #테스팅
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
-        self.test_clock = adwz.temp_digitalclock(self.time_base_label, width=int(self._window_width/2), height=int(self._window_height/24))
+        # self.test_clock = adwz.temp_digitalclock(self.time_base_label, width=int(self._window_width/2), height=int(self._window_height/24))
 #테스팅
 
             # 발전소 선택 레이블
@@ -59,7 +60,7 @@ class Mainpage:
 #테스팅
         # self.timepart.create()
         # self.timeprint.create()
-        self.test_clock.create()
+        # self.test_clock.create()
 #테스팅
 
         ### 컨텐츠 베이스 채우기

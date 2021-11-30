@@ -215,6 +215,33 @@ class linearmenu: # 현재 사용하는 메뉴 판
         pass
         self.menus.pack(padx=100)
 
+class tmep_linearmenu:
+    _parent = None
+    _width = 0
+    _hegiht = 0
+    _partitions = 0
+
+    def __init__(self, parent, partitions, width=300, height=50):
+        self._parent = parent
+        self._partitions = partitions
+        self._width = width
+        self._hegiht = height
+
+        self._linearbase = ttk.Frame(self._parent, width=800, height=70)
+        self._linearbase.rowconfigure(index=1, weight=1)
+        self._linearbase.columnconfigure(index=self._partitions, weight=1)
+
+        self._linearbase.pack(expand=True)
+
+        self._buttoncreate(self._linearbase, self._partitions)
+
+    def _buttoncreate(self, parent, amount):
+        for i in range(0, amount):
+            globals()["button{}".format(i)] = ttk.Button(parent, text=f'button{i}')
+
+        #globals()[]
+        button1.grid(row=0, column=0, sticky=tk.NS)
+
 class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상)
     pass
 
