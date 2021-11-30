@@ -228,8 +228,8 @@ class tmep_linearmenu:
         self._hegiht = height
 
         self._linearbase = ttk.Frame(self._parent, width=800, height=70)
-        self._linearbase.rowconfigure(index=1, weight=1)
-        self._linearbase.columnconfigure(index=self._partitions, weight=1)
+        self._linearbase.pack_propagate(False)
+        self._linearbase.grid_propagate(False)
 
         self._linearbase.pack(expand=True)
 
@@ -237,10 +237,10 @@ class tmep_linearmenu:
 
     def _buttoncreate(self, parent, amount):
         for i in range(0, amount):
-            globals()["button{}".format(i)] = ttk.Button(parent, text=f'button{i}')
+            self._linearbase.rowconfigure(index=0, weight=1)
+            self._linearbase.columnconfigure(index=i, weight=1)
+            locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}').grid(row=0, column=i, sticky=tk.NSEW)
 
-        #globals()[]
-        button1.grid(row=0, column=0, sticky=tk.NS)
 
 class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상)
     pass
