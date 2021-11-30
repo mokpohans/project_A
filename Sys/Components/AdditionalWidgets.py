@@ -268,21 +268,34 @@ class temp_digitalclock: # 임시 날씨 판 -> 폐기 예정
 class temp_imagechooser: # 발전소 이미지-선택기
     _parent = None
     _baseFrame = None
-    _image = None
-    _indications=[]
+    _imagelabel = None
     _chooser = None
+    _image = None
+    _images = []
+    _indications = []
 
     _width = 0
     _height = 0
 
-    def __init__(self, parent, image=None, indications=[], width=500, height=500):
+    def __init__(self, parent, image=None, images=[], indications=[], width=500, height=500):
         self._parent = parent
         self._image = image
+        self._images = images
         self._indications = indications
         self._width = width
         self._height = height
 
         self._baseFrame = ttk.Frame(self._parent, width=self._width, height=self._height)
+        self._baseFrame.rowconfigure(index=0, weight=1)
+        self._baseFrame.columnconfigure(index=0, weight=1)
+        self._baseFrame.grid_propagate(False)
+        self._baseFrame.pack_propagate(False)
+
+    def _imgdescribe(self, parent, width, height, image=None, images=[]):
+        self._imagelabel = ttk.Label(parent, width=width, height=height)
+
+    def create(self):
+        self._baseFrame.pack(expand=True)
 
 class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누르면 toplevel이 뜨고 해당 액티비티클래스가 뜨도록 할 함수 작성 예정
     _parent = None
