@@ -15,21 +15,17 @@ def Invert(Data):
         Fun: list = ["mean", "max", "min"] # 통계를 내기위한 기능 리스트
         for fun in Fun:
             globals()["data_{}".format(str(fun))] = eval("data." + fun + "()")
-        # data_Allmean = data.mean() # 평균을 구하는 함수
-        # data_Max = data.max() # 최대값을 구하는 함수
-        # data_Min = data.min() # 최소값을 구하는 함수
-        # data_Median = data.median() # 중앙값을 구하는 함수
-
         print(i, " 전체 평균 :", data_mean, " 최대값 :", data_max,
-              " 최소값 :", data_min, " 중앙값 :", data_median, "\n")
-    return data_mean, data_max, data_min, data_median
+              " 최소값 :", data_min, "\n")
+    return data_mean, data_max, data_min
 
 #날짜를 리스트로 만드는 함수
 def Date(Data):
     global  year, month, day
 
     __date_lsit = ['year', 'month', 'day']
-    Data['측정일시'] = pd.to_datetime(Data['측정일시'], format="%Y-%m-%d %H:%M") # Data의 측정일시는 object타입 임으로 Datetime타입으로 바꿔준다
+    time_lsit = []
+#    Data['측정일시'] = pd.to_datetime(Data['측정일시'], format="%Y-%m-%d %H:%M") # Data의 측정일시는 object타입 임으로 Datetime타입으로 바꿔준다
 #    print(Data.dtypes)
     for j in range(0,3):
         __date = eval("pd.DatetimeIndex(Data['측정일시'])." + __date_lsit[j]) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
@@ -40,19 +36,14 @@ def Date(Data):
 #        print(globals()['date_{}'.format(j)])
 
     year, month, day = 0, 0, 0
-    time_1 = str(date_0[year]) + "-" + str(date_1[month]) + "-" + str(date_2[day])
+    time_1 = str(date_0[year]) + "-" + str(date_1[month]).zfill(2) + "-" + str(date_2[day]).zfill(2)
 
-    for val in range(0, len(Data)):
-        __Date = Data['측정일시'][val].strftime('%Y-%m-%d')
 
-        if time_1 == __Date:
-            globals()["Date_{}-{}-{}".format(year, month, day)] = globals()["Date_{}-{}-{}".format(year, month, day-1)].append(Data.loc[val])
-            print(globals()["Date_{}-{}-{}".format(year, month, day - 1)])
-        else:
-            if Next_Date():
-                break
-            else:
-                pass
+    print(time_1)
+
+#    for i in range(0)
+    __Data = Data[Data['측정일시'].str.contains(time_1)]
+    print(__Data)
 
 
     #date_time = datetime.datetime(int(date_0[0]), int(date_1[0]), int(date_2[0]))
