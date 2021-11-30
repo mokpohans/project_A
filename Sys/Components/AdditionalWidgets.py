@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
 
-class windowSizeHelper:
+class windowSizeHelper: # 별 의미 X
     _parent = None
     _mainpage = None
     _parent_width=0 # 부모위젯의 너비, 높이
@@ -51,8 +51,8 @@ class windowSizeHelper:
         displayheight = self._display_height
         return displayheight
 
-class timeprinter: # 임시 시간 출력기
-    _parent = None
+class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,월,일,시,분,초 단위로 얻어오는 함수 작성
+    _parent = None                  #    -> 문자열을 해석해서 포맷에 맞춰 시간정보 얻어오는 방법도 찾아볼 것
     _printlabel = None
     _width = 0
     _height = 0
@@ -68,14 +68,14 @@ class timeprinter: # 임시 시간 출력기
     _minute = 0
     _second = 0
 
-    def __init__(self, parent, format="%Y년 %m월 %d일 %H시 %M분 %S초", timeVar = None ,width=300, height=50, fit=True):
+    def __init__(self, parent, format="%Y/%m/%d %H:%M", width=300, height=50, fit=True):
         self._parent = parent
         self._format = format
 
         self._entire_time_var = tk.StringVar()
         self._time_var_update()
 
-        self._printlabel = ttk.Label(self._parent, width=self._width, textvariable = self._entire_time_var)  # 시간 출력을 위한 레이블
+        self._printlabel = ttk.Label(self._parent, width=self._width, textvariable=self._entire_time_var)  # 시간 출력을 위한 레이블
 
         self._printlabel.pack_propagate(fit)
         self._printlabel.grid_propagate(fit)
@@ -99,8 +99,78 @@ class timeprinter: # 임시 시간 출력기
         self._clocking()
         self._printlabel.pack(expand=True)
 
+class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예정 -> 엔트리에 값 넣고 변경 시 timeprinter의 내용이 변화하는 함수 예정
+    _parent = None
+    _baseFrame = None
+    _edit_timepanel = None
+    _edit_confirmbtn = None
+    _print_timepanel = None
 
-class temp_digitalclock: # 임시 날씨 판
+    _time_text = ''
+    _var_time_text = None
+
+    _year = 0
+    _str_year = None
+    _month = 0
+    _str_month = None
+    _day = 0
+    _str_day = None
+    _hour = 0
+    _str_hour = None
+    _minute = 0
+    _str_minute = None
+    _second = 0
+    _str_second = None
+
+    _width = 0
+    _height = 0
+
+    def __init__(self, parent, width=500, height=100):
+        self._parent=parent
+        self._width = width
+        self._height = height
+        self._var_time_text = tk.StringVar()
+
+        self._baseFrame = ttk.Frame(self._parent, width=int(self._width/2), height=self._height)
+        self._baseFrame.grid_propagate(False)
+        self._baseFrame.pack_propagate(False)
+        self._baseFrame.rowconfigure(index=0, weight=1)
+        self._baseFrame.columnconfigure(index=0, weight=1)
+        self._baseFrame.columnconfigure(index=1, weight=1)
+
+        self._editpanel_create(self._baseFrame, textvariable=self._var_time_text)
+        self._printpanel_create(self._baseFrame)
+
+    def _editpanel_create(self, parent, textvariable, btntext=None):
+        self._edit_timepanel = ttk.Label(parent, anchor='w', background="red")
+        self._edit_timepanel.rowconfigure(index=0, weight=1)
+        self._edit_timepanel.columnconfigure(index=0, weight=1)
+        self._edit_timepanel.columnconfigure(index=1, weight=1)
+        self._edit_timepanel.pack_propagate(False)
+        self._edit_timepanel.grid_propagate(False)
+        self._edit_timepanel.grid(row=0, column=0, sticky=tk.EW)
+
+        self._edit_entry = ttk.Entry(self._edit_timepanel, textvariable=textvariable)
+        if(btntext==None):
+            self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text='변경')
+        elif(btntext!=None):
+            self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text=btntext)
+        self._edit_entry.grid(row=0, column=0)
+        self._edit_confirmbtn.grid(row=0, column=1)
+
+    def _printpanel_create(self, parent):
+        self._print_timepanel = ttk.Label(parent, background="yellow")
+        self._print_timepanel.grid_propagate(False)
+        self._print_timepanel.pack_propagate(False)
+        self._print_timepanel.grid(row=0, column=1, sticky=tk.EW)
+
+        self._timprinter = timeprinter(self._print_timepanel, width=int(self._width/2), height=self._height)
+        self._timprinter.create()
+
+    def create(self):
+        self._baseFrame.pack(expand=True)
+
+class temp_digitalclock: # 임시 날씨 판 -> 폐기 예정
     _parent = None
     _packagebase = None #(painedwindow) 시간 설정부 , 시간 출력부 구성 예정
     _controlpanel = None #(painedwindow) 시간 설정부; 레이블-콤보박스-레이블-콤보박스...
@@ -195,54 +265,61 @@ class temp_digitalclock: # 임시 날씨 판
     def create(self):
         self._packagebase.pack(expand=True)
 
+class temp_imagechooser: # 발전소 이미지-선택기
+    _parent = None
+    _baseFrame = None
+    _image = None
+    _indications=[]
+    _chooser = None
 
-class linearmenu: # 현재 사용하는 메뉴 판
-    _parent = None  # 프로젝트 거의 완성될 때 쯤 수정하거나, 프로젝트 끝나고 더 깔끔하게 업데이트 할 것.
+    _width = 0
+    _height = 0
 
-    def __init__(self, parent, width=300, height=50):
+    def __init__(self, parent, image=None, indications=[], width=500, height=500):
         self._parent = parent
+        self._image = image
+        self._indications = indications
+        self._width = width
+        self._height = height
 
-        self.menus = ttk.Panedwindow(self._parent, width=800, height=70, orient='horizontal')
-        self.measureinfoBtn = ttk.Button(self.menus, text='계측정보')
-        self.reportBtn = ttk.Button(self.menus, text='보고서')
-        self.deviceerrorBtn = ttk.Button(self.menus, text='장애목록')
+        self._baseFrame = ttk.Frame(self._parent, width=self._width, height=self._height)
 
-        self.menus.add(self.measureinfoBtn, weight=1)
-        self.menus.add(self.reportBtn, weight=1)
-        self.menus.add(self.deviceerrorBtn, weight=1)
-
-    def create(self):
-        pass
-        self.menus.pack(padx=100)
-
-class tmep_linearmenu:
+class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누르면 toplevel이 뜨고 해당 액티비티클래스가 뜨도록 할 함수 작성 예정
     _parent = None
     _width = 0
     _hegiht = 0
     _partitions = 0
+    _texts = []
 
-    def __init__(self, parent, partitions, width=300, height=50):
+    def __init__(self, parent, partitions, texts=[], width=300, height=50):
         self._parent = parent
         self._partitions = partitions
         self._width = width
         self._hegiht = height
+        self._texts = texts
 
         self._linearbase = ttk.Frame(self._parent, width=800, height=70)
         self._linearbase.pack_propagate(False)
         self._linearbase.grid_propagate(False)
 
-        self._linearbase.pack(expand=True)
+        self._buttoncreate(self._linearbase, self._partitions, texts=self._texts)
 
-        self._buttoncreate(self._linearbase, self._partitions)
-
-    def _buttoncreate(self, parent, amount):
+    def _buttoncreate(self, parent, amount, texts=[]):
         for i in range(0, amount):
             self._linearbase.rowconfigure(index=0, weight=1)
             self._linearbase.columnconfigure(index=i, weight=1)
-            locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}').grid(row=0, column=i, sticky=tk.NSEW)
+            if not texts: #텍스트s에 값이 없을 때
+                locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}').grid(row=0, column=i, sticky=tk.NSEW)
+            elif texts: # 텍스트s에 값이 있을 때
+                if(str(type(texts[i])) == "<class 'str'>"):
+                    locals()[f'button{i}'] = ttk.Button(parent, text=texts[i]).grid(row=0, column=i, sticky=tk.NSEW)
+                elif():
+                    print("error occured, please put 'str' type in texts by a list")
 
+    def create(self):
+        self._linearbase.pack(expand=True)
 
-class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상)
+class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상) -> 보류
     pass
 
 class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의 표기에 사용하도록)

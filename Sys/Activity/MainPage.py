@@ -38,12 +38,12 @@ class Mainpage:
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_label, width=self._window_width)
-        self.menus = adwz.linearmenu(self.menu_label)
+        self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
 
             # 시간 관련 베이스 레이블
         self.time_base_label = ttk.Label(self.middle_base_label)
-        self.temp_menus = adwz.tmep_linearmenu(self.time_base_label, 3)
 #테스팅
+        self.timepart = adwz.temp_Dclock(self.time_base_label, width=1000, height=100)
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
         # self.test_clock = adwz.temp_digitalclock(self.time_base_label, width=int(self._window_width/2), height=int(self._window_height/24))
@@ -52,13 +52,13 @@ class Mainpage:
             # 발전소 선택 레이블
         self.plant_select_label = ttk.Label(self.middle_base_label)
 
-        self.menu_label.pack(expand=True, anchor=tk.W)
+        self.menu_label.pack(expand=True, anchor=tk.W, ipadx=100)
         self.time_base_label.pack(expand=True, anchor=tk.W)
         self.plant_select_label.pack(expand=True)
 
         self.menus.create()
 #테스팅
-        # self.timepart.create()
+        self.timepart.create()
         # self.timeprint.create()
         # self.test_clock.create()
 #테스팅
