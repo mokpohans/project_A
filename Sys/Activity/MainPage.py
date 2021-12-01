@@ -30,6 +30,11 @@ class Mainpage:
         self.menu_base_Frame = ttk.Frame(self._mainpage)
             ### 시간, 발전소 선택 베이스 레이블
         self.middle_base_Frame = ttk.Frame(self._mainpage) # 좌->우 순서
+        self.middle_base_Frame.rowconfigure(index=0, weight=1)
+        self.middle_base_Frame.columnconfigure(index=0, weight=1)
+        self.middle_base_Frame.columnconfigure(index=1, weight=1)
+        self.middle_base_Frame.grid_propagate(False)
+        self.middle_base_Frame.pack_propagate(False)
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self.content_base_Frame = ttk.Frame(self._mainpage)
 
@@ -46,9 +51,12 @@ class Mainpage:
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
 
             # 시간 관련 베이스 레이블
-        self.time_base_label = ttk.Label(self.middle_base_Frame)
+        self.time_base_frame = ttk.Frame(self.middle_base_Frame)
+        self.time_base_frame.pack_propagate(False)
+        self.time_base_frame.grid_propagate(False)
+        self.timepart_label = ttk.Label(self.time_base_frame)
 #테스팅
-        self.timepart = adwz.temp_Dclock(self.time_base_label, width=1000, height=100)
+        self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=100)
 
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
@@ -56,14 +64,19 @@ class Mainpage:
 #테스팅
 
             # 발전소 선택 레이블
-        self.plant_select_label = ttk.Label(self.middle_base_Frame)
+        self.plantselect_base_frame = ttk.Frame(self.middle_base_Frame)
+        self.plantselect_base_frame.pack_propagate(False)
+        self.plantselect_base_frame.grid_propagate(False)
+        self.plant_select_label = ttk.Label(self.plantselect_base_frame)
 #테스팅
         self.temp_plant = adwz.temp_imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE)
 #테스팅
 
-        self.menu_label.pack(expand=True, anchor=tk.W, ipadx=100)
-        self.time_base_label.pack(expand=True, anchor=tk.W)
+        self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.plantselect_base_frame.grid(row=0, column=1, sticky=tk.NSEW)
+        self.timepart_label.pack(expand=True)
         self.plant_select_label.pack(expand=True)
+        self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
 
         self.menus.create()
 #테스팅

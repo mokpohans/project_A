@@ -92,7 +92,7 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
 
     def _clocking(self):
         self._time_var_update()
-        self._printlabel.after(500, self._clocking) # 일정 시간 뒤에 지정한 함수를 작동하도록 하는
+        self._printlabel.after(400, self._clocking) # 일정 시간 뒤에 지정한 함수를 작동하도록 하는
                                                     # after함수를 재귀함으로서 일정 시간마다 반복하는 함수로 사용
 
     def create(self):
