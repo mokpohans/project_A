@@ -30,11 +30,6 @@ class Mainpage:
         self.menu_base_Frame = ttk.Frame(self._mainpage)
             ### 시간, 발전소 선택 베이스 레이블
         self.middle_base_Frame = ttk.Frame(self._mainpage) # 좌->우 순서
-        self.middle_base_Frame.rowconfigure(index=0, weight=1)
-        self.middle_base_Frame.columnconfigure(index=0, weight=1)
-        self.middle_base_Frame.columnconfigure(index=1, weight=1)
-        self.middle_base_Frame.grid_propagate(False)
-        self.middle_base_Frame.pack_propagate(False)
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self.content_base_Frame = ttk.Frame(self._mainpage)
 
@@ -50,7 +45,14 @@ class Mainpage:
         self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width)
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
 
-            # 시간 관련 베이스 레이블
+        ### 미들 베이스 채우기
+         #미들 베이스 칸 배분
+        self.middle_base_Frame.rowconfigure(index=0, weight=1)
+        self.middle_base_Frame.columnconfigure(index=0, weight=1)
+        self.middle_base_Frame.columnconfigure(index=1, weight=1)
+        self.middle_base_Frame.grid_propagate(False)
+        self.middle_base_Frame.pack_propagate(False)
+            # 시간 관련 베이스 생성
         self.time_base_frame = ttk.Frame(self.middle_base_Frame)
         self.time_base_frame.pack_propagate(False)
         self.time_base_frame.grid_propagate(False)
@@ -68,9 +70,9 @@ class Mainpage:
         self.plantselect_base_frame.pack_propagate(False)
         self.plantselect_base_frame.grid_propagate(False)
         self.plant_select_label = ttk.Label(self.plantselect_base_frame)
-#테스팅
-        self.temp_plant = adwz.temp_imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/3))
-#테스팅
+
+        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/3))
+
 
         self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.plantselect_base_frame.grid(row=0, column=1, sticky=tk.NSEW)
@@ -81,44 +83,59 @@ class Mainpage:
         self.menus.create()
 #테스팅
         self.timepart.create()
-        # self.timeprint.create()
-        # self.test_clock.create()
-        self.temp_plant.create()
 #테스팅
+        # self.timeprint.create()
+        self.plant_choose.create()
 
         ### 컨텐츠 베이스 채우기
-            ## 발전 상태 레이블
-        self.generate_state_label = ttk.Label(self.content_base_Frame)
-            ## 인버터 상태 레이블
-        self.invertor_state_label = ttk.Label(self.content_base_Frame)
+         #컨텐츠 베이스 칸 할당
+        self.content_base_Frame.grid_propagate(False)
+        self.content_base_Frame.pack_propagate(False)
+        self.content_base_Frame.rowconfigure(index=0, weight=1)
+        self.content_base_Frame.rowconfigure(index=1, weight=1)
+        self.content_base_Frame.columnconfigure(index=0, weight=1)
+            ## 발전 상태 프레임
+        self.generate_state_frame = ttk.Frame(self.content_base_Frame)
+            ## 인버터 상태 프레임
+        self.invertor_state_frame = ttk.Frame(self.content_base_Frame)
 
-        self.generate_state_label.pack(expand=True)
-        self.invertor_state_label.pack(expand=True)
+        self.generate_state_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.invertor_state_frame.grid(row=1, column=0, sticky=tk.NSEW)
 
             # 발전량 레이블
-        self.generate_quantity_label = ttk.Label(self.generate_state_label)
+        self.generate_quantity_label = ttk.Label(self.generate_state_frame)
             # 발전금액 레이블
-        self.generate_fee_label = ttk.Label(self.generate_state_label)
+        self.generate_fee_label = ttk.Label(self.generate_state_frame)
             # 출력량 레이블
-        self.generate_emit_label = ttk.Label(self.generate_state_label)
+        self.generate_emit_label = ttk.Label(self.generate_state_frame)
 
         self.generate_quantity_label.pack(expand=True)
         self.generate_fee_label.pack(expand=True)
         self.generate_emit_label.pack(expand=True)
 
+            ## 인버터 상태 프레임 칸 배분
+        self.invertor_state_frame.grid_propagate(False)
+        self.invertor_state_frame.pack_propagate(False)
+        for i in range (0, 5, 1):
+            self.invertor_state_frame.rowconfigure(index=i, weight=1)
+        self.invertor_state_frame.columnconfigure(index=0, weight=1)
+        
+            # [종류 : 상태]를 나타내는 인덱스 레이블
+        self.index_label = ttk.Label(self.invertor_state_frame)
             # 인버터 1 레이블
-        self.invertor_1_label = ttk.Label(self.invertor_state_label)
+        self.invertor_1_label = ttk.Label(self.invertor_state_frame)
             # 인버터 2 레이블
-        self.invertor_2_label = ttk.Label(self.invertor_state_label)
+        self.invertor_2_label = ttk.Label(self.invertor_state_frame)
             # 인버터 3 레이블
-        self.invertor_3_label = ttk.Label(self.invertor_state_label)
+        self.invertor_3_label = ttk.Label(self.invertor_state_frame)
             # 모듈 온도 레이블
-        self.module_temper_label = ttk.Label(self.invertor_state_label)
+        self.module_temper_label = ttk.Label(self.invertor_state_frame)
 
-        self.invertor_1_label.pack(expand=True)
-        self.invertor_2_label.pack(expand=True)
-        self.invertor_3_label.pack(expand=True)
-        self.module_temper_label.pack(expand=True)
+        self.index_label.grid(row=0, column=0, sticky=tk.NSEW)
+        self.invertor_1_label.grid(row=1, column=0, sticky=tk.NSEW)
+        self.invertor_2_label.grid(row=2, column=0, sticky=tk.NSEW)
+        self.invertor_3_label.grid(row=3, column=0, sticky=tk.NSEW)
+        self.module_temper_label.grid(row=4, column=0, sticky=tk.NSEW)
 
         # self.test = AdditionalWidgets.KVlabel(self.invertor_1_label, type='readonly', key_text='test1', value_text='test2')
         # self.test.create()

@@ -265,7 +265,7 @@ class temp_digitalclock: # 임시 날씨 판 -> 폐기 예정
     def create(self):
         self._packagebase.pack(expand=True)
 
-class temp_imagechooser: # 발전소 이미지-선택기
+class imagechooser: # 발전소 이미지-선택기
     _parent = None
     _baseFrame = None
     _imagelabel = None
@@ -370,34 +370,43 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
     _parent = None
     _type = 'default'
     _key_text = 'default'
-    _value_text = 'default'
+    _value_var = None
+    _kvframe = None
+    _keypart = None
+    _valuepart = None
+
     def __init__(self, parent, type, key_text, value_text='default'):
         self._parent = parent
         self._type = type
         self._key_text = key_text
-        self._value_text=value_text
-        self.KVlabel = ttk.Label(self._parent, anchor=tk.W)
+        self._value_var = tk.StringVar().set(value_text)
+        self._kvframe = ttk.Frame(self._parent)
+
+        self._kvframe.grid_propagate(False)
+        self._kvframe.pack_propagate(False)
+        self._kvframe.rowconfigure(index=0, weight=1)
+        self._kvframe.columnconfigure(index=0, weight=1)
+        self._kvframe.columnconfigure(index=1, weight=1)
 
         if(self._type == 'editable'):
-            self._key_label = ttk.Label(self.KVlabel, text=self._key_text)
-            self._value_label = ttk.Entry(self.KVlabel)
-            if(self._value_text != 'default'):
-                self._value_label.configure(text=self._value_text)
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text)
+            self._valuepart = ttk.Entry(self._kvframe)
+            if(self._value_var.get() != 'default'):
+                self._valuepart.configure(textvariable=self._value_var)
 
-            self.KVlabel.pack(expand=True)
-            self._key_label.grid(row=0, column=0)
-            self._value_entry.grid(row=0, column=1)
+            self._keypart.grid(row=0, column=0, sticky=tk.NSEW)
+            self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
+
         elif(self._type == 'readonly'):
-            self._key_label = ttk.Label(self.KVlabel, text=self._key_text)
-            self._value_label = ttk.Label(self.KVlabel)
-            if (self._value_text != 'default'):
-                self._value_label.configure(text=self._value_text)
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text)
+            self._valuepart = ttk.Label(self._kvframe)
+            if (self._value_var.get() != 'default'):
+                self._valuepart.configure(textvariable=self._value_var)
 
-            self.KVlabel.pack(expand=True)
-            self._key_label.grid(row=0, column=0)
-            self._value_label.grid(row=0, column=1)
+            self._keypart.grid(row=0, column=0)
+            self._valuepart.grid(row=0, column=1)
 
     def create(self):
-        self.KVlabel.pack(expand=True)
-        self._key_label.grid(row=0, column=0)
-        self._value_label.grid(row=0, column=1)
+        self._kvframe.pack(expand=True)
+        self._keypart.grid(row=0, column=0)
+        self._valuepart.grid(row=0, column=1)
