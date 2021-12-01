@@ -277,7 +277,7 @@ class temp_imagechooser: # 발전소 이미지-선택기
     _width = 0
     _height = 0
 
-    def __init__(self, parent, image=None, images=[], indications=[], width=500, height=500):
+    def __init__(self, parent, image=None, images=[], indications=[], anchor=tk.NE ,width=500, height=500):
         self._parent = parent
         self._image = image
         self._images = images
@@ -291,8 +291,23 @@ class temp_imagechooser: # 발전소 이미지-선택기
         self._baseFrame.grid_propagate(False)
         self._baseFrame.pack_propagate(False)
 
-    def _imgdescribe(self, parent, width, height, image=None, images=[]):
+    def _createimglabel(self, parent, width, height, image=None, images=[]):
         self._imagelabel = ttk.Label(parent, width=width, height=height)
+        if(image != None):
+            self._imagelabel.configure(image=image)
+        if(images):
+            self._imagelabel.configure(image=images[0])
+        self._imagelabel.grid(row=0, column=0, sticky=tk.NSEW)
+
+    def _createchooser_by_anchor(self, parent, width=50, onceamount=5, indications=[], rowparts=3, columnparts=3):
+        if(self._imagelabel != None):
+            self._imagelabel.pack_propagate(False)
+            self._imagelabel.grid_propagate(False)
+            for i in range(0, rowparts, 1):
+                self._imagelabel.rowconfigure(index=i, weight=1)
+            for j in range(0, columnparts, 1):
+                self._imagelabel.columnconfigure(index=j, weight=1)
+            self._chooser = ttk.Combobox(parent, width=width, height=onceamount, values=indications, state='readonly')
 
     def create(self):
         self._baseFrame.pack(expand=True)
