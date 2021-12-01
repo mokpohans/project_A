@@ -69,7 +69,7 @@ class Mainpage:
         self.plantselect_base_frame.grid_propagate(False)
         self.plant_select_label = ttk.Label(self.plantselect_base_frame)
 #테스팅
-        self.temp_plant = adwz.temp_imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE)
+        self.temp_plant = adwz.temp_imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/3))
 #테스팅
 
         self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
