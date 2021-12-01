@@ -44,6 +44,7 @@ class Mainpage:
         self.time_base_label = ttk.Label(self.middle_base_label)
 #테스팅
         self.timepart = adwz.temp_Dclock(self.time_base_label, width=1000, height=100)
+
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
         # self.test_clock = adwz.temp_digitalclock(self.time_base_label, width=int(self._window_width/2), height=int(self._window_height/24))
@@ -51,6 +52,9 @@ class Mainpage:
 
             # 발전소 선택 레이블
         self.plant_select_label = ttk.Label(self.middle_base_label)
+#테스팅
+        self.temp_plant = adwz.temp_imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE)
+#테스팅
 
         self.menu_label.pack(expand=True, anchor=tk.W, ipadx=100)
         self.time_base_label.pack(expand=True, anchor=tk.W)
@@ -61,6 +65,7 @@ class Mainpage:
         self.timepart.create()
         # self.timeprint.create()
         # self.test_clock.create()
+        self.temp_plant.create()
 #테스팅
 
         ### 컨텐츠 베이스 채우기

@@ -270,17 +270,19 @@ class temp_imagechooser: # 발전소 이미지-선택기
     _baseFrame = None
     _imagelabel = None
     _chooser = None
+    _image_uri = None
     _image = None
+    _images_uri = []
     _images = []
     _indications = []
 
     _width = 0
     _height = 0
 
-    def __init__(self, parent, image=None, images=[], indications=[], anchor=tk.NE ,width=500, height=500):
+    def __init__(self, parent, image=None, images=[], indications=[], anchor=tk.NE, rowparts=3, columnparts=3,width=500, height=500):
         self._parent = parent
-        self._image = image
-        self._images = images
+        self._image_uri = image
+        self._images_uri = images
         self._indications = indications
         self._width = width
         self._height = height
@@ -291,23 +293,40 @@ class temp_imagechooser: # 발전소 이미지-선택기
         self._baseFrame.grid_propagate(False)
         self._baseFrame.pack_propagate(False)
 
+        self._makeimage(image=self._image_uri, images=self._images_uri)
+
+        self._createimglabel(self._baseFrame, width=self._width, height=self._height, image=self._image)
+        self._createchooser_by_anchor(self._baseFrame, indications=self._indications)
+
     def _createimglabel(self, parent, width, height, image=None, images=[]):
-        self._imagelabel = ttk.Label(parent, width=width, height=height)
+        self._imagelabel = ttk.Label(parent, width=width)
         if(image != None):
             self._imagelabel.configure(image=image)
         if(images):
             self._imagelabel.configure(image=images[0])
         self._imagelabel.grid(row=0, column=0, sticky=tk.NSEW)
 
-    def _createchooser_by_anchor(self, parent, width=50, onceamount=5, indications=[], rowparts=3, columnparts=3):
+    def _createchooser_by_anchor(self, parent, width=50, onceamount=5, indications=[], anchor=tk.NE):
         if(self._imagelabel != None):
             self._imagelabel.pack_propagate(False)
             self._imagelabel.grid_propagate(False)
-            for i in range(0, rowparts, 1):
-                self._imagelabel.rowconfigure(index=i, weight=1)
-            for j in range(0, columnparts, 1):
-                self._imagelabel.columnconfigure(index=j, weight=1)
+            # for i in range(0, rowparts, 1):
+            #     self._imagelabel.rowconfigure(index=i, weight=1)
+            # for j in range(0, columnparts, 1):
+            #     self._imagelabel.columnconfigure(index=j, weight=1)
             self._chooser = ttk.Combobox(parent, width=width, height=onceamount, values=indications, state='readonly')
+            self._chooser.pack(anchor=anchor)
+
+    def _makeimage(self, image=None, images=[]):
+        temp_image = ''
+        temp_images=[]
+        if(image != None):
+            temp_image = tk.PhotoImage(file=image)
+            return temp_image
+        if(images):
+            for i in images:
+                temp_images.append(tk.PhotoImage(file=images[i]))
+                return temp_images
 
     def create(self):
         self._baseFrame.pack(expand=True)
