@@ -375,7 +375,7 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
     _keypart = None
     _valuepart = None
 
-    def __init__(self, parent, type, key_text, value_text='default'):
+    def __init__(self, parent, type, key_text, value_text='default'): # 깃허브 갱신메시지 확인하기
         self._parent = parent
         self._type = type
         self._key_text = key_text
