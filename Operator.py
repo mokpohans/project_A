@@ -10,7 +10,7 @@ screen_width = main_window.winfo_screenwidth()
 screen_height = main_window.winfo_screenheight()
 
 default_width = 1280    # 디폴트 너비, 높이
-default_height = 960
+default_height = 1280
 
 #     타이틀(Solar Electricity Monitoring System)
 main_window.title("S.E.M.S")

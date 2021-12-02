@@ -170,101 +170,6 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def create(self):
         self._baseFrame.pack(expand=True)
 
-class temp_digitalclock: # 임시 날씨 판 -> 폐기 예정
-    _parent = None
-    _packagebase = None #(painedwindow) 시간 설정부 , 시간 출력부 구성 예정
-    _controlpanel = None #(painedwindow) 시간 설정부; 레이블-콤보박스-레이블-콤보박스...
-    _controlbtn = None #(button) 시간 설정 확정
-    
-    _year = ['2021']
-    _str_year = None
-    _month = ['08']
-    _str_month = None
-    _day = [f'{d}' for d in range(1, 32, 1)]
-    _str_day = None
-    _hour = [f'{h}' for h in range(0, 24, 1)]
-    _str_hour = None
-    _minute = [f'{m}' for m in range(0, 60, 1)]
-    _str_minute = None
-    _second = [f'{s}' for s in range(0, 60, 1)]
-    _str_second = None
-
-    _width=0
-    _height=0 # painedwindow 크기
-    def __init__(self, parent, width=300, height=50):
-        self._parent = parent
-        self._width = width
-        self._height= height
-
-        _str_year = tk.StringVar()
-        _str_month = tk.StringVar()
-        _str_day = tk.StringVar()
-        _str_hour = tk.StringVar()
-        _str_minute = tk.StringVar()
-        _str_second = tk.StringVar()
-
-        self._setpackagebase()
-
-        # self.timesetlabel = ttk.Label(self._parent)
-        # self.timeprintlabel = ttk.Label(self._parent)
-        #
-        # self.timesetlabel.pack(expand=True)
-        # self.timeprintlabel.pack(expand=True)
-        #
-        # self.comment_label = ttk.Label(self.timesetlabel, text=comment)
-
-
-    def _setpackagebase(self):
-        self.teststyle = ttk.Style()
-        self.teststyle.configure('test.TLabel', background='green')
-
-        self._packagebase = ttk.Label(self._parent, width=self._width, style='test.TLabel')
-
-        self._setcontrolpanel(self._packagebase)
-        self._controlpanel.pack(expand=True)
-
-    def _setcontrolpanel(self, parent):
-        self._controlpanel = ttk.Panedwindow(parent, width=self._width, height=self._height, orient=tk.HORIZONTAL)
-        self._year_combobox = ttk.Combobox(self._controlpanel, width=2, values=self._year, textvariable=self._str_year, state='readonly')
-        self._year_combobox.current(0)
-        self._year_label = ttk.Label(self._controlpanel, text='년')
-        self._month_combobox = ttk.Combobox(self._controlpanel, width=1, values=self._month, textvariable=self._str_month, state='readonly')
-        self._month_combobox.current(0)
-        self._month_label = ttk.Label(self._controlpanel, text='월')
-        self._day_combobox = ttk.Combobox(self._controlpanel, width=1, values=self._day, textvariable=self._str_day, state='readonly')
-        self._day_combobox.current(0)
-        self._day_label = ttk.Label(self._controlpanel, text='일')
-        self._hour_combobox = ttk.Combobox(self._controlpanel, width=1, values=self._hour, textvariable=self._str_hour, state='readonly')
-        self._hour_combobox.current(0)
-        self._hour_label = ttk.Label(self._controlpanel, text='시')
-        self._minute_combobox = ttk.Combobox(self._controlpanel, width=1, values=self._minute, textvariable=self._str_minute, state='readonly')
-        self._minute_combobox.current(0)
-        self._minute_label = ttk.Label(self._controlpanel, text='분')
-        self._second_combobox = ttk.Combobox(self._controlpanel, width=1, values=self._second, textvariable=self._str_second, state='readonly')
-        self._second_combobox.current(0)
-        self._second_label = ttk.Label(self._controlpanel, text='초')
-        self._controlbtn = ttk.Button(self._controlpanel, text='변경') # command부분 만들것
-
-        self._controlpanel.add(self._year_combobox, weight=1)
-        self._controlpanel.add(self._year_label, weight=1)
-        self._controlpanel.add(self._month_combobox, weight=1)
-        self._controlpanel.add(self._month_label, weight=1)
-        self._controlpanel.add(self._day_combobox, weight=1)
-        self._controlpanel.add(self._day_label, weight=1)
-        self._controlpanel.add(self._hour_combobox, weight=1)
-        self._controlpanel.add(self._hour_label, weight=1)
-        self._controlpanel.add(self._minute_combobox, weight=1)
-        self._controlpanel.add(self._minute_label, weight=1)
-        self._controlpanel.add(self._second_combobox, weight=1)
-        self._controlpanel.add(self._second_label, weight=1)
-        self._controlpanel.add(self._controlbtn, weight=1)
-
-    def setbackgroundimage(self, width=_width, height=_height, image=None):
-        pass
-
-    def create(self):
-        self._packagebase.pack(expand=True)
-
 class imagechooser: # 발전소 이미지-선택기
     _parent = None
     _baseFrame = None
@@ -374,13 +279,20 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
     _kvframe = None
     _keypart = None
     _valuepart = None
+    _width = 0
+    _height = 0
+    _anchor = 'center'
 
-    def __init__(self, parent, type, key_text, value_text='default'): # 깃허브 갱신메시지 확인하기
+    def __init__(self, parent, type, key_text, value_text='default', width=500, height=50, anchor='center'):
         self._parent = parent
         self._type = type
         self._key_text = key_text
-        self._value_var = tk.StringVar().set(value_text)
-        self._kvframe = ttk.Frame(self._parent)
+        self._value_var = tk.StringVar()
+        self._value_var.set(value_text)
+        self._width = width
+        self._height = height
+        self._anchor = anchor
+        self._kvframe = ttk.Frame(self._parent, width=self._width, height=self._height)
 
         self._kvframe.grid_propagate(False)
         self._kvframe.pack_propagate(False)
@@ -389,8 +301,8 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         self._kvframe.columnconfigure(index=1, weight=1)
 
         if(self._type == 'editable'):
-            self._keypart = ttk.Label(self._kvframe, text=self._key_text)
-            self._valuepart = ttk.Entry(self._kvframe)
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
+            self._valuepart = ttk.Entry(self._kvframe, width=int(self._width/2))
             if(self._value_var.get() != 'default'):
                 self._valuepart.configure(textvariable=self._value_var)
 
@@ -398,15 +310,13 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
             self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
 
         elif(self._type == 'readonly'):
-            self._keypart = ttk.Label(self._kvframe, text=self._key_text)
-            self._valuepart = ttk.Label(self._kvframe)
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
+            self._valuepart = ttk.Label(self._kvframe, background='gray', width=int(self._width/2), anchor='center')
             if (self._value_var.get() != 'default'):
                 self._valuepart.configure(textvariable=self._value_var)
 
-            self._keypart.grid(row=0, column=0)
-            self._valuepart.grid(row=0, column=1)
+            self._keypart.grid(row=0, column=0, sticky=tk.NSEW)
+            self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
 
     def create(self):
         self._kvframe.pack(expand=True)
-        self._keypart.grid(row=0, column=0)
-        self._valuepart.grid(row=0, column=1)

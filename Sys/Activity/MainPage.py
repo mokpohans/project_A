@@ -27,23 +27,26 @@ class Mainpage:
     def operate(self):
         #### 베이스 틀
             ### 메뉴, 시간, 날씨 포함하는 베이스 레이블
+        self._mainpage.rowconfigure(index=0, weight=1)
         self.menu_base_Frame = ttk.Frame(self._mainpage)
             ### 시간, 발전소 선택 베이스 레이블
+        self._mainpage.rowconfigure(index=1, weight=1)
         self.middle_base_Frame = ttk.Frame(self._mainpage) # 좌->우 순서
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
+        self._mainpage.rowconfigure(index=2, weight=3)
         self.content_base_Frame = ttk.Frame(self._mainpage)
 
         self.menu_base_Frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.middle_base_Frame.grid(row=1, column=0, sticky=tk.NSEW)
-        ## 날씨 표현 레이블
-        # self.weather_describe_label = ttk.Label(self._mainpage)
-        # self.weather_describe_label.pack(expand=True)
         self.content_base_Frame.grid(row=2, column=0, sticky=tk.NSEW)
 
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width)
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
+
+        self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
+        self.menus.create()
 
         ### 미들 베이스 채우기
          #미들 베이스 칸 배분
@@ -71,16 +74,14 @@ class Mainpage:
         self.plantselect_base_frame.grid_propagate(False)
         self.plant_select_label = ttk.Label(self.plantselect_base_frame)
 
-        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/3))
+        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/5))
 
 
         self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.plantselect_base_frame.grid(row=0, column=1, sticky=tk.NSEW)
         self.timepart_label.pack(expand=True)
         self.plant_select_label.pack(expand=True)
-        self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
 
-        self.menus.create()
 #테스팅
         self.timepart.create()
 #테스팅
@@ -116,20 +117,20 @@ class Mainpage:
             ## 인버터 상태 프레임 칸 배분
         self.invertor_state_frame.grid_propagate(False)
         self.invertor_state_frame.pack_propagate(False)
-        for i in range (0, 5, 1):
+        for i in range(0, 5, 1):
             self.invertor_state_frame.rowconfigure(index=i, weight=1)
         self.invertor_state_frame.columnconfigure(index=0, weight=1)
         
             # [종류 : 상태]를 나타내는 인덱스 레이블
-        self.index_label = ttk.Label(self.invertor_state_frame)
+        self.index_label = ttk.Label(self.invertor_state_frame, text='index:state', background='red')
             # 인버터 1 레이블
-        self.invertor_1_label = ttk.Label(self.invertor_state_frame)
+        self.invertor_1_label = ttk.Label(self.invertor_state_frame, text='invertor1', background='yellow')
             # 인버터 2 레이블
-        self.invertor_2_label = ttk.Label(self.invertor_state_frame)
+        self.invertor_2_label = ttk.Label(self.invertor_state_frame, text='invertor2', background='green')
             # 인버터 3 레이블
-        self.invertor_3_label = ttk.Label(self.invertor_state_frame)
+        self.invertor_3_label = ttk.Label(self.invertor_state_frame, text='invertor3', background='blue')
             # 모듈 온도 레이블
-        self.module_temper_label = ttk.Label(self.invertor_state_frame)
+        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='black')
 
         self.index_label.grid(row=0, column=0, sticky=tk.NSEW)
         self.invertor_1_label.grid(row=1, column=0, sticky=tk.NSEW)
@@ -137,5 +138,7 @@ class Mainpage:
         self.invertor_3_label.grid(row=3, column=0, sticky=tk.NSEW)
         self.module_temper_label.grid(row=4, column=0, sticky=tk.NSEW)
 
-        # self.test = AdditionalWidgets.KVlabel(self.invertor_1_label, type='readonly', key_text='test1', value_text='test2')
-        # self.test.create()
+#테스팅
+        self.test = adwz.KVlabel(self.invertor_1_label, type='readonly', key_text='test1', value_text='test2', width=self._mainpage.winfo_width()-80)
+        self.test.create()
+#테스팅
