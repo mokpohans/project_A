@@ -1,4 +1,3 @@
-import datetime
 import pandas as pd
 import calendar
 global  year, month, day, Date_list, Days
@@ -11,7 +10,6 @@ Invert_list: list= ["인버터전압(R상)", "인버터전압(S상)", "인버터
 # 표 컬럼중 인버터에 대한 통계를 만들고 출력하는 함수
 def Invert(Data):
     for i in Invert_list:
-        data = Data[i]
         Fun: list = ["mean", "max", "min"] # 통계를 내기위한 기능 리스트
         for fun in Fun:
             globals()["data_{}".format(str(fun))] = eval("data." + fun + "()")
@@ -26,20 +24,23 @@ def Date(Data):
 
     print(calendar.monthrange(2021, 8)[1])
 
-    __date_lsit = ['year', 'month', 'day']
-    Data['측정일시'] = pd.to_datetime(Data['측정일시'], format="%Y-%m-%d %H:%M") # Data의 측정일시는 object타입 임으로 Datetime타입으로 바꿔준다
-#    print(Data.dtypes)
+    year, month, day = 0, 0, 0
+    __date_lsit = ['year', 'month']
+
+    Days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, None]
+    Date_list = []
+
     for j in range(0,2):
         __date = eval("pd.DatetimeIndex(Data['측정일시'])." + __date_lsit[j]) # '측정시간'열에서 년도, 월, 일로 분리하기 위한 변수 선언
         globals()['date_{}'.format(j)] = [__date[i] for i in range(1, len(__date)-1)
                                           if __date[i]!= __date[i + 1]] # 년, 월, 일 별로 리스트 생성
         if len(globals()['date_{}'.format(j)]) == 0: # 리스트가 비어있을 때
             globals()['date_{}'.format(j)].append(__date[0]) # 리스트에 최초값 추가
-
     globals()['date_{}'.format(j)].append(__date[-1])
+
     print(globals()['date_{}'.format(j)])
     conut = 0
-    for val in range(0, len(Data)):
+    for val in range(0, len(date_1)*len(Days) - 1):
 
         try:
             Year, Month, Day = str(date_0[year]), str(date_1[month]).zfill(2), str(Days[day]).zfill(2)
@@ -54,33 +55,35 @@ def Date(Data):
         else:
             conut = conut + 1
         Next_Date(year, month, day)
-        print(time_1)
+#        print(time_1)
 
+    month_list : list = []
+    year_list : list = []
 
     for val in Date_list:
-        globals()["Date_{}-{}-{}".format(Year, Month, Day)] = Data[Data['측정일시'].str.contains(val)]
-
-
-    #date_time = datetime.datetime(int(date_0[0]), int(date_1[0]), int(date_2[0]))
-    #__data = [pd.to_datetime(Data.측정일시) == date]
+        globals()["Date_{}_{}_{}".format(Year, Month, Day)] = Data[Data['측정일시'].str.contains(val)]
+        print(val)
 def Next_Date(__Year,__Month, __Day):
     global year, month, day, Days
-    if Days[__Day] == None: # Day
-        day = 0
-        if __Month == str(date_1[-1]).zfill(2): # Month
-            month = 0
-            if __Year == date_0[-1]: # year
-                # if __Day == str(date_2[-1]).zfill(2) and __Month == str(date_1[-1]).zfill(2) and __Year == date_0[-1]:
-                return False
+    try:
+        if Days[__Day] == calendar.monthrange(date_0[year], date_1[month])[1] : # Day
+            day = 0
+            if __Month == str(date_1[-1]).zfill(2): # Month
+                month = 0
+                if __Year == date_0[-1]: # year
+                    # if __Day == str(date_2[-1]).zfill(2) and __Month == str(date_1[-1]).zfill(2) and __Year == date_0[-1]:
+                    return False
+                else:
+                    year = year + 1
+                    return year, month, day
             else:
-                year = year + 1
+                month = month + 1
                 return year, month, day
         else:
-            month = month + 1
+            day = day + 1
             return year, month, day
-    else:
-        day = day + 1
-        return year, month, day
+    except:
+        return False
 
 # def Examine_Date(year, month, day)
 
