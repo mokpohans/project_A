@@ -282,8 +282,12 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
     _width = 0
     _height = 0
     _anchor = 'center'
+    _image_uri = None
+    _image = None
+    _images_uri = []
+    _images = []
 
-    def __init__(self, parent, type, key_text, value_text='default', width=500, height=50, anchor='center'):
+    def __init__(self, parent, type, key_text, value_text='default', width=500, height=50, anchor='center', image=None, images=[]):
         self._parent = parent
         self._type = type
         self._key_text = key_text
@@ -292,6 +296,8 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         self._width = width
         self._height = height
         self._anchor = anchor
+        self._image_uri = image
+        self._images_uri = images
         self._kvframe = ttk.Frame(self._parent, width=self._width, height=self._height)
 
         self._kvframe.grid_propagate(False)
@@ -299,6 +305,8 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         self._kvframe.rowconfigure(index=0, weight=1)
         self._kvframe.columnconfigure(index=0, weight=1)
         self._kvframe.columnconfigure(index=1, weight=1)
+
+        self._makeimage(image=self._image_uri, images=self._images_uri)
 
         if(self._type == 'editable'):
             self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
@@ -318,5 +326,31 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
             self._keypart.grid(row=0, column=0, sticky=tk.NSEW)
             self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
 
-    def create(self):
-        self._kvframe.pack(expand=True)
+        elif(self._type == 'showcase'):
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
+            self._valuepart = ttk.Label(self._kvframe, background='gray', width=int(self._width/2), anchor='center')
+            self._keypart.grid_propagate(False)
+            self._keypart.pack_propagate(False)
+            self._valuepart.grid_propagate(False)
+            self._valuepart.pack_propagate(False)
+            if(self._image != None):
+                self._valuepart_imglabel = ttk.Label(self._valuepart, image=self._image, width=int(self._width/2), anchor='center')
+                self._valuepart_imglabel.pack_propagate(False)
+                self._valuepart_imglabel.update()
+                self._valuepart_imglabel.pack(expand=True, fill='both')
+                # self._valuepart.pack(expand=True)
+                # self._valuepart.configure(image=self._image, anchor=tk.W)
+                # self._valuepart.update()
+
+            self._keypart.grid(row=0, column=0, sticky=tk.NSEW)
+            self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
+
+    def _makeimage(self, image=None, images=[]):
+        if(image != None):
+            self._image = tk.PhotoImage(file=image)
+        if(images):
+            for i in images:
+                self._images.append(tk.PhotoImage(file=images[i]))
+
+    def create(self, padx=0, pady=0, ipadx=0, ipady=0):
+        self._kvframe.pack(expand=True, padx=padx, pady=pady, ipadx=ipadx, ipady=ipady)

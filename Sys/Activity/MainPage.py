@@ -130,7 +130,7 @@ class Mainpage:
             # 인버터 3 레이블
         self.invertor_3_label = ttk.Label(self.invertor_state_frame, text='invertor3', background='blue')
             # 모듈 온도 레이블
-        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='black')
+        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='violet')
 
         self.index_label.grid(row=0, column=0, sticky=tk.NSEW)
         self.invertor_1_label.grid(row=1, column=0, sticky=tk.NSEW)
@@ -138,7 +138,22 @@ class Mainpage:
         self.invertor_3_label.grid(row=3, column=0, sticky=tk.NSEW)
         self.module_temper_label.grid(row=4, column=0, sticky=tk.NSEW)
 
-#테스팅
-        self.test = adwz.KVlabel(self.invertor_1_label, type='readonly', key_text='test1', value_text='test2', width=self._mainpage.winfo_width()-80)
-        self.test.create()
-#테스팅
+        self.indexstate_content = adwz.KVlabel(self.index_label, type='readonly',
+                                               key_text='index', value_text='state', width=self._mainpage.winfo_width())
+        self.invertor1_content = adwz.KVlabel(self.invertor_1_label, type='showcase', key_text='invertor 1',
+                                              image="./Resources/images/test_button_img.png",
+                                              width=self._mainpage.winfo_width())
+        self.invertor2_content = adwz.KVlabel(self.invertor_2_label, type='showcase', key_text='invertor 2',
+                                              image="./Resources/images/test_button_img.png",
+                                              width=self._mainpage.winfo_width())
+        self.invertor3_content = adwz.KVlabel(self.invertor_3_label, type='showcase', key_text='invertor 3',
+                                              image="./Resources/images/test_button_img.png",
+                                              width=self._mainpage.winfo_width())
+        self.moduletemper_content = adwz.KVlabel(self.module_temper_label, type='readonly',
+                                                 key_text='module temperature', value_text='state', width=self._mainpage.winfo_width())
+
+        self.indexstate_content.create(padx=80)
+        self.invertor1_content.create(padx=80)
+        self.invertor2_content.create(padx=80)
+        self.invertor3_content.create(padx=80)
+        self.moduletemper_content.create(padx=80)
