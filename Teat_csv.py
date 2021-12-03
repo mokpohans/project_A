@@ -19,15 +19,15 @@ def Invert(Data):
     return data_mean, data_max, data_min
 
 #날짜를 리스트로 만드는 함수
-def Date(Data):
-    global  year, month, day, Days
+def Date_lists(Data):
+    global  year, month, day, Days, Date_list
 
-    print(calendar.monthrange(2021, 8)[1])
 
     year, month, day = 0, 0, 0
     __date_lsit = ['year', 'month']
 
     Days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, None]
+    month_list = []
     Date_list = []
 
     for j in range(0,2):
@@ -38,7 +38,6 @@ def Date(Data):
             globals()['date_{}'.format(j)].append(__date[0]) # 리스트에 최초값 추가
     globals()['date_{}'.format(j)].append(__date[-1])
 
-    print(globals()['date_{}'.format(j)])
     conut = 0
     for val in range(0, len(date_1)*len(Days) - 1):
 
@@ -51,18 +50,17 @@ def Date(Data):
                 break
         time_1 = Year + "-" + Month + "-" + Day  # 년, 월, 일을 2021-08-01로 만드는 코드
         if Month ==  str(date_1[conut]).zfill(2):
-            Date_list.append(time_1)
+            month_list.append(time_1)
         else:
+            Date_list.append(month_list)
+            month_list = []
             conut = conut + 1
+            month_list.append(time_1)
         Next_Date(year, month, day)
-#        print(time_1)
+    Date_list.append(month_list)
+    return Date_list
 
-    month_list : list = []
-    year_list : list = []
 
-    for val in Date_list:
-        globals()["Date_{}_{}_{}".format(Year, Month, Day)] = Data[Data['측정일시'].str.contains(val)]
-        print(val)
 def Next_Date(__Year,__Month, __Day):
     global year, month, day, Days
     try:
@@ -71,10 +69,10 @@ def Next_Date(__Year,__Month, __Day):
             if __Month == str(date_1[-1]).zfill(2): # Month
                 month = 0
                 if __Year == date_0[-1]: # year
-                    # if __Day == str(date_2[-1]).zfill(2) and __Month == str(date_1[-1]).zfill(2) and __Year == date_0[-1]:
                     return False
                 else:
                     year = year + 1
+
                     return year, month, day
             else:
                 month = month + 1
@@ -85,7 +83,7 @@ def Next_Date(__Year,__Month, __Day):
     except:
         return False
 
-# def Examine_Date(year, month, day)
+
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
 pd.set_option('display.max_columns', None) #생략되는 행없이 출력
