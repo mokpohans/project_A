@@ -1,5 +1,7 @@
 ## 계측 정보 메뉴
-import CSV_Data
+from tkinter import messagebox
+
+import CsvCreate as tc
 import tkinter as tk
 import tkinter.ttk as ttk
 import numpy as np
@@ -13,7 +15,7 @@ global i
 i = 0
 
 def print_sel(e):
-    prid = day_selete.get_date()
+    prid = day_selete.get_date() #DateTime 타입 반환
     print(prid)
 
 ## 공백 프레임 생성 메소드
@@ -40,7 +42,7 @@ def out_btr():
 
     ##그래프 작성 부분####
     x = np.arange(3)
-    years = CSV_Data.Date_list[0][0:]
+    years = ['2018', '2019', '2020']
     values = [10 / i, 40 * i, 9 * i]
 
     plt.bar(x, values)
@@ -55,26 +57,24 @@ def out_btr():
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
+def result(Select):
+    if Select == 1:
+
 
 ## 날짜선택 옵션 함수
 def btr_1():
-    ## 기본 데이터 초기화
-    day_selete.delete(0, tk.END)
     if (type_select.get() == "시간별"):
-        day_selete.insert(0, "2019-08-00")
-        lable_name.configure(text="날짜 [년도-월-일] 입력 : ")
+        print(type_select.get())
 
     elif (type_select.get() == "일별"):
-        day_selete.insert(0, "2019-00")
-        lable_name.configure(text="날짜 [년도-월] 입력 : ")
+        print(type_select.get())
 
     elif (type_select.get() == "월별"):
-        day_selete.insert(0, "2000")
-        lable_name.configure(text="날짜 [년도] 입력")
+        print(type_select.get())
 
     else:
-        day_selete.insert(0, "2019-08-01")
-    day_selete.pack(side="right", padx=5)
+        messagebox.showinfo("선택 오류", "기간선택을 해주세요4")
+
 
 
 menu1_window = tk.Tk()
@@ -134,7 +134,7 @@ type_select_1.set("계측종류 선택")
 
 ##날짜 선택
 ##날짜입력 위젯생성
-day_selete = DateEntry(frame_1_2, year=2021, month=12, day=2)
+day_selete = DateEntry(frame_1_2, year=2021, month=12, day=2, date_pattern='yyyy/MM/dd', state="readonly")
 day_selete.pack(side="right")
 day_selete.bind("<<DateEntrySelected>>", print_sel)
 

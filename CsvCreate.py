@@ -1,6 +1,6 @@
 import pandas as pd
 import calendar
-global  year, month, day, Date_list, Days
+global  year, month, day, Date_list, Days, InvertList
 # 표 컬럼중 인버터와 관련된 컬럼 리스트
 from pandas import DataFrame
 
@@ -8,20 +8,29 @@ Invert_list: list= ["인버터전압(R상)", "인버터전압(S상)", "인버터
               "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)"]
 
 # 표 컬럼중 인버터에 대한 통계를 만들고 출력하는 함수
-def Invert(Data):
+def Inverter(Data):
+    global InvertList
+    InvertList = {}
+    __temp = []
+    Fun: list = ["mean", "max", "min"] # 통계를 내기위한 기능 리스트
+    __data = Data
     for i in Invert_list:
-        Fun: list = ["mean", "max", "min"] # 통계를 내기위한 기능 리스트
-        for fun in Fun:
-            globals()["data_{}".format(str(fun))] = eval("data." + fun + "()")
-
-        print(i, " 전체 평균 :", data_mean, " 최대값 :", data_max,
-              " 최소값 :", data_min, "\n")
-    return data_mean, data_max, data_min
+        __Delete = __data[__data[i] != 0 ].index
+        if len(__Delete) == 0:
+            InvertList[i] = "only 0"
+        else:
+            data = __data.loc[__data[i] != 0]
+            for fun in Fun:
+                globals()["data_{}".format(str(fun))] = eval("data['" + i + "']." + fun + "()")
+                __temp.append(globals()["data_{}".format(str(fun))])
+            InvertList[i] = __temp
+            __temp = []
+    print(InvertList)
+    return #InvertList
 
 #날짜를 리스트로 만드는 함수
 def Date_lists(Data):
     global  year, month, day, Days, Date_list
-
 
     year, month, day = 0, 0, 0
     __date_lsit = ['year', 'month']
