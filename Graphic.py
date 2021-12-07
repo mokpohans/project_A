@@ -1,7 +1,9 @@
 ## 계측 정보 메뉴
+import datetime
+import random
 from tkinter import messagebox
 
-import CsvCreate as tc
+import CsvCreate
 import tkinter as tk
 import tkinter.ttk as ttk
 import numpy as np
@@ -10,13 +12,21 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkcalendar import DateEntry
 from matplotlib.figure import Figure
 
-## 테스트 변수
-global i
-i = 0
+global i, count, Data
 
-def print_sel(e):
-    prid = day_selete.get_date() #DateTime 타입 반환
-    print(prid)
+day = datetime.date.today()
+
+def Get_Data():
+    global Data
+    Date = day_selete.get_date()
+    Data = CsvCreate.Date_Day(CsvCreate.Place_1, str(Date))
+    try:
+        if len(Data) == 0:
+            messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+    except TypeError:
+        messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+    else:
+        out_btr()
 
 ## 공백 프레임 생성 메소드
 def f_x(frame_name, x):
@@ -27,6 +37,17 @@ def f_y(frame_name, y):
     instant_frame = ttk.Frame(frame_name)
     instant_frame.pack(side="top", padx=y)
 
+def xlable(time):
+    global count
+    if time == 1 :
+        __max = 25
+    elif time == 2:
+        __max = CsvCreate.Months(day_selete.get_date()) + 1
+    elif time == 3:
+        __max = 13
+    lable = [i for i in range(1, __max)]
+    count = __max
+    return lable
 
 ## 출력 버튼 메소드
 def out_btr():
@@ -34,17 +55,14 @@ def out_btr():
     ax.clear()
 
     ## 테스트 코드
-    global i
-    i += 1
-    print("기간종류 : " + type_select.get())
-    print("계측종류 : " + type_select_1.get())
-    print(i)
+    global i, count
 
     ##그래프 작성 부분####
-    x = np.arange(3)
-    years = ['2018', '2019', '2020']
-    values = [10 / i, 40 * i, 9 * i]
 
+    years = xlable(i)
+    values = [random.randrange(10, 100) for _ in range(0, len(years))]
+
+    x = np.arange(count - 1)
     plt.bar(x, values)
     plt.xticks(x, years)
 
@@ -57,24 +75,36 @@ def out_btr():
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-def result(Select):
-    if Select == 1:
-
-
 ## 날짜선택 옵션 함수
 def btr_1():
+    global i
+    i = 0
     if (type_select.get() == "시간별"):
-        print(type_select.get())
+        i = 1
 
     elif (type_select.get() == "일별"):
-        print(type_select.get())
+        i = 2
 
     elif (type_select.get() == "월별"):
-        print(type_select.get())
+        i = 3
 
     else:
-        messagebox.showinfo("선택 오류", "기간선택을 해주세요4")
+        messagebox.showerror("선택 오류", "기간선택을 해주세요.")
 
+def btr_2():
+    global i
+    i = 0
+    if (type_select_1.get() == "발전량"):
+        i = 1
+
+    elif (type_select_1.get() == "발전금액"):
+        i = 2
+
+    elif (type_select_1.get() == "출력량"):
+        i = 3
+
+    else:
+        messagebox.showerror("선택 오류", "계측종류를 해주세요.")
 
 
 menu1_window = tk.Tk()
@@ -124,7 +154,7 @@ op_btr = ttk.Button(frame_1_2, text="적용", command=btr_1, width=15)
 op_btr.pack(side="left", padx=5)
 
 ##출력 버튼 위젯 생성
-output_btr = ttk.Button(frame_1_2, text="출력", command=out_btr)
+output_btr = ttk.Button(frame_1_2, text="출력", command=Get_Data)
 output_btr.pack(side="right", padx=5)
 
 ## 계측종류 선택 프레임
@@ -134,9 +164,9 @@ type_select_1.set("계측종류 선택")
 
 ##날짜 선택
 ##날짜입력 위젯생성
-day_selete = DateEntry(frame_1_2, year=2021, month=12, day=2, date_pattern='yyyy/MM/dd', state="readonly")
+day_selete = DateEntry(frame_1_2, year=day.year, month=day.month, day= day.day ,date_pattern='yyyy/MM/dd', state="readonly")
 day_selete.pack(side="right")
-day_selete.bind("<<DateEntrySelected>>", print_sel)
+day_selete.bind("<<DateEntrySelected>>")
 
 ##lable 위젯 생성
 lable_name = ttk.Label(frame_1_2, text="날짜입력 : ")
