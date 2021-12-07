@@ -103,6 +103,12 @@ class Mainpage:
         self.generate_state_frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.invertor_state_frame.grid(row=1, column=0, sticky=tk.NSEW)
 
+        ##발전량, 발전금액, 출력량 채우기
+        self.generate_state_frame.grid_propagate(False)
+        self.generate_state_frame.pack_propagate(False)
+        for i in range(0,4):
+            self.generate_state_frame.rowconfigure(index=i, weight=1)
+        self.generate_state_frame.columnconfigure(index=0, weight=1)
             # 발전량 레이블
         self.generate_quantity_label = ttk.Label(self.generate_state_frame)
             # 발전금액 레이블
@@ -110,9 +116,22 @@ class Mainpage:
             # 출력량 레이블
         self.generate_emit_label = ttk.Label(self.generate_state_frame)
 
-        self.generate_quantity_label.pack(expand=True)
-        self.generate_fee_label.pack(expand=True)
-        self.generate_emit_label.pack(expand=True)
+            # 인덱스와 상태들 보이기
+        self.generate_index_label = ttk.Label(self.generate_state_frame)
+        self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, texts=['', '일간', '월간', '누적'], width=800, height=50)
+        self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, texts=['발전량', '0', '0', '0'], width=800, height=50)
+        self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, texts=['발전금액', '0', '0', '0'], width=800, height=50)
+        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['출력량', '0', '0', '0'], width=800, height=50)
+
+        self.generate_index_label.grid(row=0, column=0)
+        self.generate_quantity_label.grid(row=1, column=0)
+        self.generate_fee_label.grid(row=2, column=0)
+        self.generate_emit_label.grid(row=3, column=0)
+
+        self.generate_indexs.create()
+        self.generate_quanitiy_state.create()
+        self.generate_fee_state.create()
+        self.generate_emit_state.create()
 
             ## 인버터 상태 프레임 칸 배분
         self.invertor_state_frame.grid_propagate(False)
