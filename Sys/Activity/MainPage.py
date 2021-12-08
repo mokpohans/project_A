@@ -30,7 +30,7 @@ class Mainpage:
         self._mainpage.rowconfigure(index=0, weight=1)
         self.menu_base_Frame = ttk.Frame(self._mainpage)
             ### 시간, 발전소 선택 베이스 레이블
-        self._mainpage.rowconfigure(index=1, weight=1)
+        self._mainpage.rowconfigure(index=1, weight=3)
         self.middle_base_Frame = ttk.Frame(self._mainpage) # 좌->우 순서
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self._mainpage.rowconfigure(index=2, weight=3)
@@ -44,6 +44,7 @@ class Mainpage:
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width)
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
+        # self.menus = adwz.linearmenu(self.menu_label, 3)
 
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
         self.menus.create()
@@ -84,6 +85,8 @@ class Mainpage:
 
 #테스팅
         self.timepart.create()
+
+
 #테스팅
         # self.timeprint.create()
         self.plant_choose.create()
@@ -121,7 +124,7 @@ class Mainpage:
         self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, texts=['', '일간', '월간', '누적'], width=800, height=50)
         self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, texts=['발전량', '0', '0', '0'], width=800, height=50)
         self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, texts=['발전금액', '0', '0', '0'], width=800, height=50)
-        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['출력량', '0', '0', '0'], width=800, height=50)
+        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['현재출력량', '0', '', ''], width=800, height=50)
 
         self.generate_index_label.grid(row=0, column=0)
         self.generate_quantity_label.grid(row=1, column=0)

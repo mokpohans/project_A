@@ -2,54 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
 
-class windowSizeHelper: # 별 의미 X
-    _parent = None
-    _mainpage = None
-    _parent_width=0 # 부모위젯의 너비, 높이
-    _parent_height=0
-    _window_width=0 # tikinter 창의 너비, 높이
-    _widnow_height=0
-    _display_width=0 # 모니터 해상도의 너비, 높이
-    _display_height=0
-
-    def __init__(self, parent, root=None):
-        self._parent = parent
-        self._parent.update()
-        self._parent_width = self._parent.winfo_width()
-        self._parent_height = self._parent.winfo_height()
-
-        if(root != None):
-            self._mainpage = root
-            self._mainpage.update()
-            self._window_width = self._mainpage.winfo_width()
-            self._window_height = self._mainpage.winfo_height()
-            self._display_width = self._mainpage.winfo_screenwidth()
-            self._display_height = self._mainpage.winfo_screenheight()
-        elif(root == None):
-            self._parent.update()
-            self._window_width = self._parent_width
-            self._window_height = self._parent_height
-            self._display_width = self._parent.winfo_screenwidth()
-            self._display_height = self._parent.winfo_screenheight()
-
-    def getParentWidth(self):
-        parentwidth = self._parent_width
-        return parentwidth
-    def getParentHeight(self):
-        parentheight = self._parent_height
-        return parentheight
-    def getWindowWidth(self):
-        windowwidth = self._window_width
-        return windowwidth
-    def getWindowHeight(self):
-        windowheight = self._window_height
-        return windowheight
-    def getDisplayWidth(self):
-        displaywidth = self._display_width
-        return displaywidth
-    def getDisplayHeight(self):
-        displayheight = self._display_height
-        return displayheight
 
 class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,월,일,시,분,초 단위로 얻어오는 함수 작성
     _parent = None                  #    -> 문자열을 해석해서 포맷에 맞춰 시간정보 얻어오는 방법도 찾아볼 것
@@ -99,6 +51,9 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
         self._clocking()
         self._printlabel.pack(expand=True)
 
+    def getTimeVar(self):
+        return self._entire_time_var
+
 class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예정 -> 엔트리에 값 넣고 변경 시 timeprinter의 내용이 변화하는 함수 예정
     _parent = None
     _baseFrame = None
@@ -126,7 +81,7 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     _height = 0
 
     def __init__(self, parent, width=500, height=100):
-        self._parent=parent
+        self._parent = parent
         self._width = width
         self._height = height
         self._var_time_text = tk.StringVar()
@@ -170,6 +125,7 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def create(self):
         self._baseFrame.pack(expand=True)
 
+
 class imagechooser: # 발전소 이미지-선택기
     _parent = None
     _baseFrame = None
@@ -184,7 +140,7 @@ class imagechooser: # 발전소 이미지-선택기
     _width = 0
     _height = 0
 
-    def __init__(self, parent, image=None, images=[], indications=[], anchor=tk.NE, rowparts=3, columnparts=3,width=500, height=500):
+    def __init__(self, parent, image=None, images=[], indications=[], anchor=tk.NE, rowparts=3, columnparts=3, width=500, height=500):
         self._parent = parent
         self._image_uri = image
         self._images_uri = images
@@ -239,6 +195,7 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
     _hegiht = 0
     _partitions = 0
     _texts = []
+    _textVars = []
 
     def __init__(self, parent, partitions, texts=[], width=300, height=50):
         self._parent = parent
