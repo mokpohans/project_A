@@ -5,11 +5,12 @@ from Sys.Components import AdditionalWidgets as adwz
 
 
 class Mainpage:
-    def __init__(self, page):
+    def __init__(self, page, pagewidth=1280, pageheight=1280):
         self._mainpage = page
         self._mainpage.grid_propagate(False)
         self._mainpage.pack_propagate(False)
-        self._mainpage.columnconfigure(index=0, weight=1)
+        self._mainpage.columnconfigure(index=0, weight=99)
+        self._mainpage.columnconfigure(index=1, weight=1)
         for i in range(0, 3, 1):
             self._mainpage.rowconfigure(index=i, weight=1)
         self._mainpage.update()
@@ -22,7 +23,6 @@ class Mainpage:
         print(self._display_height)
         print(self._window_width)
         print(self._window_height)
-
 
     def operate(self):
         #### 베이스 틀

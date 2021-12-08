@@ -10,7 +10,7 @@ screen_width = main_window.winfo_screenwidth()
 screen_height = main_window.winfo_screenheight()
 
 default_width = 1280    # 디폴트 너비, 높이
-default_height = 1280
+default_height = 960
 
 #     타이틀(Solar Electricity Monitoring System)
 main_window.title("S.E.M.S")
@@ -18,7 +18,7 @@ main_window.title("S.E.M.S")
 main_window.geometry(f"{default_width}x{default_height}")
 
 
-main_page = MainPage.Mainpage(main_window)
+main_page = MainPage.Mainpage(main_window, pagewidth=1280, pageheight=2560)
 main_page.operate()
 
 main_window.mainloop()
