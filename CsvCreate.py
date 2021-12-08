@@ -1,5 +1,4 @@
 import datetime
-
 import pandas as pd
 import calendar
 global  year, month, day, Date_list, Days
@@ -94,21 +93,10 @@ def Next_Date(__Year : str,__Month : str, __Day):
     except:
         return False
 
-def Months(time):
-    __month = time.month
-    __year = time.year
-    __time = calendar.monthrange(__year, __month)[ 1 ]
-    return __time
 
-# def test(Data, type):
-#     if type == 1:
-#         Data
-#     elif type == 2:
-#
-#     elif type == 3:
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
-#pd.set_option('display.max_columns', None) #생략되는 행없이 출력
+# pd.set_option('display.max_columns', None) #생략되는 행없이 출력
 # pd.set_option('display.max_rows', None)
 
 # github에 저장되어있는 csv파일을 불러오는 코드

@@ -2,7 +2,7 @@
 import datetime
 import random
 from tkinter import messagebox
-
+import CsvData
 import CsvCreate
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -42,7 +42,7 @@ def xlable(time):
     if time == 1 :
         __max = 25
     elif time == 2:
-        __max = CsvCreate.Months(day_selete.get_date()) + 1
+        __max = CsvData.Months(day_selete.get_date()) + 1
     elif time == 3:
         __max = 13
     lable = [i for i in range(1, __max)]
@@ -92,8 +92,6 @@ def btr_1():
         messagebox.showerror("선택 오류", "기간선택을 해주세요.")
 
 def btr_2():
-    global i
-    i = 0
     if (type_select_1.get() == "발전량"):
         i = 1
 
