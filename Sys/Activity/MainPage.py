@@ -44,7 +44,6 @@ class Mainpage:
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width)
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
-        # self.menus = adwz.linearmenu(self.menu_label, 3)
 
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
         self.menus.create()
@@ -109,7 +108,7 @@ class Mainpage:
         ##발전량, 발전금액, 출력량 채우기
         self.generate_state_frame.grid_propagate(False)
         self.generate_state_frame.pack_propagate(False)
-        for i in range(0,4):
+        for i in range(0, 4):
             self.generate_state_frame.rowconfigure(index=i, weight=1)
         self.generate_state_frame.columnconfigure(index=0, weight=1)
             # 발전량 레이블
