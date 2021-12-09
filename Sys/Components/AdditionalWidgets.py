@@ -61,6 +61,12 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     _edit_confirmbtn = None
     _print_timepanel = None
 
+    _framebg = None
+    _image_uri = None
+    _image = None
+    _images_uri = []
+    _images = []
+
     _time_text = ''
     _var_time_text = None
 
@@ -80,26 +86,51 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     _width = 0
     _height = 0
 
-    def __init__(self, parent, width=500, height=100):
+    def __init__(self, parent, width=500, height=100, frameBG=None, images=[], image=None):
         self._parent = parent
         self._width = width
         self._height = height
         self._var_time_text = tk.StringVar()
+        self._framebg = frameBG
+        self._images_uri = images
+        self._image_uri = image
 
-        self._baseFrame = ttk.Frame(self._parent, width=int(self._width/2), height=self._height)
+        self._baseFrame = ttk.Frame(self._parent, width=self._width, height=self._height)
+        if(self._framebg != None):
+            self._baseFrame.configure(style=self._framebg)
         self._baseFrame.grid_propagate(False)
         self._baseFrame.pack_propagate(False)
         self._baseFrame.rowconfigure(index=0, weight=1)
         self._baseFrame.columnconfigure(index=0, weight=1)
-        self._baseFrame.columnconfigure(index=1, weight=1)
 
-        self._editpanel_create(self._baseFrame, textvariable=self._var_time_text)
-        self._printpanel_create(self._baseFrame)
+        self._makeimage(image=self._image_uri, images=self._images_uri)
+
+        self._background_panel = ttk.Label(self._baseFrame, width=self._width)
+        if(self._images):
+            self._background_panel.configure(image=self._images[0])
+        elif(self._image != None):
+            self._background_panel.configure(image=self._image)
+        self._background_panel.grid_propagate(False)
+        self._background_panel.pack_propagate(False)
+        self._background_panel.rowconfigure(index=0, weight=1)
+        self._background_panel.columnconfigure(index=0, weight=1)
+        self._background_panel.columnconfigure(index=1, weight=1)
+        self._background_panel.grid(row=0, column=0, sticky=tk.NSEW)
+
+        self._editpanel_create(self._background_panel, textvariable=self._var_time_text)
+        self._printpanel_create(self._background_panel)
+
+    def _makeimage(self, image=None, images=[]):
+        if(image != None):
+            self._image = tk.PhotoImage(file=image)
+        if(images):
+            for i in images:
+                self._images.append(tk.PhotoImage(file=images[i]))
 
     def _editpanel_create(self, parent, textvariable, btntext=None):
-        self._edit_timepanel = ttk.Label(parent, anchor='w', background="red")
+        self._edit_timepanel = ttk.Label(parent, anchor='w', background="#cfffe5") # 민트색 : #cfffe5
         self._edit_timepanel.rowconfigure(index=0, weight=1)
-        self._edit_timepanel.columnconfigure(index=0, weight=1)
+        self._edit_timepanel.columnconfigure(index=0, weight=3)
         self._edit_timepanel.columnconfigure(index=1, weight=1)
         self._edit_timepanel.pack_propagate(False)
         self._edit_timepanel.grid_propagate(False)
@@ -110,11 +141,11 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
             self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text='변경')
         elif(btntext!=None):
             self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text=btntext)
-        self._edit_entry.grid(row=0, column=0)
-        self._edit_confirmbtn.grid(row=0, column=1)
+        self._edit_entry.grid(row=0, column=0, sticky=tk.E)
+        self._edit_confirmbtn.grid(row=0, column=1, sticky=tk.EW)
 
     def _printpanel_create(self, parent):
-        self._print_timepanel = ttk.Label(parent, background="yellow")
+        self._print_timepanel = ttk.Label(parent, background="#cfffe5")
         self._print_timepanel.grid_propagate(False)
         self._print_timepanel.pack_propagate(False)
         self._print_timepanel.grid(row=0, column=1, sticky=tk.EW)
@@ -197,14 +228,14 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
     _texts = []
     _textVars = []
 
-    def __init__(self, parent, partitions, texts=[], width=300, height=50):
+    def __init__(self, parent, partitions, texts=[], width=800, height=70):
         self._parent = parent
         self._partitions = partitions
         self._width = width
         self._hegiht = height
         self._texts = texts
 
-        self._linearbase = ttk.Frame(self._parent, width=800, height=70)
+        self._linearbase = ttk.Frame(self._parent, width=self._width, height=self._hegiht)
         self._linearbase.pack_propagate(False)
         self._linearbase.grid_propagate(False)
 
@@ -266,7 +297,7 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         self._makeimage(image=self._image_uri, images=self._images_uri)
 
         if(self._type == 'editable'):
-            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='#cfffe5', width=int(self._width/2), anchor=self._anchor)
             self._valuepart = ttk.Entry(self._kvframe, width=int(self._width/2))
             if(self._value_var.get() != 'default'):
                 self._valuepart.configure(textvariable=self._value_var)
@@ -275,8 +306,8 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
             self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
 
         elif(self._type == 'readonly'):
-            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
-            self._valuepart = ttk.Label(self._kvframe, background='gray', width=int(self._width/2), anchor='center')
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='#cfffe5', width=int(self._width/2), anchor=self._anchor)
+            self._valuepart = ttk.Label(self._kvframe, background='#cfffe5', width=int(self._width/2), anchor='center')
             if (self._value_var.get() != 'default'):
                 self._valuepart.configure(textvariable=self._value_var)
 
@@ -284,14 +315,14 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
             self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
 
         elif(self._type == 'showcase'):
-            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='ghostwhite', width=int(self._width/2), anchor=self._anchor)
-            self._valuepart = ttk.Label(self._kvframe, background='gray', width=int(self._width/2), anchor='center')
+            self._keypart = ttk.Label(self._kvframe, text=self._key_text, background='#cfffe5', width=int(self._width/2), anchor=self._anchor)
+            self._valuepart = ttk.Label(self._kvframe, background='#cfffe5', width=int(self._width/2), anchor='center')
             self._keypart.grid_propagate(False)
             self._keypart.pack_propagate(False)
             self._valuepart.grid_propagate(False)
             self._valuepart.pack_propagate(False)
             if(self._image != None):
-                self._valuepart_imglabel = ttk.Label(self._valuepart, image=self._image, width=int(self._width/2), anchor='center')
+                self._valuepart_imglabel = ttk.Label(self._valuepart, background='#cfffe5', image=self._image, width=int(self._width/2), anchor='center')
                 self._valuepart_imglabel.pack_propagate(False)
                 self._valuepart_imglabel.update()
                 self._valuepart_imglabel.pack(expand=True, fill='both')

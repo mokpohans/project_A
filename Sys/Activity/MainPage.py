@@ -9,8 +9,7 @@ class Mainpage:
         self._mainpage = page
         self._mainpage.grid_propagate(False)
         self._mainpage.pack_propagate(False)
-        self._mainpage.columnconfigure(index=0, weight=99)
-        self._mainpage.columnconfigure(index=1, weight=1)
+        self._mainpage.columnconfigure(index=0, weight=1)
         for i in range(0, 3, 1):
             self._mainpage.rowconfigure(index=i, weight=1)
         self._mainpage.update()
@@ -18,6 +17,10 @@ class Mainpage:
         self._display_height = self._mainpage.winfo_screenheight()
         self._window_width = self._mainpage.winfo_width()
         self._window_height = self._mainpage.winfo_height()
+
+        self.defaultStyle = ttk.Style()
+        self.defaultStyle.configure("defaultBackground.TFrame",
+                                    background='ivory')
 
         print(self._display_width)
         print(self._display_height)
@@ -28,13 +31,13 @@ class Mainpage:
         #### 베이스 틀
             ### 메뉴, 시간, 날씨 포함하는 베이스 레이블
         self._mainpage.rowconfigure(index=0, weight=1)
-        self.menu_base_Frame = ttk.Frame(self._mainpage)
+        self.menu_base_Frame = ttk.Frame(self._mainpage, style="defaultBackground.TFrame")
             ### 시간, 발전소 선택 베이스 레이블
         self._mainpage.rowconfigure(index=1, weight=3)
-        self.middle_base_Frame = ttk.Frame(self._mainpage) # 좌->우 순서
+        self.middle_base_Frame = ttk.Frame(self._mainpage, style="defaultBackground.TFrame") # 좌->우 순서
             ### 발전량, 발전금액 등 상태 레이블을 포함하는 베이스 레이블
         self._mainpage.rowconfigure(index=2, weight=3)
-        self.content_base_Frame = ttk.Frame(self._mainpage)
+        self.content_base_Frame = ttk.Frame(self._mainpage, style="defaultBackground.TFrame")
 
         self.menu_base_Frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.middle_base_Frame.grid(row=1, column=0, sticky=tk.NSEW)
@@ -42,7 +45,7 @@ class Mainpage:
 
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
-        self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width)
+        self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width, background='ivory')
         self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
 
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
@@ -56,12 +59,14 @@ class Mainpage:
         self.middle_base_Frame.grid_propagate(False)
         self.middle_base_Frame.pack_propagate(False)
             # 시간 관련 베이스 생성
-        self.time_base_frame = ttk.Frame(self.middle_base_Frame)
+        self.time_base_frame = ttk.Frame(self.middle_base_Frame, style="defaultBackground.TFrame")
         self.time_base_frame.pack_propagate(False)
         self.time_base_frame.grid_propagate(False)
         self.timepart_label = ttk.Label(self.time_base_frame)
 #테스팅
-        self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=100)
+        self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=100,
+                                         frameBG="defaultBackground.TFrame",
+                                         images=['./Resources/images/day001.png', './Resources/images/night001.png'])
 
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
@@ -69,12 +74,15 @@ class Mainpage:
 #테스팅
 
             # 발전소 선택 레이블
-        self.plantselect_base_frame = ttk.Frame(self.middle_base_Frame)
+        self.plantselect_base_frame = ttk.Frame(self.middle_base_Frame, style="defaultBackground.TFrame")
         self.plantselect_base_frame.pack_propagate(False)
         self.plantselect_base_frame.grid_propagate(False)
-        self.plant_select_label = ttk.Label(self.plantselect_base_frame)
+        self.plant_select_label = ttk.Label(self.plantselect_base_frame, background='#cfffe5') # 민트색 : #cfffe5
 
-        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/temp_bird.png', indications=['a', 'b', 'c'], anchor=tk.NE, width=700, height=int(self._mainpage.winfo_height()/5))
+        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/solargenerate001.png',
+                                              indications=['정선한교', '태곡_태양광', '서천_태양광', '광양항_제1_자전거도로', '광양항_제2_자전거도로', '광양항_제3_자전거도로',
+                                                           '판교_가입형', '양산_태양광', '분당지사_제1호', '분당지사_제2호'],
+                                              anchor=tk.NE, width=800, height=int(self._mainpage.winfo_height()/2))
 
 
         self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
@@ -98,12 +106,12 @@ class Mainpage:
         self.content_base_Frame.rowconfigure(index=1, weight=1)
         self.content_base_Frame.columnconfigure(index=0, weight=1)
             ## 발전 상태 프레임
-        self.generate_state_frame = ttk.Frame(self.content_base_Frame)
+        self.generate_state_frame = ttk.Frame(self.content_base_Frame, style="defaultBackground.TFrame")
             ## 인버터 상태 프레임
-        self.invertor_state_frame = ttk.Frame(self.content_base_Frame)
+        self.invertor_state_frame = ttk.Frame(self.content_base_Frame, style="defaultBackground.TFrame")
 
-        self.generate_state_frame.grid(row=0, column=0, sticky=tk.NSEW)
-        self.invertor_state_frame.grid(row=1, column=0, sticky=tk.NSEW)
+        self.generate_state_frame.grid(row=0, column=0, sticky=tk.NSEW, pady=5)
+        self.invertor_state_frame.grid(row=1, column=0, sticky=tk.NSEW, pady=5)
 
         ##발전량, 발전금액, 출력량 채우기
         self.generate_state_frame.grid_propagate(False)
@@ -112,18 +120,18 @@ class Mainpage:
             self.generate_state_frame.rowconfigure(index=i, weight=1)
         self.generate_state_frame.columnconfigure(index=0, weight=1)
             # 발전량 레이블
-        self.generate_quantity_label = ttk.Label(self.generate_state_frame)
+        self.generate_quantity_label = ttk.Label(self.generate_state_frame, background='ivory')
             # 발전금액 레이블
-        self.generate_fee_label = ttk.Label(self.generate_state_frame)
+        self.generate_fee_label = ttk.Label(self.generate_state_frame, background='ivory')
             # 출력량 레이블
-        self.generate_emit_label = ttk.Label(self.generate_state_frame)
+        self.generate_emit_label = ttk.Label(self.generate_state_frame, background='ivory')
 
             # 인덱스와 상태들 보이기
-        self.generate_index_label = ttk.Label(self.generate_state_frame)
-        self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, texts=['', '일간', '월간', '누적'], width=800, height=50)
-        self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, texts=['발전량', '0', '0', '0'], width=800, height=50)
-        self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, texts=['발전금액', '0', '0', '0'], width=800, height=50)
-        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['현재출력량', '0', '', ''], width=800, height=50)
+        self.generate_index_label = ttk.Label(self.generate_state_frame, background='#cfffe5') # 민트색 : #cfffe5
+        self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, texts=['', '일간', '월간', '누적'], width=1100, height=50)
+        self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, texts=['발전량', '0', '0', '0'], width=1100, height=50)
+        self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, texts=['발전금액', '0', '0', '0'], width=1100, height=50)
+        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['현재출력량', '0', '', ''], width=1100, height=50)
 
         self.generate_index_label.grid(row=0, column=0)
         self.generate_quantity_label.grid(row=1, column=0)
@@ -143,15 +151,15 @@ class Mainpage:
         self.invertor_state_frame.columnconfigure(index=0, weight=1)
         
             # [종류 : 상태]를 나타내는 인덱스 레이블
-        self.index_label = ttk.Label(self.invertor_state_frame, text='index:state', background='red')
+        self.index_label = ttk.Label(self.invertor_state_frame, text='index:state', background='ivory') # 민트색 : #cfffe5
             # 인버터 1 레이블
-        self.invertor_1_label = ttk.Label(self.invertor_state_frame, text='invertor1', background='yellow')
+        self.invertor_1_label = ttk.Label(self.invertor_state_frame, text='invertor1', background='ivory')
             # 인버터 2 레이블
-        self.invertor_2_label = ttk.Label(self.invertor_state_frame, text='invertor2', background='green')
+        self.invertor_2_label = ttk.Label(self.invertor_state_frame, text='invertor2', background='ivory')
             # 인버터 3 레이블
-        self.invertor_3_label = ttk.Label(self.invertor_state_frame, text='invertor3', background='blue')
+        self.invertor_3_label = ttk.Label(self.invertor_state_frame, text='invertor3', background='ivory')
             # 모듈 온도 레이블
-        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='violet')
+        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='ivory')
 
         self.index_label.grid(row=0, column=0, sticky=tk.NSEW)
         self.invertor_1_label.grid(row=1, column=0, sticky=tk.NSEW)
@@ -173,8 +181,8 @@ class Mainpage:
         self.moduletemper_content = adwz.KVlabel(self.module_temper_label, type='readonly',
                                                  key_text='module temperature', value_text='state', width=self._mainpage.winfo_width())
 
-        self.indexstate_content.create(padx=80)
-        self.invertor1_content.create(padx=80)
-        self.invertor2_content.create(padx=80)
-        self.invertor3_content.create(padx=80)
-        self.moduletemper_content.create(padx=80)
+        self.indexstate_content.create(padx=135)
+        self.invertor1_content.create(padx=135)
+        self.invertor2_content.create(padx=135)
+        self.invertor3_content.create(padx=135)
+        self.moduletemper_content.create(padx=135)
