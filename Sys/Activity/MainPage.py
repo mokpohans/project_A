@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 from Sys.Components import AdditionalWidgets as adwz
-
+from Sys.Activity import MeasureInfo as msi
 
 class Mainpage:
     def __init__(self, page):
@@ -52,6 +52,8 @@ class Mainpage:
         self.menus.create()
 
         # self.menus.elementManipulate(index=0, command=None) # command에 들어갈 함수 만들어서 내용 수정할 것.
+        # self.menus.elementManipulate(index=0, command=lambda: self.test_change())
+        self.menus.elementManipulate(index=0, command=self.test_change)
 
         # print(f'in Minapage, locals() print : {locals()}')
 
@@ -153,7 +155,7 @@ class Mainpage:
         for i in range(0, 5, 1):
             self.invertor_state_frame.rowconfigure(index=i, weight=1)
         self.invertor_state_frame.columnconfigure(index=0, weight=1)
-        
+
             # [종류 : 상태]를 나타내는 인덱스 레이블
         self.index_label = ttk.Label(self.invertor_state_frame, background='ivory') # 민트색 : #cfffe5
             # 인버터 1 레이블
@@ -190,3 +192,11 @@ class Mainpage:
         self.invertor2_content.create(padx=135)
         self.invertor3_content.create(padx=135)
         self.moduletemper_content.create(padx=135)
+
+#테스팅 : 메뉴버튼 누르면 탑레벨이 뜨게끔 함.
+    def test_change(self):
+        self.test_toplevel = tk.Toplevel(self._mainpage, width=600, height=800)
+        measureinfo = msi.Measureinfo(self.test_toplevel)
+        measureinfo.operate()
+
+#테스팅
