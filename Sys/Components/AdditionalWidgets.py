@@ -54,6 +54,9 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
     def getTimeVar(self):
         return self._entire_time_var
 
+    def setTimeVar(self, changevalue):
+        self._entire_time_var.set(changevalue)
+
 class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예정 -> 엔트리에 값 넣고 변경 시 timeprinter의 내용이 변화하는 함수 예정
     _parent = None
     _baseFrame = None
@@ -112,7 +115,8 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
             self._background_panel.configure(image=self._image)
         self._background_panel.grid_propagate(False)
         self._background_panel.pack_propagate(False)
-        self._background_panel.rowconfigure(index=0, weight=1)
+        for i in range(0, 3):
+            self._background_panel.rowconfigure(index=i, weight=1)
         self._background_panel.columnconfigure(index=0, weight=1)
         self._background_panel.columnconfigure(index=1, weight=1)
         self._background_panel.grid(row=0, column=0, sticky=tk.NSEW)
@@ -127,15 +131,16 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
             for i in range(0, len(images)):
                 self._images.append(tk.PhotoImage(file=images[i]))
 
-    def _editpanel_create(self, parent, textvariable, btntext=None):
-        self._edit_timepanel = ttk.Label(parent, anchor='w', background="#cfffe5") # 민트색 : #cfffe5
-        self._edit_timepanel.rowconfigure(index=0, weight=1)
+    def _editpanel_create(self, parent, textvariable, btntext=None):          # 사진 하늘 색 : #5cd9ff
+        self._edit_timepanel = ttk.Label(parent, anchor='w', background="#5cd9ff") # 민트색 : #cfffe5
+        for i in range(0, 3):
+            self._edit_timepanel.rowconfigure(index=i, weight=1)
         self._edit_timepanel.columnconfigure(index=0, weight=3)
         self._edit_timepanel.columnconfigure(index=1, weight=1)
         self._edit_timepanel.pack_propagate(False)
         self._edit_timepanel.grid_propagate(False)
-        self._edit_timepanel.grid(row=0, column=0, sticky=tk.EW)
 
+        self._edit_timepanel.grid(row=0, column=0, sticky=tk.EW)
         self._edit_entry = ttk.Entry(self._edit_timepanel, textvariable=textvariable)
         if(btntext==None):
             self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text='변경')
@@ -143,10 +148,12 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
             self._edit_confirmbtn = ttk.Button(self._edit_timepanel, text=btntext)
         self._edit_entry.grid(row=0, column=0, sticky=tk.E)
         self._edit_confirmbtn.grid(row=0, column=1, sticky=tk.EW)
+        # self._edit_entry.grid(row=0, column=0)
+        # self._edit_confirmbtn.grid(row=0, column=1)
 
-    def _printpanel_create(self, parent):
-        self._print_timepanel = ttk.Label(parent, background="#cfffe5")
-        self._print_timepanel.grid_propagate(False)
+    def _printpanel_create(self, parent):                               # 사진 하늘 색 : #5cd9ff
+        self._print_timepanel = ttk.Label(parent, background="#5cd9ff") #사진 해 색 : #fffb8e
+        self._print_timepanel.grid_propagate(False)                     # 민트색 : #cfffe5
         self._print_timepanel.pack_propagate(False)
         self._print_timepanel.grid(row=0, column=1, sticky=tk.EW)
 

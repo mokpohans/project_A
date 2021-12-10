@@ -195,7 +195,8 @@ class Mainpage:
 
 #테스팅 : 메뉴버튼 누르면 탑레벨이 뜨게끔 함.
     def test_change(self):
-        self.test_toplevel = tk.Toplevel(self._mainpage, width=600, height=800)
+        self.test_toplevel = tk.Toplevel(self._mainpage, width=600, height=800) #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
+        self.test_toplevel.grab_set()
         measureinfo = msi.Measureinfo(self.test_toplevel)
         measureinfo.operate()
 
