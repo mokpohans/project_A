@@ -123,8 +123,8 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def _makeimage(self, image=None, images=[]):
         if(image != None):
             self._image = tk.PhotoImage(file=image)
-        if(images):
-            for i in images:
+        if images:
+            for i in range(0, len(images)):
                 self._images.append(tk.PhotoImage(file=images[i]))
 
     def _editpanel_create(self, parent, textvariable, btntext=None):
@@ -227,31 +227,36 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
     _partitions = 0
     _texts = []
     _textVars = []
+    _command = None
 
-    def __init__(self, parent, partitions, texts=[], width=800, height=70):
+    def __init__(self, parent, partitions, texts=[], command=None, width=800, height=70):
         self._parent = parent
         self._partitions = partitions
         self._width = width
         self._hegiht = height
         self._texts = texts
+        self._command = command
 
         self._linearbase = ttk.Frame(self._parent, width=self._width, height=self._hegiht)
         self._linearbase.pack_propagate(False)
         self._linearbase.grid_propagate(False)
 
-        self._buttoncreate(self._linearbase, self._partitions, texts=self._texts)
+        self._buttoncreate(self._linearbase, self._partitions, texts=self._texts, command=self._command)
+        # print(f"in linearmenu_lobby locals()button_numbering like this : {locals()}")
 
-    def _buttoncreate(self, parent, amount, texts=[]):
+    def _buttoncreate(self, parent, amount, texts=[], command=None):
         for i in range(0, amount):
             self._linearbase.rowconfigure(index=0, weight=1)
             self._linearbase.columnconfigure(index=i, weight=1)
             if not texts: #텍스트s에 값이 없을 때
-                locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}').grid(row=0, column=i, sticky=tk.NSEW)
+                locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}', command=command).grid(row=0, column=i, sticky=tk.NSEW)
             elif texts: # 텍스트s에 값이 있을 때
                 if(str(type(texts[i])) == "<class 'str'>"):
-                    locals()[f'button{i}'] = ttk.Button(parent, text=texts[i]).grid(row=0, column=i, sticky=tk.NSEW)
+                    locals()[f'button{i}'] = ttk.Button(parent, text=texts[i], command=command).grid(row=0, column=i, sticky=tk.NSEW)
+                    # print(f"in creating buttons locals()button_numbering like this : {locals()}")
                 elif():
                     print("error occured, please put 'str' type in texts by a list")
+            # print(f'in _buttoncreate locals()button_numbering like this : {locals()}')
 
     def create(self):
         self._linearbase.pack(expand=True)

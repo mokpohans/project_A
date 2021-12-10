@@ -18,7 +18,7 @@ main_window.title("S.E.M.S")
 main_window.geometry(f"{default_width}x{default_height}")
 
 
-main_page = MainPage.Mainpage(main_window, pagewidth=1280, pageheight=2560)
+main_page = MainPage.Mainpage(main_window)
 main_page.operate()
 
 main_window.mainloop()

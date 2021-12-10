@@ -5,7 +5,7 @@ from Sys.Components import AdditionalWidgets as adwz
 
 
 class Mainpage:
-    def __init__(self, page, pagewidth=1280, pageheight=1280):
+    def __init__(self, page):
         self._mainpage = page
         self._mainpage.grid_propagate(False)
         self._mainpage.pack_propagate(False)
@@ -51,6 +51,8 @@ class Mainpage:
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
         self.menus.create()
 
+        # print(f'in Minapage, locals() print : {locals()}')
+
         ### 미들 베이스 채우기
          #미들 베이스 칸 배분
         self.middle_base_Frame.rowconfigure(index=0, weight=1)
@@ -64,9 +66,9 @@ class Mainpage:
         self.time_base_frame.grid_propagate(False)
         self.timepart_label = ttk.Label(self.time_base_frame)
 #테스팅
-        self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=100,
+        self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=500,
                                          frameBG="defaultBackground.TFrame",
-                                         images=['./Resources/images/day001.png', './Resources/images/night001.png'])
+                                         images=['./Resources/images/day_small.png', './Resources/images/night001.png'])
 
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
@@ -151,15 +153,15 @@ class Mainpage:
         self.invertor_state_frame.columnconfigure(index=0, weight=1)
         
             # [종류 : 상태]를 나타내는 인덱스 레이블
-        self.index_label = ttk.Label(self.invertor_state_frame, text='index:state', background='ivory') # 민트색 : #cfffe5
+        self.index_label = ttk.Label(self.invertor_state_frame, background='ivory') # 민트색 : #cfffe5
             # 인버터 1 레이블
-        self.invertor_1_label = ttk.Label(self.invertor_state_frame, text='invertor1', background='ivory')
+        self.invertor_1_label = ttk.Label(self.invertor_state_frame, background='ivory')
             # 인버터 2 레이블
-        self.invertor_2_label = ttk.Label(self.invertor_state_frame, text='invertor2', background='ivory')
+        self.invertor_2_label = ttk.Label(self.invertor_state_frame, background='ivory')
             # 인버터 3 레이블
-        self.invertor_3_label = ttk.Label(self.invertor_state_frame, text='invertor3', background='ivory')
+        self.invertor_3_label = ttk.Label(self.invertor_state_frame, background='ivory')
             # 모듈 온도 레이블
-        self.module_temper_label = ttk.Label(self.invertor_state_frame, text='module_temperature', background='ivory')
+        self.module_temper_label = ttk.Label(self.invertor_state_frame, background='ivory')
 
         self.index_label.grid(row=0, column=0, sticky=tk.NSEW)
         self.invertor_1_label.grid(row=1, column=0, sticky=tk.NSEW)
