@@ -1,6 +1,11 @@
 import tkinter as tk
+from functools import partial
 from tkinter import ttk
-from datetime import datetime
+from datetime import datetime as dt
+from datetime import timedelta as tdelta
+from datetime import timezone as tz
+from datetime import date
+from datetime import time
 
 
 class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,월,일,시,분,초 단위로 얻어오는 함수 작성
@@ -8,11 +13,13 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
     _printlabel = None
     _width = 0
     _height = 0
-    _format = "default"
+    time_format = "default"
     _std_time = "default"
     _current_time = "default"
     _entire_time_var = None
 
+    _timechanged = False
+    _rawtimedata = None
     _year = 0
     _month = 0
     _day = 0
@@ -20,32 +27,83 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
     _minute = 0
     _second = 0
 
-    def __init__(self, parent, format="%Y/%m/%d %H:%M", width=300, height=50, fit=True):
+    def __init__(self, parent, timeformat="%Y/%m/%d %H:%M", width=300, height=50, fit=True):
         self._parent = parent
-        self._format = format
+        self.time_format = timeformat
 
         self._entire_time_var = tk.StringVar()
-        self._time_var_update()
+        self._time_var_update_present()
 
         self._printlabel = ttk.Label(self._parent, width=self._width, textvariable=self._entire_time_var)  # 시간 출력을 위한 레이블
+        self._printlabel.update()
 
         self._printlabel.pack_propagate(fit)
         self._printlabel.grid_propagate(fit)
 
-    def _time_var_update(self):
-        self._current_time = datetime.now()          #   Python Format Code(사용한 것만 나타냄, 나머지는 검색할 것)
+    def _time_var_update_present(self):
+        self._current_time = dt.now()          #   Python Format Code(사용한 것만 나타냄, 나머지는 검색할 것)
         self._year = self._current_time.year         # %Y : 년을 길게 숫자로(2021) / %y : 년을 짧게 숫자로(21)
         self._month = self._current_time.month       # %m : 월을 숫자로 표현(04)
         self._day = self._current_time.day           # %d : 날(일)을 숫자로 표현(1~31까지; 29)
         self._hour = self._current_time.hour         # %H : 시간을 24시간 표현방식으로(00~23 ; 23) / %h : 시간을 12시간 표현 방식으로(00~12; 11)
         self._minute = self._current_time.minute     # %M : 분을 표시(0~59; 15)
         self._second = self._current_time.second     # %S : 초를 표시(0~59; 46) / %f : 마이크로초 단위 표시
-        self._entire_time_var.set(self._current_time.strftime(self._format))
+        self._entire_time_var.set(self._current_time.strftime(self.time_format))
 
     def _clocking(self):
-        self._time_var_update()
-        self._printlabel.after(400, self._clocking) # 일정 시간 뒤에 지정한 함수를 작동하도록 하는
+        # print(f'timechanged signal is : {self._timechanged}')
+        if(self._timechanged == False):
+            self._time_var_update_present()
+            self._printlabel.update()
+            self._present_after = self._printlabel.after(500, self._clocking) # 일정 시간 뒤에 지정한 함수를 작동하도록 하는
                                                     # after함수를 재귀함으로서 일정 시간마다 반복하는 함수로 사용
+        elif(self._timechanged == True):
+            self._time_calculator()
+            self._second += 1
+            self._printlabel.update()
+            self._calc_after = self._printlabel.after(980, self._clocking)
+
+    def _time_calculator(self):
+        # print(f'in _time_calculator; self._year : {self._year}, month : {self._month}, day : {self._day}, hour : {self._hour}')
+        if(self._second > 59):
+            self._second = 0
+            self._minute += 1
+        if(self._minute > 59):
+            self._minute = 0
+            self._hour += 1
+        if(self._hour > 23):
+            self._hour = 0
+            self._day += 1
+        if((self._year % 4) == 0): # 년도가 4로 나누어 떨어지고
+            if(self._month == 2): # 2월 이면
+                if(self._day > 29): # 29일까지
+                    self._day = 1
+                    self._month += 1
+        elif(self._month == 2): # 년도가 4로 나누어 떨어지지 않고
+            if(self._day > 28): # 2월 이면 28일까지
+                self._day = 1
+                self._month += 1
+        elif(self._day > 31):
+            self._day = 1
+            self._month += 1
+        if(self._month > 12):
+            self._month = 1
+            self._year += 1
+
+        self._edited_time = dt(self._year, self._month, self._day, self._hour, self._minute, self._second)
+        self._entire_time_var.set(self._edited_time.strftime(self.time_format))
+        self._printlabel.update()
+
+    # def _calculated_clocking(self):
+    #     # print(f'timechanged signal is : {self._timechanged}')
+    #     self._time_calculator()
+    #     print(f'tempcount is : {self._tempcount}')
+    #     if(self._tempcount != 0):
+    #         self._second += 1
+    #     elif(self._tempcount == 0):
+    #         self._tempcount = 1
+    #     self._printlabel.update()
+    #     self._calc_after = self._printlabel.after(1000, self._calculated_clocking)
 
     def create(self):
         self._clocking()
@@ -56,6 +114,19 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
 
     def setTimeVar(self, changevalue):
         self._entire_time_var.set(changevalue)
+
+    def setTimeElements(self, rawtime=None, year=0, month=0, day=0, hour=0, minute=0, second=0):
+        self._rawtimedata = rawtime
+        self._year = year
+        self._month = month
+        self._day = day
+        self._hour = hour
+        self._minute = minute
+        self._second = second
+        # print(f'in timeprinter > setTimeElements activated; year : {self._year}, month : {self._month}, day : {self._day}, hour : {self._hour}')
+
+    def setChangedState(self, state=False):
+        self._timechanged = state
 
 class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예정 -> 엔트리에 값 넣고 변경 시 timeprinter의 내용이 변화하는 함수 예정
     _parent = None
@@ -70,21 +141,17 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     _images_uri = []
     _images = []
 
+    _format = "%Y/%m/%d %H:%M"
+
     _time_text = ''
     _var_time_text = None
 
     _year = 0
-    _str_year = None
     _month = 0
-    _str_month = None
     _day = 0
-    _str_day = None
     _hour = 0
-    _str_hour = None
     _minute = 0
-    _str_minute = None
     _second = 0
-    _str_second = None
 
     _width = 0
     _height = 0
@@ -123,6 +190,9 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
 
         self._editpanel_create(self._background_panel, textvariable=self._var_time_text)
         self._printpanel_create(self._background_panel)
+        self._format = self._timeprinter.time_format
+
+        self._edit_confirmbtn.configure(command=lambda: self._parseEditedTime(self._var_time_text, self._format))
 
     def _makeimage(self, image=None, images=[]):
         if(image != None):
@@ -157,8 +227,26 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
         self._print_timepanel.pack_propagate(False)
         self._print_timepanel.grid(row=0, column=1, sticky=tk.EW)
 
-        self._timprinter = timeprinter(self._print_timepanel, width=int(self._width/2), height=self._height)
-        self._timprinter.create()
+        self._timeprinter = timeprinter(self._print_timepanel, width=int(self._width/2), height=self._height)
+        self._timeprinter.create()
+
+    def _parseEditedTime(self, textvariable, format):
+        self._rawtimestr = textvariable.get()
+        print(self._rawtimestr)
+        self._parseDateTime = dt.strptime(self._rawtimestr, format)
+        print(self._parseDateTime)
+        self._year = self._parseDateTime.year  # %Y : 년을 길게 숫자로(2021) / %y : 년을 짧게 숫자로(21)
+        self._month = self._parseDateTime.month  # %m : 월을 숫자로 표현(04)
+        self._day = self._parseDateTime.day  # %d : 날(일)을 숫자로 표현(1~31까지; 29)
+        self._hour = self._parseDateTime.hour  # %H : 시간을 24시간 표현방식으로(00~23 ; 23) / %h : 시간을 12시간 표현 방식으로(00~12; 11)
+        self._minute = self._parseDateTime.minute  # %M : 분을 표시(0~59; 15)
+        self._second = self._parseDateTime.second  # %S : 초를 표시(0~59; 46) / %f : 마이크로초 단위 표시
+
+        # print(f'in parsing : year : {self._year}, month : {self._month}, day : {self._day}')
+
+        self._timeprinter.setChangedState(True)
+        self._timeprinter.setTimeElements(rawtime=self._parseDateTime, year=self._year, month=self._month, day=self._day, hour=self._hour,
+                                          minute=self._minute, second=self._second)
 
     def create(self):
         self._baseFrame.pack(expand=True)
