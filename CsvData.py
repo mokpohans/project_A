@@ -8,9 +8,26 @@ def Months(time):
     __time = calendar.monthrange(__year, __month)[ 1 ]
     return __time
 
-def test(Data : pd.DataFrame, type):
-    choice = Data.loc[Data[type] != 0]
-    choices = pd.DatetimeIndex(choice['측정일시']).resample('1H').first()
-    print(choices)
+def Data_list(Data : pd.DataFrame, type, Time):
 
-test(tc.Place_1, "인버팅후 인버터전력")
+    result = []
+    choice = Data
+    choice['측정일시'] = pd.to_datetime(choice['측정일시'])
+    print(choice)
+    if Time == 1:
+        choices = choice.set_index('측정일시').resample('1H').first()
+    elif Time == 2:
+        choices = choice.set_index('측정일시').resample('1D').max()
+    elif Time == 3:
+        choices = choice.set_index('측정일시').resample('1M').mean()
+    else:
+        return
+
+    if (type == '인버팅후 누적발전량') or (type == '인버팅후 금일발전량' and Time == 1 ):
+        __temp = choices[type].tolist()
+        result.append(abs(__temp[1] - __temp[0]))
+        for i in range(1, len(__temp)):
+            result.append(abs(__temp[i] - __temp[i-1]))
+    else:
+        result = choices[type].tolist()
+    return result
