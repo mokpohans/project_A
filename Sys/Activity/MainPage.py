@@ -51,6 +51,8 @@ class Mainpage:
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
         self.menus.create()
 
+        # self.menus.elementManipulate(index=0, command=None) # command에 들어갈 함수 만들어서 내용 수정할 것.
+
         # print(f'in Minapage, locals() print : {locals()}')
 
         ### 미들 베이스 채우기

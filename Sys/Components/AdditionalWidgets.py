@@ -228,6 +228,10 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
     _texts = []
     _textVars = []
     _command = None
+    # 테스트 1) locals() 버튼 변수들을 생성 즉시 리스트로 넣는다. -> 리스트 내용 확인해볼 것 -> 실패 : 전부 None으로만 기록된다.
+    _X_btnlist = []
+    # 테스트 2) 딕셔너리를 생성해서 텍스트 내용 -> 해당 버튼 담당 구성
+    _X_btnDict = {}
 
     def __init__(self, parent, partitions, texts=[], command=None, width=800, height=70):
         self._parent = parent
@@ -243,20 +247,65 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
 
         self._buttoncreate(self._linearbase, self._partitions, texts=self._texts, command=self._command)
         # print(f"in linearmenu_lobby locals()button_numbering like this : {locals()}")
+        print(f"in linearmenu_lobby globals()button_numbering like this : {globals()['__button0']}")
+        # print(f"in linearmenu_lobby, For test list is : {self._X_btnlist}")
 
     def _buttoncreate(self, parent, amount, texts=[], command=None):
         for i in range(0, amount):
             self._linearbase.rowconfigure(index=0, weight=1)
             self._linearbase.columnconfigure(index=i, weight=1)
             if not texts: #텍스트s에 값이 없을 때
-                locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}', command=command).grid(row=0, column=i, sticky=tk.NSEW)
+                # locals()[f'button{i}'] = ttk.Button(parent, text=f'button{i}', command=command).grid(row=0, column=i, sticky=tk.NSEW)
+                globals()[f'__button{i}'] = ttk.Button(parent, text=f'button{i}', command=command)
+                globals()[f'__button{i}'].grid(row=0, column=i, sticky=tk.NSEW)
+                # globals()[f'{texts[i]}'] = ttk.Button(parent, text=f'button{i}', command=command).grid(row=0, column=i, sticky=tk.NSEW)
             elif texts: # 텍스트s에 값이 있을 때
                 if(str(type(texts[i])) == "<class 'str'>"):
-                    locals()[f'button{i}'] = ttk.Button(parent, text=texts[i], command=command).grid(row=0, column=i, sticky=tk.NSEW)
+                #원래 적혀 있던 내용 -> grid를 함께 쓴 것이 지금 까지 안된 원인.
+                    # locals()[f'button{i}'] = ttk.Button(parent, text=texts[i], command=command).grid(row=0, column=i, sticky=tk.NSEW)
+                #버튼 번호별로 생성 -> 번호가 겹치면서 리스트에 들어감, 속성이 겹치는지 확인해 볼 것.
+                    # locals()[f'button{i}'] = ttk.Button(parent, text=texts[i], command=command)
+                    # locals()[f'button{i}'].grid(row=0, column=i, sticky=tk.NSEW)
+
+                #locals에서 입력한 텍스트(계측정보, 보고서 등)를 변수명으로 활용 -> 사용가능하나 한글이므로 주의할 것.
+                    # locals()[f'{texts[i]}'] = ttk.Button(parent, text=texts[i], command=command)
+                    # locals()[f'{texts[i]}'].grid(row=0, column=i, sticky=tk.NSEW)
+
+                #globals에서 버튼 번호별로 생성 -> 번호가 겹치면서 list에 쌓인다. 속성이 겹치는지 확인해 볼 것
+                    globals()[f'__button{i}'] = ttk.Button(parent, text=texts[i], scommand=command)
+                    globals()[f'__button{i}'].grid(row=0, column=i, sticky=tk.NSEW)
+
+                #globas에서 입력한 텍스트(계측정보, 보고서 등)를 변수명으로 활용 -> 요놈은 사용불가 -> grid를 같이 쓴 순간부터 삭제됨
+                    # globals()[f'{texts[i]}'] = ttk.Button(parent, text=texts[i], command=command).grid(row=0, column=i, sticky=tk.NSEW)
+
+                #globals에서 입력한 텍스트(계측정보, 보고서 등)를 변수명으로 활용 -> 사용가능하나 한글이므로 주의할 것.
+                    # globals()[f'{texts[i]}'] = ttk.Button(parent, text=texts[i], command=command)
+                    # globals()[f'{texts[i]}'].grid(row=0, column=i, sticky=tk.NSEW)
+
+                    # print(f"in creating buttons locals()button_numbering like this : {locals()[f'button{i}']}")
                     # print(f"in creating buttons locals()button_numbering like this : {locals()}")
+                    # print(f"in creating buttons globals()button_numbering like this : {globals()}")
+                    # print(f"in creating buttons globals()button_numbering like this : {globals()[f'{texts[i]}']}")
+                    # self._X_btnlist.append(locals()[f'button{i}'])
+                    # self._X_btnlist.append(locals()[f'{texts[i]}'])
+                    # self._X_btnlist.append(globals()[f'button{i}'])
                 elif():
                     print("error occured, please put 'str' type in texts by a list")
-            # print(f'in _buttoncreate locals()button_numbering like this : {locals()}')
+        # print(f"in _buttoncreate locals()button_numbering like this : {locals()}")
+        # print(f"in _buttoncreate globals()button_numbering like this : {globals()}")
+        # print(f"in _buttoncreate, For test list is : {self._X_btnlist}")
+
+    def elementManipulate(self, index=0, command=None, compound=None, cursor=None,
+                          image=None, style=None, takefocus=None, text=None, textvariable=None,
+                          underline=None, width=None):
+        if(index > self._partitions):
+            print("Error: Out of Range! Check your index number & partitions number")
+        elif(index <= self._partitions):
+            globals()[f'__button{index}'].configure(command=command, compound=compound, cursor=cursor,
+                                                  image=image, style=style, takefocus=takefocus,
+                                                  text=text, textvariable=textvariable,
+                                                  underline=underline, width=width)
+            globals()[f'__button{index}'].update()
 
     def create(self):
         self._linearbase.pack(expand=True)
