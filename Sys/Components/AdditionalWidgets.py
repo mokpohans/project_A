@@ -1,12 +1,7 @@
 import tkinter as tk
-from functools import partial
-from tkinter import ttk
 from datetime import datetime as dt
-from datetime import timedelta as tdelta
-from datetime import timezone as tz
-from datetime import date
-from datetime import time
-
+from tkinter import ttk
+from PIL import Image
 
 class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,월,일,시,분,초 단위로 얻어오는 함수 작성
     _parent = None                  #    -> 문자열을 해석해서 포맷에 맞춰 시간정보 얻어오는 방법도 찾아볼 것
@@ -251,6 +246,34 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def create(self):
         self._baseFrame.pack(expand=True)
 
+class imagesizehelper:
+    _image_uri = None
+    _images_uri = []
+    _width = 0
+    _height = 0
+    _tempimg = None
+    _resized = None
+
+    def __init__(self, image=None, images=[], width=0, height=0):
+        self._image_uri = image
+        self._images_uri = images
+        self._width = width
+        self._height = height
+
+    def doResize(self, width, height):
+        self._width = width
+        self._hegiht = height
+
+        if(self._image_uri != None):
+            self._tempimg = Image.open(self._image_uri)
+            self._resized = self._tempimg.resize((int(self._width), int(self._height)))
+            self._resized.save(self._image_uri)
+        if(self._images_uri):
+            for i in range(0, len(self._images_uri)):
+                self._tempimg = Image.open(self._images_uri[i])
+                self._resized = self._tempimg.resize((int(self._width), int(self._height)))
+                self._resized.save(self._images_uri[i])
+
 
 class imagechooser: # 발전소 이미지-선택기
     _parent = None
@@ -274,12 +297,15 @@ class imagechooser: # 발전소 이미지-선택기
         self._width = width
         self._height = height
 
+        self.imgMG = imagesizehelper(image=self._image_uri, images=self._images_uri, width=self._width, height=self._height)
+
         self._baseFrame = ttk.Frame(self._parent, width=self._width, height=self._height)
         self._baseFrame.rowconfigure(index=0, weight=1)
         self._baseFrame.columnconfigure(index=0, weight=1)
         self._baseFrame.grid_propagate(False)
         self._baseFrame.pack_propagate(False)
 
+        self.imgMG.doResize(width=self._width, height=self._height)
         self._makeimage(image=self._image_uri, images=self._images_uri)
 
         self._createimglabel(self._baseFrame, width=self._width, height=self._height, image=self._image, images=self._images)
@@ -304,16 +330,23 @@ class imagechooser: # 발전소 이미지-선택기
             self._chooser = ttk.Combobox(parent, width=width, height=onceamount, values=indications, state='readonly')
             self._chooser.current(0)
             self._chooser.pack(anchor=anchor, padx=int(self._width/18), pady=int(self._height/18))
+            self._chooser.bind("<<ComboboxSelected>>", lambda event: self._callbackFunc())
 
     def _makeimage(self, image=None, images=[]):
         if(image != None):
             self._image = tk.PhotoImage(file=image)
         if(images):
-            for i in images:
+            for i in range(0, len(images)):
                 self._images.append(tk.PhotoImage(file=images[i]))
 
     def create(self):
         self._baseFrame.pack(expand=True)
+
+    def _callbackFunc(self):
+        self._imgnumb = self._indications.index(str(self._chooser.get()))
+        self._imagelabel.configure(image=self._images[self._imgnumb])
+        self._imagelabel.update()
+
 
 class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누르면 toplevel이 뜨고 해당 액티비티클래스가 뜨도록 할 함수 작성 예정
     _parent = None

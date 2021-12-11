@@ -72,7 +72,7 @@ class Mainpage:
 #테스팅
         self.timepart = adwz.temp_Dclock(self.timepart_label, width=1000, height=500,
                                          frameBG="defaultBackground.TFrame",
-                                         images=['./Resources/images/day_small.png', './Resources/images/night001.png'])
+                                         images=['./Resources/images/dayNnight/day_small.png', './Resources/images/dayNnight/night001.png'])
 
         # self.timepart = adwz.tempweather(self.time_base_label, 'test', width=300, height=300)
         # self.timeprint = adwz.timeprinter(self.time_base_label, width=self.time_base_label.winfo_width(), fit=False)
@@ -84,17 +84,25 @@ class Mainpage:
         self.plantselect_base_frame.pack_propagate(False)
         self.plantselect_base_frame.grid_propagate(False)
         self.plant_select_label = ttk.Label(self.plantselect_base_frame, background='#cfffe5') # 민트색 : #cfffe5
+        self.plantselect_base_frame.update()
+        print(f'plant_select_base_frame is {self.plantselect_base_frame.winfo_width()} x {self.plantselect_base_frame.winfo_height()}')
 
-        self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/solargenerate001.png',
+        # self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/solargenerate001.png',
+        self.plant_choose = adwz.imagechooser(self.plant_select_label,
+                                              images=['./Resources/images/plants/P001_JH_SolarPlant.png', './Resources/images/plants/P002_TG_SolarPlant.png'
+                                                  , './Resources/images/plants/P003_SCH_SolarPlant.png', './Resources/images/plants/P004_G1C_SolarPlant.png'
+                                                  , './Resources/images/plants/P005_G2C_SolarPlant.png', './Resources/images/plants/P006_G3C_SolarPlant.png'
+                                                  , './Resources/images/plants/P007_PG_SolarPlant.png', './Resources/images/plants/P008_YS_SolarPlant.png'
+                                                  , './Resources/images/plants/P009_B1P_SolarPlant.png', './Resources/images/plants/P010_B2P_SolarPlant.png'],
                                               indications=['정선한교', '태곡_태양광', '서천_태양광', '광양항_제1_자전거도로', '광양항_제2_자전거도로', '광양항_제3_자전거도로',
                                                            '판교_가압장', '양산_태양광', '분당지사_제1호_주차장', '분당지사_제2호_주차장'],
-                                              anchor=tk.NE, width=800, height=int(self._mainpage.winfo_height()/2))
+                                              anchor=tk.NE, width=950, height=int(self._mainpage.winfo_height()/2))
 
 
         self.time_base_frame.grid(row=0, column=0, sticky=tk.NSEW)
         self.plantselect_base_frame.grid(row=0, column=1, sticky=tk.NSEW)
-        self.timepart_label.pack(expand=True)
-        self.plant_select_label.pack(expand=True)
+        self.timepart_label.pack(expand=True, anchor=tk.E)
+        self.plant_select_label.pack(expand=True, anchor=tk.W)
 
 #테스팅
         self.timepart.create()
