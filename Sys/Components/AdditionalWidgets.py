@@ -405,9 +405,6 @@ class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누�
     def create(self):
         self._linearbase.pack(expand=True)
 
-class menuboard:    # 동일한 테마를 가지는 버튼 리스트(식당 메뉴판 연상) -> 보류
-    pass
-
 class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의 표기에 사용하도록)
     _parent = None
     _type = 'default'
