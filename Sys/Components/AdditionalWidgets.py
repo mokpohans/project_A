@@ -246,6 +246,9 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def create(self):
         self._baseFrame.pack(expand=True)
 
+    def getTimeInfo(self):
+        return str(self._timeprinter.getTimeVar().get())
+
 class imagesizehelper:
     _image_uri = None
     _images_uri = []
@@ -273,7 +276,6 @@ class imagesizehelper:
                 self._tempimg = Image.open(self._images_uri[i])
                 self._resized = self._tempimg.resize((int(self._width), int(self._height)))
                 self._resized.save(self._images_uri[i])
-
 
 class imagechooser: # 발전소 이미지-선택기
     _parent = None
@@ -321,12 +323,8 @@ class imagechooser: # 발전소 이미지-선택기
             self._imagelabel.configure(image=images[0])
         self._imagelabel.grid(row=0, column=0, sticky=tk.NSEW)
 
-    def _createchooser_by_anchor(self, parent, width=20, onceamount=5, indications=[], anchor=tk.NE):
+    def _createchooser_by_anchor(self, parent, width=30, onceamount=5, indications=[], anchor=tk.NE):
         if(self._imagelabel != None):
-            # for i in range(0, rowparts, 1):
-            #     self._imagelabel.rowconfigure(index=i, weight=1)
-            # for j in range(0, columnparts, 1):
-            #     self._imagelabel.columnconfigure(index=j, weight=1)
             self._chooser = ttk.Combobox(parent, width=width, height=onceamount, values=indications, state='readonly')
             self._chooser.current(0)
             self._chooser.pack(anchor=anchor, padx=int(self._width/18), pady=int(self._height/18))
@@ -347,6 +345,8 @@ class imagechooser: # 발전소 이미지-선택기
         self._imagelabel.configure(image=self._images[self._imgnumb])
         self._imagelabel.update()
 
+    def getPlantName(self):
+        return str(self._chooser.get())
 
 class linearmenu: # 현재 사용중인 메뉴판; 예정 -> 각 버튼을 누르면 toplevel이 뜨고 해당 액티비티클래스가 뜨도록 할 함수 작성 예정
     _parent = None
