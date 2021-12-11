@@ -1,5 +1,8 @@
 import pandas as pd
 import calendar
+
+import CsvData
+
 global  year, month, day, Date_list, Days
 # 표 컬럼중 인버터와 관련된 컬럼 리스트
 from pandas import DataFrame
@@ -92,6 +95,17 @@ def Next_Date(__Year : str,__Month : str, __Day):
     except:
         return False
 
+def create_csv(Data, Date, Type, Time):
+    print(Time)
+    if Time == 1 :
+       pass
+    elif Time == 2 :
+        Date = Date[0:-3]
+    elif Time == 3 :
+        Date = Date[0:5]
+    data = Data[Data['측정일시'].str.contains(Date)]
+    result = CsvData.Data_list(data, Type, Time)
+    return result
 
 
 # DataFrame을 출력할 때 '...'로 생략되는 부분없이 전부다 출력하기위한 설정
