@@ -87,7 +87,6 @@ class Mainpage:
         self.plantselect_base_frame.update()
         print(f'plant_select_base_frame is {self.plantselect_base_frame.winfo_width()} x {self.plantselect_base_frame.winfo_height()}')
 
-        # self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/solargenerate001.png',
         self.plant_choose = adwz.imagechooser(self.plant_select_label,
                                               images=['./Resources/images/plants/P001_JH_SolarPlant.png', './Resources/images/plants/P002_TG_SolarPlant.png'
                                                   , './Resources/images/plants/P003_SCH_SolarPlant.png', './Resources/images/plants/P004_G1C_SolarPlant.png'
