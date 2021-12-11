@@ -87,7 +87,7 @@ class Mainpage:
 
         self.plant_choose = adwz.imagechooser(self.plant_select_label, image='./Resources/images/solargenerate001.png',
                                               indications=['정선한교', '태곡_태양광', '서천_태양광', '광양항_제1_자전거도로', '광양항_제2_자전거도로', '광양항_제3_자전거도로',
-                                                           '판교_가입형', '양산_태양광', '분당지사_제1호', '분당지사_제2호'],
+                                                           '판교_가압장', '양산_태양광', '분당지사_제1호_주차장', '분당지사_제2호_주차장'],
                                               anchor=tk.NE, width=800, height=int(self._mainpage.winfo_height()/2))
 
 
