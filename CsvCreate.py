@@ -113,7 +113,7 @@ def create_csv(Data, Date, Type, Time):
 # pd.set_option('display.max_rows', None)
 
 # github에 저장되어있는 csv파일을 불러오는 코드
-Orignal_CSV: DataFrame = pd.read_csv('./csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv', encoding='CP949')
+Orignal_CSV: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv', encoding='CP949')
 
 # CSV파일에서 장소 열에서 발전소 위치를 중복없이 리스트로 만드는 코드
 place: pd.Series = Orignal_CSV.장소 # if문에서 비교를 위한 '장소'열의 값을 place에 저장

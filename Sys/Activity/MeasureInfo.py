@@ -2,19 +2,191 @@
 import tkinter as tk
 from tkinter import ttk
 from Sys.Components import AdditionalWidgets as adwz
+import datetime
+from tkinter import messagebox
+import CsvData
+import CsvCreate
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from tkcalendar import DateEntry
+from matplotlib.figure import Figure
 
-class Measureinfo:
-    def __init__(self, parent):
-        self._parent = parent
-        self._parent.grid_propagate(False)
-        self._parent.pack_propagate(False)
+class MeasureinfoPage:
+    _window = None
+    _plantname = ''
+    _timeinfo = ''
+    _windowtitle = ''
+    _pagetitle = ''
+
+    _day = None
+    _i = None
+    _count = None
+    _Data = None
+    _value = None
+
+    def __init__(self, window, windowtitle='', pagetitle='', plantname='', timeinfo=''):
+        self._window = window
+        self._window.grid_propagate(False)
+        self._window.pack_propagate(False)
+        self._window.update()
+        self._windowtitle = windowtitle
+        self._pagetitle = pagetitle
+        self._plantname = plantname
+        self._timeinfo = timeinfo
+
+        #윈도우 너비, 높이
+        self._display_width = self._window.winfo_screenwidth()
+        self._display_height = self._window.winfo_screenheight()
+        #디폴트 너비, 높이
+        self._default_width = 1280
+        self._default_height = 960
+
+        if(self._windowtitle != ''):
+            self._window.title(self._windowtitle)
+
+        print(f'in MeasureInfo; plantname : {self._plantname}, timeinfo : {self._timeinfo} check')
+
+        self._day = datetime.date.today()
 
     def operate(self):
-        # self.testbaseframe = ttk.Frame(self._parent)
-        # self.testbaseframe.grid_propagate(False)
-        # self.testbaseframe.pack_propagate(False)
-        # self.testbaseframe.pack(expand=True)
-        # self.testbutton = ttk.Button(self.testbaseframe, text='testing in MeasureInfo')
-        self.testbutton = ttk.Button(self._parent, text='testing in MeasureInfo')
-        self.testbutton.pack(expand=True)
+        self._baseframe = ttk.Frame(self._window)
+        self._baseframe.pack_propagate(False)
+        self._baseframe.grid_propagate(False)
+        self._baseframe.pack(side='top', fill='both', padx=2, pady=2, expand=True)
 
+        ###타이틀 프레임
+        self._title_baseframe = ttk.Frame(self._baseframe, relief='raised', height=100)
+        self._title_baseframe.pack_propagate(False)
+        self._title_baseframe.grid_propagate(False)
+        self._title_baseframe.pack(side='top', fill='both', padx=2, pady=2, expand=True)
+
+        ##타이틀담당 frame
+        self._titleframe = ttk.Frame(self._title_baseframe, relief='solid', height=50)
+        self._titleframe.pack(side='top', padx=10, fill='x', expand=True)
+
+        #타이틀 위젯 생성
+        self._titlelabel = ttk.Label(self._titleframe, text=f'{self._plantname} 계측 정보')
+        self._titlelabel.pack(anchor='center', ipadx=5, ipady=5, fill='both', expand=True)
+        #타이틀 위치 및 폰트 속성 설정
+        self._titlelabel.config(anchor='center', font=('한컴바탕', 24))
+
+
+        ###그래프 출력 프레임
+        self._graph_print_frame = ttk.Frame(self._baseframe, height=650, relief='solid')
+        self._graph_print_frame.pack(side='top', fill='both', expand=True)
+
+        ##캔버스 생성, figsize => 가로, 세로 크기 조정
+        self._fig = plt.figure(figsize=(10, 10))
+
+        ## 그래프 좌표 정의
+        self._ax = self._fig.add_subplot(111)
+
+        ## 캔버스 정의
+        self._canvas = FigureCanvasTkAgg(self._fig, master=self._graph_print_frame)
+
+        ##기간 설정 프레임
+        self._timeconfigframe = ttk.Frame(self._title_baseframe)
+        self._timeconfigframe.pack(side='top', fill='both', expand=True, padx=10, pady=5)
+
+
+        ### 타이틀 프레임 채우기
+        #기간 종류
+        self._time_type_select = ttk.Combobox(self._timeconfigframe, values=['시간별', '일별', '월별'], width=20, state='readonly')
+        self._time_type_select.pack(side='left', padx=5)
+        self._time_type_select.set('시간별/일별/월별 선택')
+
+        #기간 종류 적용 버튼 위젯 생성
+        self._confirm_btn = ttk.Button(self._timeconfigframe, text='적용', width=15)
+        self._confirm_btn.pack(side='left', padx=5)
+
+        ##계측 출력 버튼 위젯 생성
+        self._print_btn = ttk.Button(self._timeconfigframe, text='출력')
+        self._print_btn.pack(side='right', padx=5)
+
+        ##계측 종류 선택 part
+        self._measure_type_select = ttk.Combobox(self._timeconfigframe, values=['발전량', '발전금액', '출력량'], state='readonly')
+        self._measure_type_select.pack(side='right', padx=5)
+        self._measure_type_select.set('계측종류 선택')
+
+        ##날짜 선택 part
+        self._dayselect = DateEntry(self._timeconfigframe, year=self._day.year,
+                                    month=self._day.month, day=self._day.day, date_pattern='yyyy/MM/dd',
+                                    state='readonly')
+        self._dayselect.pack(side='right')
+        self._dayselect.bind("<<DataEntrySelected>>")
+
+        ##날짜 선택 text
+        self._textlabel = ttk.Label(self._timeconfigframe, text="날짜 입력 :")
+        self._textlabel.pack(side='right')
+
+        self._confirm_btn.configure(command=lambda: self._btn1())
+        self._print_btn.configure(command=lambda: self._Get_Data())
+
+    def _Get_Data(self):
+        self._Date = self._dayselect.get_date()
+        self._Data = CsvCreate.Date_Day(CsvCreate.Place_1, str(self._Date))
+        try:
+            if len(self._Data) == 0:
+                messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+        except TypeError:
+            messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+        else:
+            self._out_btn()
+
+    def _xlabel(self, time):
+        if(time == 1):
+            self.__max = 25
+        elif(time == 2):
+            self.__max = CsvData.Months(self._dayselect.get_date())+1
+        elif(time == 3):
+            self.__max = 13
+
+        self.label = [i for i in range(1, self.__max)]
+        self._count = self.__max
+        return self.label
+
+    def _out_btn(self):
+        self._btn2()
+        ## 전에 그려진 그래프 데이터 지우기
+        self._ax.clear()
+
+        ## 그래프 작성 부분##
+        self._years = self._xlabel(self._i)
+        self._values = self._value
+
+        self.x = np.arange(self._count - 1)
+        plt.bar(self.x, self._values)
+        plt.xticks(self.x, self._years)
+
+        self._ax.set_xlabel('dice')
+
+        self._ax.set_ylabel('relative frequency')
+        ## 그래프 작성 부분##
+
+        ## 그래프를 캔버스에 그리기
+        self._canvas.draw()
+        self._canvas.get_tk_widget().pack(fill='both', expand=True)
+
+    def _btn1(self):
+        self._i = 0
+        if(self._time_type_select.get() == '시간별'):
+            self._i = 1
+        elif(self._time_type_select.get() == '일별'):
+            self._i = 2
+        elif(self._time_type_select.get() == '월별'):
+            self._i = 3
+        else:
+            messagebox.showerror('선택 오류', '기간 선택을 해주세요')
+
+    def _btn2(self):
+        self._day = self._dayselect.get_date()
+        if(self._measure_type_select.get() == '발전량'):
+            self._data = '인버팅후 금일발전량'
+        elif(self._measure_type_select.get() == '발전금액'):
+            self._data = '인버팅후 누적발전량'
+        elif(self._measure_type_select.get() == '출력량'):
+            self._data = '인버팅후 인버터전력'
+        else:
+            messagebox.showerror('선택 오류', '계측종류를 선택해주세요')
+        self._value = CsvCreate.create_csv(CsvCreate.Place_1, str(self._day), str(self._data), self._i)
