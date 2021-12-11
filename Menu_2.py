@@ -10,7 +10,7 @@ from pandastable import Table
 global place_name, data_table, data, df_jeongsun, df
 
 ##테스트 데이터
-df_data = pd.read_csv("data/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv",
+df_data = pd.read_csv("Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv",
                       encoding="cp949") #선택한 발전소의 테이블을 출력할 예정
 
 ## 장소 임시 지정

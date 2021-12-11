@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from pandastable import Table
 
 ##테스트 데이터
-df_data = pd.read_csv("data/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv",
+df_data = pd.read_csv("Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv",
                       encoding="cp949")#장애 목록을 만들어서 넣을 예정
 
 ## 장소, 데이터 테이블, 데이터, 데이터 샘플
