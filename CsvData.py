@@ -13,7 +13,6 @@ def Data_list(Data : pd.DataFrame, type, Time):
     result = []
     choice = Data
     choice['측정일시'] = pd.to_datetime(choice['측정일시'])
-    print(choice)
     if Time == 1:
         choices = choice.set_index('측정일시').resample('1H').first()
     elif Time == 2:

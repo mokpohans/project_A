@@ -203,7 +203,7 @@ class Mainpage:
     def test_change(self):
         self.test_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height) #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
         self.test_toplevel.grab_set()
-        measureinfo = msi.MeasureinfoPage(window=self.test_toplevel, windowtitle='계측정보', pagetitle='계측정보',
+        measureinfo = msi.MeasureinfoPage(window=self.test_toplevel, windowtitle= self.plant_choose.getPlantName() + '계측정보', pagetitle='계측정보',
                                           plantname=self.plant_choose.getPlantName(), timeinfo=self.timepart.getTimeInfo())
         measureinfo.operate()
 
