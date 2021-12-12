@@ -93,8 +93,9 @@ class Mainpage:
                                                   , './Resources/images/plants/P005_G2C_SolarPlant.png', './Resources/images/plants/P006_G3C_SolarPlant.png'
                                                   , './Resources/images/plants/P007_PG_SolarPlant.png', './Resources/images/plants/P008_YS_SolarPlant.png'
                                                   , './Resources/images/plants/P009_B1P_SolarPlant.png', './Resources/images/plants/P010_B2P_SolarPlant.png'],
-                                              indications=['정선한교', '태곡태양광발전소', '서천태양광발전소', '광양항 제1자전거도로 태양광발전소', '광양항 제2자전거도로 태양광발전소', '광양항 제3자전거도로 태양광발전소',
-                                                           '판교가압장 태양광발전소', '양산 태양광발전소', '분당지사 제1호 주차장 태양광발전소', '분당지사 제2호 주차장 태양광발전소'],
+                                              indications=['정선한교', '태곡태양광발전소', '서천태양광발전소', '광양항 제1자전거도로 태양광발전소',
+                                                           '광양항 제2자전거도로 태양광발전소', '광양항 제3자전거도로 태양광발전소', '판교가압장 태양광발전소',
+                                                           '양산 태양광발전소', '분당지사 제1호 주차장 태양광발전소', '분당지사 제2호 주차장 태양광발전소'],
                                               anchor=tk.NE, width=950, height=int(self._mainpage.winfo_height()/2))
 
 
@@ -203,7 +204,7 @@ class Mainpage:
     def test_change(self):
         self.test_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height) #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
         self.test_toplevel.grab_set()
-        measureinfo = msi.MeasureinfoPage(window=self.test_toplevel, windowtitle= self.plant_choose.getPlantName() + '계측정보', pagetitle='계측정보',
+        measureinfo = msi.MeasureinfoPage(window=self.test_toplevel, windowtitle=self.plant_choose.getPlantName() + '계측정보', pagetitle='계측정보',
                                           plantname=self.plant_choose.getPlantName(), timeinfo=self.timepart.getTimeInfo())
         measureinfo.operate()
 
