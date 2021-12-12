@@ -27,6 +27,7 @@ class Mainpage:
         print(self._window_width)
         print(self._window_height)
 
+
     def operate(self):
         #### 베이스 틀
             ### 메뉴, 시간, 날씨 포함하는 베이스 레이블
@@ -183,13 +184,19 @@ class Mainpage:
         self.indexstate_content = adwz.KVlabel(self.index_label, type='readonly',
                                                key_text='index', value_text='state', width=self._mainpage.winfo_width())
         self.invertor1_content = adwz.KVlabel(self.invertor_1_label, type='showcase', key_text='invertor 1',
-                                              image="./Resources/images/test_button_img.png",
+                                              images=['./Resources/images/invertor_light/invertor_null.png',
+                                                      './Resources/images/invertor_light/invertor_red.png',
+                                                      './Resources/images/invertor_light/invertor_green.png'],
                                               width=self._mainpage.winfo_width())
         self.invertor2_content = adwz.KVlabel(self.invertor_2_label, type='showcase', key_text='invertor 2',
-                                              image="./Resources/images/test_button_img.png",
+                                              images=['./Resources/images/invertor_light/invertor_null.png',
+                                                      './Resources/images/invertor_light/invertor_red.png',
+                                                      './Resources/images/invertor_light/invertor_green.png'],
                                               width=self._mainpage.winfo_width())
         self.invertor3_content = adwz.KVlabel(self.invertor_3_label, type='showcase', key_text='invertor 3',
-                                              image="./Resources/images/test_button_img.png",
+                                              images=['./Resources/images/invertor_light/invertor_null.png',
+                                                      './Resources/images/invertor_light/invertor_red.png',
+                                                      './Resources/images/invertor_light/invertor_green.png'],
                                               width=self._mainpage.winfo_width())
         self.moduletemper_content = adwz.KVlabel(self.module_temper_label, type='readonly',
                                                  key_text='module temperature', value_text='state', width=self._mainpage.winfo_width())

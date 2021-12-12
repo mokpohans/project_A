@@ -508,6 +508,12 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
                 # self._valuepart.pack(expand=True)
                 # self._valuepart.configure(image=self._image, anchor=tk.W)
                 # self._valuepart.update()
+            elif(self._images):
+                self._valuepart_imglabel = ttk.Label(self._valuepart, background='#cfffe5', image=self._images[0],
+                                                     width=int(self._width / 2), anchor='center')
+                self._valuepart_imglabel.pack_propagate(False)
+                self._valuepart_imglabel.update()
+                self._valuepart_imglabel.pack(expand=True, fill='both')
 
             self._keypart.grid(row=0, column=0, sticky=tk.NSEW)
             self._valuepart.grid(row=0, column=1, sticky=tk.NSEW)
@@ -516,7 +522,7 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
         if(image != None):
             self._image = tk.PhotoImage(file=image)
         if(images):
-            for i in images:
+            for i in range(len(images)):
                 self._images.append(tk.PhotoImage(file=images[i]))
 
     def create(self, padx=0, pady=0, ipadx=0, ipady=0):
