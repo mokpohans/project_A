@@ -30,8 +30,8 @@ def Data_list(Data : pd.DataFrame, type, Time):
                 __temp_1.append(0.0)
             else:
                 __temp_1.append(0)
-            for i in range(1, len(__temp)):
-                __temp_1.append(abs(__temp[i] - __temp[i-1]))
+            for j in range(1, len(__temp)):
+                __temp_1.append(abs(__temp[j] - __temp[j-1]))
             if __col[i] == '인버팅후 누적발전량':
                 break
             else:
