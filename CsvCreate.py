@@ -96,7 +96,6 @@ def Next_Date(__Year : str,__Month : str, __Day):
         return False
 
 def create_csv(Data, Date, Type, Time):
-    print(Time)
     if Time == 1 :
        pass
     elif Time == 2 :
@@ -109,12 +108,30 @@ def create_csv(Data, Date, Type, Time):
 
 def Place_csv(place_name):
     # csv_files에 저장되어있는 csv파일을 불러오는 코드
-    __temp_csv_1: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv',
-                                          encoding='CP949')
-    __temp_csv_2: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210930.csv',
-                                          encoding='CP949')
-    #2개의 데이터프레임을 하나로 합치는 코드
-    Orignal_CSV: DataFrame = pd.concat([__temp_csv_1, __temp_csv_2], ignore_index=True)
-    #CSV파일에서 입력 받은 발전소 이름으로 표를 만듬
-    return_CSV= Orignal_CSV[Orignal_CSV.장소 == place_name]
-    return return_CSV
+    for i in range(0, len(place_list)):
+        if globals()["Place_{}".format(i)].iloc[1]['장소'] == place_name:
+            return globals()["Place_{}".format(i)]
+        else:
+            pass
+
+__temp_csv_1: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv',
+                                      encoding='CP949')
+__temp_csv_2: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210930.csv',
+                                      encoding='CP949')
+#2개의 데이터프레임을 하나로 합치는 코드
+Orignal_CSV: DataFrame = pd.concat([__temp_csv_1, __temp_csv_2], ignore_index=True)
+
+place: pd.Series = Orignal_CSV.장소 # if문에서 비교를 위한 '장소'열의 값을 place에 저장
+place_list: list = ['정선한교'] # 장소의 값인 발전소 위치를 저장할 리스트
+count_list: int = 0 # place_list의 인덱스
+
+for i in place:
+    if place_list[count_list] == i: # 리스트에 있는 장소일 경우
+        pass #아무것도 하지않음
+    else:
+        count_list = count_list + 1 # 리스트의 인덱스를 증가
+        place_list.insert(count_list, i) # 리스트에 발전소 위치 추가
+
+# 원본 CSV파일에서 발전소 위치 각각 표를 만듬
+for i in range(0, len(place_list)): # 원본파일이 데이터가 많아서 장소별로 DataFrame을 생성
+    globals()["Place_{}".format(i)] = Orignal_CSV[Orignal_CSV.장소 == place_list[i]] # 자동변수할당 하여 Place_1, Place_2, ... , Place_10라는 Datafrrame 생성

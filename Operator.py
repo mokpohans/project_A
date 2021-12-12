@@ -1,8 +1,10 @@
 #   Operator.py는 게시자입니다.
 import tkinter
 from tkinter import ttk
-from Sys.Activity import MainPage
 
+import CsvCreate
+from Sys.Activity import MainPage
+CsvCreate
 main_window = tkinter.Tk()
 
 #     현재 모니터 디스플레이 사이즈(나중에 비율 맞출때 쓰기)
