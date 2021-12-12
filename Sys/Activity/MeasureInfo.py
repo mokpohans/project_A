@@ -10,8 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkcalendar import DateEntry
-from matplotlib import font_manager, rc
-
 from matplotlib.figure import Figure
 
 class MeasureinfoPage:
@@ -20,22 +18,14 @@ class MeasureinfoPage:
     _timeinfo = ''
     _windowtitle = ''
     _pagetitle = ''
-    _Xlable= ''
-    _Ylable = ''
-    _Day = ''
 
     _day = None
     _i = None
     _count = None
     _Data = None
     _value = None
-    font_path = "C:/Windows/Fonts/NGULIM.TTF"
-    font = font_manager.FontProperties( fname = font_path ).get_name()
-    rc('font', family=font)
 
     def __init__(self, window, windowtitle='', pagetitle='', plantname='', timeinfo=''):
-
-
         self._window = window
         self._window.grid_propagate(False)
         self._window.pack_propagate(False)
@@ -91,8 +81,7 @@ class MeasureinfoPage:
 
         ## 그래프 좌표 정의
         self._ax = self._fig.add_subplot(111)
-        self._ax_1 = self._ax.twinx()
-        self._ax_2 = self._ax_1.twinx()
+
         ## 캔버스 정의
         self._canvas = FigureCanvasTkAgg(self._fig, master=self._graph_print_frame)
 
@@ -161,27 +150,20 @@ class MeasureinfoPage:
         self._btn2()
         ## 전에 그려진 그래프 데이터 지우기
         self._ax.clear()
-        self._ax_1.clear()
-        self._ax_2.clear()
-        ##막대 그래프 작성 부분##
+
+        ## 그래프 작성 부분##
         self._years = self._xlabel(self._i)
+        self._values = self._value
+
         self.x = np.arange(self._count - 1)
-        self._ax.bar(self.x, self._value[0],  color='red')
-        plt.xticks(self.x)
+        plt.bar(self.x, self._values)
+        plt.xticks(self.x, self._years)
 
-        self._ax.set_xlabel(self._Day + self._Xlable)
-        self._ax.set_ylabel(self._Day + self._Ylable)
+        self._ax.set_xlabel('dice')
 
-        self._ax.patch.set_visible(False)
-        ##실선선 그래프 작성부분##
+        self._ax.set_ylabel('relative frequency')
+        ## 그래프 작성 부분##
 
-        if (self._measure_type_select.get() != '발전금액'):
-            self._ax_1.plot(self.x, self._value[1], '-s', color='green', markersize=7, linewidth=5)
-            self._ax_2.plot(self.x, self._value[2], color='blue', markersize=7, linewidth=5, alpha=0.7)
-            self._ax_1.set_zorder(self._ax.get_zorder() + 10)
-            self._ax_2.set_zorder(self._ax_1.get_zorder() + 10)
-        else:
-            pass
         ## 그래프를 캔버스에 그리기
         self._canvas.draw()
         self._canvas.get_tk_widget().pack(fill='both', expand=True)
@@ -190,16 +172,10 @@ class MeasureinfoPage:
         self._i = 0
         if(self._time_type_select.get() == '시간별'):
             self._i = 1
-            self._Xlable = '시간 단위'
-            self._Day = '금일'
         elif(self._time_type_select.get() == '일별'):
             self._i = 2
-            self._Xlable = '일 단위'
-            self._Day = '금월'
         elif(self._time_type_select.get() == '월별'):
             self._i = 3
-            self._Xlable = '월 단위'
-            self._Day = '금년'
         else:
             messagebox.showerror('선택 오류', '기간 선택을 해주세요')
 
@@ -207,13 +183,10 @@ class MeasureinfoPage:
         self._day = self._dayselect.get_date()
         if(self._measure_type_select.get() == '발전량'):
             self._data = '인버팅후 금일발전량'
-            self._Ylable = '발전량'
         elif(self._measure_type_select.get() == '발전금액'):
             self._data = '인버팅후 누적발전량'
-            self._Ylable = '발전 금액'
         elif(self._measure_type_select.get() == '출력량'):
             self._data = '인버팅후 인버터전력'
-            self._Ylable = '출력량'
         else:
             messagebox.showerror('선택 오류', '계측종류를 선택해주세요')
         self._value = CsvCreate.create_csv(CsvCreate.Place_csv(self._plantname), str(self._day), str(self._data), self._i)
