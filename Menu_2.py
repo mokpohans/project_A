@@ -23,17 +23,6 @@ df_jeongsun = df_data[jeongsun]
 df_jeongsun.columns
 
 
-## 공백 프레임 생성 메소드
-def f_x(frame_name, x):
-    instant_frame = ttk.Frame(frame_name)
-    instant_frame.pack(side="left", padx=x)
-
-
-def f_y(frame_name, y):
-    instant_frame = ttk.Frame(frame_name)
-    instant_frame.pack(side="top", padx=y)
-
-
 ## 날짜선택 옵션 함수
 def btr_1():
     ## 기본 데이터 초기화

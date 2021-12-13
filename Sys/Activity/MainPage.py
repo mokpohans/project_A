@@ -5,6 +5,7 @@ from tkinter import ttk
 import CsvCreate
 from Sys.Components import AdditionalWidgets as adwz
 from Sys.Activity import MeasureInfo as msi
+from Sys.Activity import ReportInfo as rpi
 import CsvData
 
 class Mainpage:
@@ -57,7 +58,8 @@ class Mainpage:
 
         # self.menus.elementManipulate(index=0, command=None) # command에 들어갈 함수 만들어서 내용 수정할 것.
         # self.menus.elementManipulate(index=0, command=lambda: self.test_change())
-        self.menus.elementManipulate(index=0, command=self.test_change)
+        self.menus.elementManipulate(index=0, command=self.Wake_MeasureInfo)
+        self.menus.elementManipulate(index=1, command=self.Wake_ReportInfo)
 
         # print(f'in Minapage, locals() print : {locals()}')
 
@@ -211,18 +213,32 @@ class Mainpage:
 
         self.test_live_timechecker()
 
-#테스팅 : 메뉴버튼 누르면 탑레벨이 뜨게끔 함.
-    def test_change(self):
-        self.test_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height) #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
-        self.test_toplevel.grab_set()
-        measureinfo = msi.MeasureinfoPage(window=self.test_toplevel, windowtitle=self.plant_choose.getPlantName() + '계측정보', pagetitle='계측정보',
+    ## 메뉴1번 계측정보 열기(Toplevel)
+    def Wake_MeasureInfo(self):
+        self.MSI_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height)
+                                     #
+        self.MSI_toplevel.grab_set() #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
+                                     #
+        measureinfo = msi.MeasureinfoPage(window=self.MSI_toplevel, windowtitle=self.plant_choose.getPlantName() + '계측정보', pagetitle='계측정보',
                                           plantname=self.plant_choose.getPlantName(), timeinfo=self.timepart.getTimeInfo())
         measureinfo.operate()
 
+    ## 메뉴2번 보고서 열기(Toplevel)
+    def Wake_ReportInfo(self):
+        self.RPI_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height)
+                                     #
+        self.RPI_toplevel.grab_set() #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
+                                     #
+        reportinfo = rpi.ReportinfoPage(window=self.RPI_toplevel, windowtitle=self.plant_choose.getPlantName() + ' 보고서', pagetitle='보고서',
+                                        plantname=self.plant_choose.getPlantName())
+        reportinfo.operate()
+
+# 테스팅
     def test_live_timechecker(self):
-        print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
+        # print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
         self.checking = CsvData.GetInvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
         self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
+
 
     def on_closing(self):
         self.test_toplevel.destroy()

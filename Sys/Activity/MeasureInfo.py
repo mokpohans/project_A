@@ -37,7 +37,6 @@ class MeasureinfoPage:
 
     def __init__(self, window, windowtitle='', pagetitle='', plantname='', timeinfo=''):
 
-
         self._window = window
         self._window.grid_propagate(False)
         self._window.pack_propagate(False)
@@ -49,11 +48,13 @@ class MeasureinfoPage:
         self._timeinfo = timeinfo
 
         #윈도우 너비, 높이
-        self._display_width = self._window.winfo_screenwidth()
-        self._display_height = self._window.winfo_screenheight()
+        self._window_width = self._window.winfo_screenwidth()
+        self._window_height = self._window.winfo_screenheight()
         #디폴트 너비, 높이
         self._default_width = 1280
         self._default_height = 960
+
+        self._window.geometry(f"{self._window_width}x{self._window_height}")
 
         if(self._windowtitle != ''):
             self._window.title(self._windowtitle)
