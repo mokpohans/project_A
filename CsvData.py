@@ -70,17 +70,11 @@ def coll_S_R():
     else:
         print(__response.status_code)
 
-# 표 컬럼중 인버터에 대한 통계를 만들고 출력하는 함수
-def Invert_state(Data: pd.DataFrame, Time) -> list:
-    __Fun: list = ["mean", "max", "min"]  # 통계를 내기위한 기능 리스트
-    __Inverts_list: list = ["인버터전압(R상)", "인버터전압(S상)", "인버터전압(T상)", "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)"]
-    __Data = Data
-    __Data[__Data[__Inverts_list[0]]].str.contains(Time)
-
+# CSV파일에서 시간('분'단위 까지), 발전소 이름 을 이용해 해당 시간의 데이터 행 불러와 검사.
 def GetInvertState(time, plantname):
-    plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
+    plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname) # 먼저 발전소 이름을 조회해서 몇번째 발전소 데이터프레임인지 확인
     try:
-        live_checked_df: pd.DataFrame = plant_df[plant_df['측정일시'].str.contains(time)]
+        live_checked_df: pd.DataFrame = plant_df[plant_df['측정일시'].str.contains(time)] #발전소 데이터프레임의 '측정일시'부분에서 시간 검사 후 확인
         print(live_checked_df)
     except:
         print('Please check your time, in this version you can only use August and September informations')

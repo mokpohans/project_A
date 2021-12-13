@@ -106,6 +106,7 @@ place_list: list = ['정선한교'] # 장소의 값인 발전소 위치를 저�
 count_list: int = 0 # place_list의 인덱스
 
 for i in place:
+# for i in range(len(place)):
     if place_list[count_list] == i: # 리스트에 있는 장소일 경우
         pass #아무것도 하지않음
     else:
@@ -115,3 +116,4 @@ for i in place:
 # 원본 CSV파일에서 발전소 위치 각각 표를 만듬
 for i in range(0, len(place_list)): # 원본파일이 데이터가 많아서 장소별로 DataFrame을 생성
     globals()["Place_{}".format(i)] = Orignal_CSV[Orignal_CSV.장소 == place_list[i]] # 자동변수할당 하여 Place_1, Place_2, ... , Place_10라는 Datafrrame 생성
+    # print(globals()[f"Place_{i}"])

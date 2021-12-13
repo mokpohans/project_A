@@ -22,7 +22,7 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
     _minute = 0
     _second = 0
 
-    def __init__(self, parent, timeformat="%Y/%m/%d %H:%M", width=300, height=50, fit=True):
+    def __init__(self, parent, timeformat="%Y-%m-%d %H:%M", width=300, height=50, fit=True):
         self._parent = parent
         self.time_format = timeformat
 
@@ -150,7 +150,7 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     _images_uri = []
     _images = []
 
-    _format = "%Y/%m/%d %H:%M"
+    _format = "%Y-%m-%d %H:%M"
 
     _time_text = ''
     _var_time_text = None
@@ -262,7 +262,8 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
 
     def getTimeInfo(self, expand=''):
         if (expand == 'default')or(expand == ''):
-            return str(self._timeprinter.getTimeVar().get())
+            return str(f"{self._timeprinter.getTimeElements('year')}-" + "{0:0>2}".format(f"{self._timeprinter.getTimeElements('month')}") + "-" + "{0:0>2}".format(f"{self._timeprinter.getTimeElements('day')}")
+                       + f" {self._timeprinter.getTimeElements('hour')}:" + "{0:0>2}".format(f"{self._timeprinter.getTimeElements('minute')}"))
         elif(expand == 'sec')or(expand == 'second'):
             self._second = self._timeprinter.getTimeElements(element='second')
             return str(self._timeprinter.getTimeVar().get() + " {0:0>2}".format(f"{self._second}"))
