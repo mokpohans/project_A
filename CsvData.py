@@ -92,7 +92,15 @@ def GetInvertState(time:str, plantname:str):
                 print(__temp_storage_df)
             elif(__temp_storage_df.empty == True): # 임시 저장 데이터프레임 조차도 비어있다면(처음 입력할 때 부터 존재하지 않는 시간)
                 pass
-
-
     except:
         print('Please check your time, in this version you can only use August and September informations')
+
+def Trans_DF(Data, Date, Time): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
+    if Time == 1 :# 예) 2021-08-01 그대로 사용
+       pass
+    elif Time == 2 :# 예) 2021-08로 -01 제거
+        Date = Date[0:-3]
+    elif Time == 3 :# 예) 2021로 -08-01 제거
+        Date = Date[0:5]
+    data = Data[Data['측정일시'].str.contains(Date)]# 측정일시를 위 조건문에 설정된 대로 필터링
+    return data

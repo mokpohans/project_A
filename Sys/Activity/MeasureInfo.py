@@ -142,6 +142,7 @@ class MeasureinfoPage:
 
     def _Get_Data(self):
         self._Date = self._dayselect.get_date()
+        print(self._Date)
         self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
         try:
             if len(self._Data) == 0:
