@@ -6,6 +6,7 @@ import CsvCreate
 from Sys.Components import AdditionalWidgets as adwz
 from Sys.Activity import MeasureInfo as msi
 from Sys.Activity import ReportInfo as rpi
+from Sys.Activity import ErrorInfo as eri
 import CsvData
 
 class Mainpage:
@@ -60,6 +61,7 @@ class Mainpage:
         # self.menus.elementManipulate(index=0, command=lambda: self.test_change())
         self.menus.elementManipulate(index=0, command=self.Wake_MeasureInfo)
         self.menus.elementManipulate(index=1, command=self.Wake_ReportInfo)
+        self.menus.elementManipulate(index=2, command=self.Wake_ErrorInfo)
 
         # print(f'in Minapage, locals() print : {locals()}')
 
@@ -233,6 +235,14 @@ class Mainpage:
                                         plantname=self.plant_choose.getPlantName())
         reportinfo.operate()
 
+    def Wake_ErrorInfo(self):
+        self.ERI_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height)
+                                     #
+        self.ERI_toplevel.grab_set() #toplevel_id.grab_set() 써야 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
+                                     #
+        errorinfo = eri.ErrorInfoPage(window=self.ERI_toplevel, windowtitle=self.plant_choose.getPlantName() + ' 장애 목록', pagetitle='장애목록',
+                                      plantname=self.plant_choose.getPlantName())
+        errorinfo.operate()
 # 테스팅
     def test_live_timechecker(self):
         # print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
@@ -240,8 +250,18 @@ class Mainpage:
         self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
 
 
-    def on_closing(self):
-        self.test_toplevel.destroy()
+    def msi_closing(self):
+        self.MSI_toplevel.quit()
 
-        self.test_toplevel.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.MSI_toplevel.protocol("WM_DELETE_WINDOW", self.msi_closing)
+
+    def rpi_closing(self):
+        self.RPI_toplevel.quit()
+
+        self.RPI_toplevel.protocol("WM_DELETE_WINDOW", self.rpi_closing)
+
+    def eri_closing(self):
+        self.ERI_toplevel.quit()
+
+        self.ERI_toplevel.protocol("WM_DELETE_WINDOW", self.eri_closing)
 #테스팅
