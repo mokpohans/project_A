@@ -25,7 +25,7 @@ main_page.operate()
 
 def on_closing():
     global main_window
-    main_window.destroy()
+    main_window.quit()
 
 main_window.protocol("WM_DELETE_WINDOW", on_closing)
 
