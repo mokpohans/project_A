@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkcalendar import DateEntry
 from matplotlib import font_manager, rc
-
+from datetime import datetime
 from matplotlib.figure import Figure
 
 class MeasureinfoPage:
@@ -61,7 +61,9 @@ class MeasureinfoPage:
 
         print(f'in MeasureInfo; plantname : {self._plantname}, timeinfo : {self._timeinfo} check')
 
-        self._day = datetime.date.today()
+        #Csv파일에서 가장 빠른 날짜 불러오기
+        self.str = CsvData.Csv_First_Date(self._plantname)
+        self._day = datetime.strptime(self.str, '%Y-%m-%d')
 
     def operate(self):
         self._baseframe = ttk.Frame(self._window)

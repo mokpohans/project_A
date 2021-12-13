@@ -11,6 +11,10 @@ pd.set_option('mode.chained_assignment',  None)
 global __temp_storage_df
 __temp_storage_df = pd.DataFrame()
 
+def Csv_First_Date(plantname:str):
+    plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
+    Date = CsvCreate.Date_list(plant_df)
+    return Date[0]
 #그달의 마지막 일(day)를 출력하는 함수
 def Months(time):
     __month = time.month
