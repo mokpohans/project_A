@@ -1,12 +1,14 @@
 ## 보고서 메뉴
-import tkinter as tk
+import datetime
 import tkinter.ttk as ttk
+from tkinter import messagebox
+
 from tkcalendar import DateEntry
 import pandas as pd
 from pandastable import Table
 import CsvData
 import CsvCreate
-import datetime as dt
+from datetime import datetime
 
 class ReportinfoPage:
     _window = None
@@ -14,7 +16,9 @@ class ReportinfoPage:
     _pagetitle = ''
     _plantname = ''
     _plant_df:pd.DataFrame = None
+    _place : pd.DataFrame = None
 
+    _i = None
     _default_time = None
     _default_time_year = None
     _default_time_month = None
@@ -35,11 +39,6 @@ class ReportinfoPage:
 
         self._plant_df = CsvCreate.Matching_Place_csv(self._plantname)
 
-        self._default_time = self._plant_df['측정일시'][0]
-        self._default_time_year = int(self._default_time[0:4])
-        self._default_time_month = int(self._default_time[5:7])
-        self._default_time_day = int(self._default_time[8:10])
-
         print(f'sliced => {self._default_time_year}, {self._default_time_month}, {self._default_time_day}')
 
         # 윈도우 너비, 높이
@@ -55,6 +54,8 @@ class ReportinfoPage:
             self._window.title(self._windowtitle)
 
         print(f'in MeasureInfo; plantname : {self._plantname} check')
+        self.str = CsvData.Csv_First_Date(self._plantname)
+        self._day = datetime.strptime(self.str, '%Y-%m-%d')
 
     def operate(self):
         self._baseframe = ttk.Frame(self._window)
@@ -94,12 +95,12 @@ class ReportinfoPage:
 
         ## 날짜 선택
             # 출력 버튼 위젯 생성
-        self._printbtn = ttk.Button(self._confirm_frame, text='출력')
+        self._printbtn = ttk.Button(self._confirm_frame, text='출력', command = self._btn1)
         self._printbtn.pack(side='right', padx=5)
 
             # 날짜 입력 엔트리
         self._day_select = DateEntry(self._confirm_frame,
-                                    year=self._default_time_year, month=self._default_time_month, day=self._default_time_day,
+                                     year=self._day.year,month=self._day.month, day=self._day.day,
                                     date_pattern='yyyy/MM/dd',
                                state="readonly")
         self._day_select.pack(side="right")
@@ -113,26 +114,42 @@ class ReportinfoPage:
         self._report_frame = ttk.Frame(self._baseframe, height=600, relief="solid")
         self._report_frame.pack(side="top", fill="both", expand=True)
 
-        self._data_table = Table(self._report_frame, dataframe=self._plant_df, height=600)
-        self._data_table.show()
 
 
     ## 날짜선택 옵션 함수
-    def btn_1(self):
-        ## 기본 데이터 초기화
-        self._day_select.delete(0, tk.END)
-        if (self._type_select.get() == "시간별"):
-            self._day_select.insert(0, "2021-08-00")
-            self._lable_name.configure(text="날짜 [년도-월-일] 입력 : ")
-
-        elif (type_select.get() == "일별"):
-            day_selete.insert(0, "2021-00")
-            lable_name.configure(text="날짜 [년도-월] 입력 : ")
-
-        elif (type_select.get() == "월별"):
-            day_selete.insert(0, "2000")
-            lable_name.configure(text="날짜 [년도] 입력")
-
+    def _btn1(self):
+        self._i = 0
+        if(self._type_select.get() == '시간별'):
+            self._i = 1
+        elif(self._type_select.get() == '일별'):
+            self._i = 2
+        elif(self._type_select.get() == '월별'):
+            self._i = 3
         else:
-            day_selete.insert(0, "2021-08-01")
-        day_selete.pack(side="right", padx=5)
+            messagebox.showerror('선택 오류', '기간 선택을 해주세요')
+        self._Date = self._day_select.get_date()
+        self._place = CsvData.Trans_DF(self._plant_df, str(self._Date),self._i)
+        self.out_table()
+
+    def _Get_Data(self):
+        # print(self._Date)
+        self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
+        try:
+            if len(self._Data) == 0:
+                messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+        except TypeError:
+            messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+        else:
+            self._btn1()
+
+    def out_table(self):
+        ##대신data 변수
+
+        ## 테이블 지우기
+        if self.data_table != None:
+            self.data_table.clearTable()
+            self.data_table.destroy()
+        else:
+            pass
+        self.data_table = Table(self._report_frame, dataframe= self._place, height=600)
+        self.data_table.show()
