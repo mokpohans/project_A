@@ -1,6 +1,8 @@
 #   GUI 메인 화면 구성입니다.
 import tkinter as tk
 from tkinter import ttk
+
+import CsvCreate
 from Sys.Components import AdditionalWidgets as adwz
 from Sys.Activity import MeasureInfo as msi
 import CsvData
@@ -219,7 +221,8 @@ class Mainpage:
 
     def test_live_timechecker(self):
         print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
-        self.checking = CsvData.GetInvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        # self.checking = CsvData.GetInvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        self.checking = CsvData.Invert_state(CsvCreate.Matching_Place_csv(self.plant_choose.getPlantName()), Time="2021/08/01 00:00")
         self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
 
     def on_closing(self):

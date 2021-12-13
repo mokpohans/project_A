@@ -75,7 +75,7 @@ def Invert_state(Data: pd.DataFrame, Time) -> list:
     __Fun: list = ["mean", "max", "min"]  # 통계를 내기위한 기능 리스트
     __Inverts_list: list = ["인버터전압(R상)", "인버터전압(S상)", "인버터전압(T상)", "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)"]
     __Data = Data
-    __Data[__Inverts_list[0]].str.contains(Time)
+    __Data[__Data[__Inverts_list[0]]].str.contains(Time)
 
 def GetInvertState(time, plantname):
     plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
