@@ -3,6 +3,8 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+import CsvCreate
+
 pd.set_option('display.max_columns', None)
 pd.set_option('mode.chained_assignment',  None)
 
@@ -74,3 +76,11 @@ def Invert_state(Data: pd.DataFrame, Time) -> list:
     __Inverts_list: list = ["인버터전압(R상)", "인버터전압(S상)", "인버터전압(T상)", "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)"]
     __Data = Data
     __Data[__Inverts_list[0]].str.contains(Time)
+
+def GetInvertState(time, plantname):
+    plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
+    try:
+        live_checked_df: pd.DataFrame = plant_df[plant_df['측정일시'].str.contains(time)]
+        print(live_checked_df)
+    except:
+        print('Please check your time, in this version you can only use August and September informations')

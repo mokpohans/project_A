@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from Sys.Components import AdditionalWidgets as adwz
 from Sys.Activity import MeasureInfo as msi
+import CsvData
 
 class Mainpage:
     def __init__(self, page):
@@ -109,7 +110,6 @@ class Mainpage:
         self.timepart.create()
 
 #테스팅
-        # self.timeprint.create()
         self.plant_choose.create()
 
         ### 컨텐츠 베이스 채우기
@@ -207,6 +207,8 @@ class Mainpage:
         self.invertor3_content.create(padx=135)
         self.moduletemper_content.create(padx=135)
 
+        self.test_live_timechecker()
+
 #테스팅 : 메뉴버튼 누르면 탑레벨이 뜨게끔 함.
     def test_change(self):
         self.test_toplevel = tk.Toplevel(self._mainpage, width=self._display_width, height=self._display_height) #toplevel_id.grab_set() 해야지 메인윈도우와 탑레벨간 이벤트, 매개변수 상호작용이 가능하다.
@@ -215,4 +217,13 @@ class Mainpage:
                                           plantname=self.plant_choose.getPlantName(), timeinfo=self.timepart.getTimeInfo())
         measureinfo.operate()
 
+    def test_live_timechecker(self):
+        print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
+        self.checking = CsvData.GetInvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
+
+    def on_closing(self):
+        self.test_toplevel.destroy()
+
+        self.test_toplevel.protocol("WM_DELETE_WINDOW", self.on_closing)
 #테스팅

@@ -41,8 +41,8 @@ def Date_list(Data : pd.DataFrame) -> list:
             __month_list = [] #여기서 clear를 쓰지 않는 이유는 clear가 list =[] 보다 약간 느리기 때문이다
             __month_list.append(time_1)
             conut = conut + 1
-        Next_Date(year, month, day)
-    Date_list.append(__month_list)
+        (year, month, day)
+    Date_list.apNext_Datepend(__month_list)
     return Date_list
 
 def Date_Day(Data : pd.DataFrame, Day):

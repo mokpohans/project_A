@@ -110,6 +110,20 @@ class timeprinter: # 임시 시간 출력기  예정 -> 시간 정보들을 년,
     def setTimeVar(self, changevalue):
         self._entire_time_var.set(changevalue)
 
+    def getTimeElements(self, element='second'):
+        if(element=='year'):
+            return self._year
+        if(element=='month'):
+            return self._month
+        if(element=='day'):
+            return self._day
+        if(element=='hour'):
+            return self._hour
+        if(element=='minute'):
+            return self._minute
+        if(element=='second'):
+            return self._second
+
     def setTimeElements(self, rawtime=None, year=0, month=0, day=0, hour=0, minute=0, second=0):
         self._rawtimedata = rawtime
         self._year = year
@@ -246,8 +260,14 @@ class temp_Dclock: # 완전히 시간 표현 부분으로 사용할 예정; 예�
     def create(self):
         self._baseFrame.pack(expand=True)
 
-    def getTimeInfo(self):
-        return str(self._timeprinter.getTimeVar().get())
+    def getTimeInfo(self, expand=''):
+        if (expand == 'default')or(expand == ''):
+            return str(self._timeprinter.getTimeVar().get())
+        elif(expand == 'sec')or(expand == 'second'):
+            self._second = self._timeprinter.getTimeElements(element='second')
+            return str(self._timeprinter.getTimeVar().get() + " {0:0>2}".format(f"{self._second}"))
+
+
 
 class imagesizehelper:
     _image_uri = None
