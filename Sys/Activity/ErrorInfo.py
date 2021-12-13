@@ -81,35 +81,35 @@ class ErrorInfoPage:
 
         ## 기간설정 및 출력 버튼 프레임
         self._confirm_frame = ttk.Frame(self._title_base_frame)
-        self._confirm_frame.pack(side='top', fill='both', expand=True, padx=10, pady=5)
-        #
-        # ## 날짜 입력 위젯 생성
-        #     # 출력 버튼 위젯 생성
-        # self._printbtn = ttk.Button(self._confirm_frame, text='출력')
-        # self._printbtn.pack(side='right', padx=5)
-        #
-        # ##날짜 범위 끝
-        # self._day_end = ttk.Entry(self._confirm_frame, text=self.cal_end, width=20)
-        # self._day_end.insert(0, self.cal_end)
-        # self._day_end.pack(side='right')
-        #
-        # ## "~"
-        # self._in_instans = ttk.Label(self._confirm_frame, text=' ~ ')
-        # self._in_instans.pack(side='right', padx=5)
-        # self._in_instans.configure(state='readonly')
-        #
-        # ##날짜 범위 시작
-        # self._day_start = ttk.Entry(self._confirm_frame, text=self.cal_start, width=20)
-        # self._day_start.insert(0, self.cal_start)
-        # self._day_start.pack(sdie='right')
-        #
-        # ## 텍스트 라벨 생성
-        # self._label_name = ttk.Label(self._confirm_frame, text='날짜입력 :')
-        # self._label_name.pack(side='right')
-        #
-        # ##장애목록 출력 프레임
-        # self._print_frame = ttk.Frame(self._window, height=600, relief='solid')
-        # self._print_frame.pack(side='top', fill='both', expand=True)
-        #
-        # self.data_table = Table(self._print_frame, dataframe=self._plant_df, height=600)
-        # self.data_table.show()
+        self._confirm_frame.pack(side="top", fill='both', expand=True, padx=10, pady=5)
+
+        ## 날짜 입력 위젯 생성
+            # 출력 버튼 위젯 생성
+        self._printbtn = ttk.Button(self._confirm_frame, text='출력')
+        self._printbtn.pack(side='right', padx=5)
+
+        ##날짜 범위 끝
+        self._day_end = ttk.Entry(self._confirm_frame, text=self.cal_end, width=20)
+        self._day_end.insert(0, self.cal_end)
+        self._day_end.pack(side="right")
+
+        ## "~"
+        self._in_instans = ttk.Label(self._confirm_frame, text=' ~ ')
+        self._in_instans.pack(side="right", padx=5)
+        self._in_instans.configure(state='readonly')
+
+        ##날짜 범위 시작
+        self._day_start = ttk.Entry(self._confirm_frame, text=self.cal_start, width=20)
+        self._day_start.insert(0, self.cal_start)
+        self._day_start.pack(side="right")
+
+        ## 텍스트 라벨 생성
+        self._label_name = ttk.Label(self._confirm_frame, text='날짜입력 :')
+        self._label_name.pack(side="right")
+
+        ##장애목록 출력 프레임
+        self._print_frame = ttk.Frame(self._window, height=600, relief='solid')
+        self._print_frame.pack(side="top", fill='both', expand=True)
+
+        self.data_table = Table(self._print_frame, dataframe=self._plant_df, height=600)
+        self.data_table.show()

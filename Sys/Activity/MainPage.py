@@ -242,6 +242,7 @@ class Mainpage:
                                      #
         errorinfo = eri.ErrorInfoPage(window=self.ERI_toplevel, windowtitle=self.plant_choose.getPlantName() + ' 장애 목록', pagetitle='장애목록',
                                       plantname=self.plant_choose.getPlantName())
+        errorinfo.operate()
 # 테스팅
     def test_live_timechecker(self):
         # print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
