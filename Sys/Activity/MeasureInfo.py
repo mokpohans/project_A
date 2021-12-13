@@ -29,9 +29,11 @@ class MeasureinfoPage:
     _count = None
     _Data = None
     _value = None
-    font_path = "C:/Windows/Fonts/NGULIM.TTF"
+    _Place = None
+    font_path = "C:/Windows/Fonts/GULIM.TTC"
     font = font_manager.FontProperties( fname = font_path ).get_name()
     rc('font', family=font)
+
 
     def __init__(self, window, windowtitle='', pagetitle='', plantname='', timeinfo=''):
 
@@ -43,6 +45,7 @@ class MeasureinfoPage:
         self._windowtitle = windowtitle
         self._pagetitle = pagetitle
         self._plantname = plantname
+        self._Place = CsvCreate.Matching_Place_csv(plantname)
         self._timeinfo = timeinfo
 
         #윈도우 너비, 높이
@@ -136,7 +139,7 @@ class MeasureinfoPage:
 
     def _Get_Data(self):
         self._Date = self._dayselect.get_date()
-        self._Data = CsvCreate.Date_Day(CsvCreate.Place_csv(self._plantname), str(self._Date))
+        self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
         try:
             if len(self._Data) == 0:
                 messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
@@ -216,4 +219,4 @@ class MeasureinfoPage:
             self._Ylable = '출력량'
         else:
             messagebox.showerror('선택 오류', '계측종류를 선택해주세요')
-        self._value = CsvCreate.create_csv(CsvCreate.Place_csv(self._plantname), str(self._day), str(self._data), self._i)
+        self._value = CsvCreate.TransF_Date(CsvCreate.Matching_Place_csv(self._plantname), str(self._day), str(self._data), self._i)

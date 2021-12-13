@@ -1,9 +1,8 @@
 ## 보고서 메뉴
 import tkinter as tk
 import tkinter.ttk as ttk
-import numpy as np
+from tkcalendar import DateEntry
 import pandas as pd
-import matplotlib.pyplot as plt
 from pandastable import Table
 
 ## 장소, 데이터 테이블, 데이터, 데이터 샘플
@@ -57,7 +56,7 @@ def btr_1():
 
 
 ## 출력 버튼 메소드
-def out_btr():
+def out_table():
     ##대신data 변수
     global data_table, df_jeongsun, df
 
@@ -117,15 +116,14 @@ op_btr = ttk.Button(frame_1_2, text="적용", command=btr_1, width=15)
 op_btr.pack(side="left", padx=5)
 
 ##출력 버튼 위젯 생성
-output_btr = ttk.Button(frame_1_2, text="출력", command=out_btr)
+output_btr = ttk.Button(frame_1_2, text="출력", command=out_table)
 output_btr.pack(side="right", padx=5)
 
 ##날짜 선택
 ##날짜입력 위젯생성
-day = "2019-08-01"
-day_selete = ttk.Entry(frame_1_2, textvariable=day, width=20)
-day_selete.insert(0, day)
+day_selete = DateEntry(frame_1_2, year=day.year, month=day.month, day= day.day ,date_pattern='yyyy/MM/dd', state="readonly")
 day_selete.pack(side="right")
+day_selete.bind("<<DateEntrySelected>>")
 
 ##lable 위젯 생성
 lable_name = ttk.Label(frame_1_2, text="날짜입력 : ")

@@ -1,27 +1,8 @@
 import pandas as pd
 import calendar
-
 import CsvData
-
-global  year, month, day, Date_list, Days
-# 표 컬럼중 인버터와 관련된 컬럼 리스트
 from pandas import DataFrame
-
-
-# 표 컬럼중 인버터에 대한 통계를 만들고 출력하는 함수
-def Invert(Data : pd.DataFrame) -> float:
-    __Fun: list = ["mean", "max", "min"]  # 통계를 내기위한 기능 리스트
-    __Inverts_list: list = ["인버터전압(R상)", "인버터전압(S상)", "인버터전압(T상)", "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)"]
-    Invert_list = {}
-    for i in __Inverts_list:
-
-        data = Data[i]
-        for __fun in __Fun:
-            globals()["data_{}".format(str(__fun))] = eval("data." + __fun + "()")
-        print(f'{i} 전체 평균 : {data_mean} 최대값 : {data_max} 최소값 : {data_min}')
-        Invert_list[i] = {data_mean, data_max, data_min}
-    print(Invert_list)
-    return Invert_list
+global  year, month, day, Date_list, Days
 
 #날짜를 리스트로 만드는 함수
 def Date_list(Data : pd.DataFrame) -> list:
@@ -95,19 +76,18 @@ def Next_Date(__Year : str,__Month : str, __Day):
     except:
         return False
 
-def create_csv(Data, Date, Type, Time):
-    if Time == 1 :
+def TransF_Date(Data, Date, Type, Time): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
+    if Time == 1 :# 예) 2021-08-01 그대로 사용
        pass
-    elif Time == 2 :
+    elif Time == 2 :# 예) 2021-08로 -01 제거
         Date = Date[0:-3]
-    elif Time == 3 :
+    elif Time == 3 :# 예) 2021로 -08-01 제거
         Date = Date[0:5]
-    data = Data[Data['측정일시'].str.contains(Date)]
+    data = Data[Data['측정일시'].str.contains(Date)]# 측정일시를 위 조건문에 설정된 대로 필터링
     result = CsvData.Data_list(data, Type, Time)
     return result
 
-def Place_csv(place_name):
-    # csv_files에 저장되어있는 csv파일을 불러오는 코드
+def Matching_Place_csv(place_name):# 메인에서 선택한 발전소 이름을 Place_넘버링에 맞춰서 찾는 함수
     for i in range(0, len(place_list)):
         if globals()["Place_{}".format(i)].iloc[1]['장소'] == place_name:
             return globals()["Place_{}".format(i)]
