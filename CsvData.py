@@ -5,9 +5,16 @@ from bs4 import BeautifulSoup
 
 import CsvCreate
 
+global temp_storage_df
+temp_storage_df = pd.DataFrame()
+
 pd.set_option('display.max_columns', None)
 pd.set_option('mode.chained_assignment',  None)
 
+def Csv_First_Date(plantname:str):
+    plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
+    Date = CsvCreate.Date_list(plant_df)
+    return Date[0]
 #그달의 마지막 일(day)를 출력하는 함수
 def Months(time):
     __month = time.month
@@ -71,10 +78,21 @@ def coll_S_R():
         print(__response.status_code)
 
 # CSV파일에서 시간('분'단위 까지), 발전소 이름 을 이용해 해당 시간의 데이터 행 불러와 검사.
-def GetInvertState(time, plantname):
+def GetInvertState(time:str, plantname:str):
+    global __temp_storage_df
     plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname) # 먼저 발전소 이름을 조회해서 몇번째 발전소 데이터프레임인지 확인
     try:
         live_checked_df: pd.DataFrame = plant_df[plant_df['측정일시'].str.contains(time)] #발전소 데이터프레임의 '측정일시'부분에서 시간 검사 후 확인
-        print(live_checked_df)
+        # print(live_checked_df)
+        if (live_checked_df.empty == False): #시간이 존재할 때
+            # temp_m = time[len(time)-2, len(time)]
+            # print(temp_m)
+            __temp_storage_df = live_checked_df.copy(deep=True)
+            print(__temp_storage_df)
+        elif(live_checked_df.empty == True): # 시간이 존재하지 않을 때
+            if(__temp_storage_df.empty == False): # 임시 저장 데이터프레임이 비어있지 않다면
+                print(__temp_storage_df)
+            elif(__temp_storage_df.empty == True): # 임시 저장 데이터프레임 조차도 비어있다면(처음 입력할 때 부터 존재하지 않는 시간)
+                pass
     except:
         print('Please check your time, in this version you can only use August and September informations')

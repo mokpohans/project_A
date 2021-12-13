@@ -6,6 +6,8 @@ import pandas as pd
 from pandastable import Table
 
 ## 장소, 데이터 테이블, 데이터, 데이터 샘플
+import CsvData
+
 global place_name, data_table, data, df_jeongsun, df
 
 ##테스트 데이터
@@ -67,7 +69,7 @@ def out_table():
     data_table = Table(frame_2, dataframe=df, height=600)
     data_table.show()
 
-
+day = CsvData.Csv_First_Date(place_name)
 ## 윈도우 생성
 menu2_window = tk.Tk()
 

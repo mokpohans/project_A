@@ -42,7 +42,7 @@ def Date_list(Data : pd.DataFrame) -> list:
             __month_list.append(time_1)
             conut = conut + 1
         (year, month, day)
-    Date_list.apNext_Datepend(__month_list)
+    Date_list.append(__month_list)
     return Date_list
 
 def Date_Day(Data : pd.DataFrame, Day):
