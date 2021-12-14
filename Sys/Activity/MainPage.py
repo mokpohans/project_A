@@ -11,6 +11,7 @@ import CsvData
 
 class Mainpage:
     _inverts = []
+    _generates = []
 
     def __init__(self, page):
         self._mainpage = page
@@ -54,16 +55,16 @@ class Mainpage:
         ### 메뉴 베이스 채우기
             # 메뉴 선택 레이블
         self.menu_label = ttk.Label(self.menu_base_Frame, width=self._window_width, background='ivory')
-        self.menus = adwz.linearmenu(self.menu_label, 3, texts=['계측정보', '보고서', '장애목록'])
+        self.menus = adwz.linearmenu(self.menu_label, 3, index='menus', texts=['계측정보', '보고서', '장애목록'])
 
         self.menu_label.pack(expand=True, anchor=tk.E, ipadx=100)
         self.menus.create()
 
         # self.menus.elementManipulate(index=0, command=None) # command에 들어갈 함수 만들어서 내용 수정할 것.
         # self.menus.elementManipulate(index=0, command=lambda: self.test_change())
-        self.menus.elementManipulate(index=0, command=self.Wake_MeasureInfo)
-        self.menus.elementManipulate(index=1, command=self.Wake_ReportInfo)
-        self.menus.elementManipulate(index=2, command=self.Wake_ErrorInfo)
+        self.menus.elementManipulate(index='menus', seq=0, command=self.Wake_MeasureInfo)
+        self.menus.elementManipulate(index='menus', seq=1, command=self.Wake_ReportInfo)
+        self.menus.elementManipulate(index='menus', seq=2, command=self.Wake_ErrorInfo)
 
         # print(f'in Minapage, locals() print : {locals()}')
 
@@ -150,10 +151,10 @@ class Mainpage:
 
             # 인덱스와 상태들 보이기
         self.generate_index_label = ttk.Label(self.generate_state_frame, background='#cfffe5') # 민트색 : #cfffe5
-        self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, texts=['', '일간', '월간', '누적'], width=1100, height=50)
-        self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, texts=['발전량', '0', '0', '0'], width=1100, height=50)
-        self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, texts=['발전금액', '0', '0', '0'], width=1100, height=50)
-        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, texts=['현재출력량', '0', '', ''], width=1100, height=50)
+        self.generate_indexs = adwz.linearmenu(self.generate_index_label, partitions=4, index='invert_indexs', texts=['', '일간', '월간', '누적'], width=1100, height=50)
+        self.generate_quanitiy_state = adwz.linearmenu(self.generate_quantity_label, partitions=4, index='발전량', texts=['발전량', '0', '0', '0'], width=1100, height=50)
+        self.generate_fee_state = adwz.linearmenu(self.generate_fee_label, partitions=4, index='발전금액', texts=['발전금액', '0', '0', '0'], width=1100, height=50)
+        self.generate_emit_state = adwz.linearmenu(self.generate_emit_label, partitions=4, index='현재출력량', texts=['현재출력량', '0', '', ''], width=1100, height=50)
 
         self.generate_index_label.grid(row=0, column=0)
         self.generate_quantity_label.grid(row=1, column=0)
@@ -249,16 +250,24 @@ class Mainpage:
     def test_live_timechecker(self):
         # print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
         # self._invert_R, self._invert_S, self._invert_T = CsvData.Get_RST_InvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        self._generates = CsvData.Get_Generate_State(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        print(self._generates)
+        #발전량, 발전금액, 출력량 부분
+        self.generate_quanitiy_state.elementManipulate(index='발전량', seq=1, text=self._generates[0])
+        self.generate_quanitiy_state.elementManipulate(index='발전량', seq=2, text=self._generates[3])
+        self.generate_quanitiy_state.elementManipulate(index='발전량', seq=3, text=self._generates[5])
+        self.generate_fee_state.elementManipulate(index='발전금액', seq=1, text=self._generates[1])
+        self.generate_fee_state.elementManipulate(index='발전금액', seq=2, text=self._generates[4])
+        self.generate_fee_state.elementManipulate(index='발전금액', seq=3, text=self._generates[6])
+        self.generate_emit_state.elementManipulate(index='현재출력량', seq=1, text=self._generates[2])
+
         self._inverts = CsvData.Get_RST_InvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
-        # self.invertor1_content.showcase_configure(index=self._invert_R)
-        # self.invertor2_content.showcase_configure(index=self._invert_S)
-        # self.invertor3_content.showcase_configure(index=self._invert_T)
-        # print(self._inverts)
-        # print(self._invert_R)
+        #인버터 상태표시등
         self.invertor1_content.showcase_configure(index=self._inverts[0])
         self.invertor2_content.showcase_configure(index=self._inverts[1])
         self.invertor3_content.showcase_configure(index=self._inverts[2])
 
+        # 약 20초마다 검사(딱 20초면 실행되는데 소모되는 시간때문에 문제가 생길 수 있음)
         self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
 
 
