@@ -212,13 +212,13 @@ class MeasureinfoPage:
     def _btn2(self):
         self._day = self._dayselect.get_date()
         if(self._measure_type_select.get() == '발전량'):
-            self._data = '인버팅후 금일발전량'
+            self._data = "인버팅후 금일발전량"
             self._Ylable = '발전량'
         elif(self._measure_type_select.get() == '발전금액'):
-            self._data = '인버팅후 누적발전량'
+            self._data = "인버팅후 누적발전량"
             self._Ylable = '발전 금액'
         elif(self._measure_type_select.get() == '출력량'):
-            self._data = '인버팅후 인버터전력'
+            self._data = "인버팅후 인버터전력"
             self._Ylable = '출력량'
         else:
             messagebox.showerror('선택 오류', '계측종류를 선택해주세요')

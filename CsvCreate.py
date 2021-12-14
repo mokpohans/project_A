@@ -77,7 +77,7 @@ def Next_Date(__Year : str,__Month : str, __Day): #날짜 리스트를 만들때
     except:
         return False
 
-def TransF_Date(Data, Date, Type, Time): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
+def TransF_Date(Data : pd.DataFrame, Date : str, Type : str, Time : int): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
     if Time == 1 :# 예) 2021-08-01 그대로 사용
        pass
     elif Time == 2 :# 예) 2021-08로 -01 제거
@@ -88,12 +88,26 @@ def TransF_Date(Data, Date, Type, Time): #캘린더에서 입력 받은 날짜�
     result = CsvData.Data_list(data, Type, Time)
     return result
 
-def Matching_Place_csv(place_name):# 메인에서 선택한 발전소 이름을 Place_넘버링에 맞춰서 찾는 함수
+def Matching_Place_csv(place_name :str):# 메인에서 선택한 발전소 이름을 Place_넘버링에 맞춰서 찾는 함수
     for i in range(0, len(place_list)):
         if globals()["Place_{}".format(i)].iloc[1]['장소'] == place_name:
             return globals()["Place_{}".format(i)]
         else:
             pass
+
+def Error_Table_Create(Data : DataFrame, type : int):
+    __Data = Data
+
+    if type == 1:
+        ## 외부온도와 묘듈온도 20도 이상 차이 모듈 과부화
+        condition = __Data["모듈온도(인버터단위)"] >= (__Data["외부온도(인버터단위)"] + 20)
+    elif type == 2:
+        ## 인버터 전류(R,S,T상 운정상태 오류)
+        condition = (__Data["인버터전류(R상)"] == 0) & (__Data["인버터전류(S상)"] == 0) & (__Data["인버터전류(T상)"] == 0) & (__Data["인버팅후 금일발전량"] > 0)
+    else:
+        return 0
+    result = __Data.loc[condition, :]
+    return result
 
 __temp_csv_1: DataFrame = pd.read_csv('Resources/csv_files/한국지역난방공사_인버터별 분단위 태양광발전 정보_20210831.csv',
                                       encoding='CP949')
@@ -117,4 +131,3 @@ for i in place:
 # 원본 CSV파일에서 발전소 위치 각각 표를 만듬
 for i in range(0, len(place_list)): # 원본파일이 데이터가 많아서 장소별로 DataFrame을 생성
     globals()["Place_{}".format(i)] = Orignal_CSV[Orignal_CSV.장소 == place_list[i]] # 자동변수할당 하여 Place_1, Place_2, ... , Place_10라는 Datafrrame 생성
-    # print(globals()[f"Place_{i}"])

@@ -30,7 +30,7 @@ def Months(time):
     return __time
 
 #그래프를 그리기위한 리스트 만드는 함수
-def Data_list(Data : pd.DataFrame, type, Time):
+def Data_list(Data : pd.DataFrame, type : str, Time : int):
     __temp_1 = []
     result = []
     __col = [str(type), '경사면일사량(인버터단위)', '수평면일사량(인버터단위)']
@@ -56,8 +56,7 @@ def Data_list(Data : pd.DataFrame, type, Time):
                 __temp_1.append(0)
             for j in range(1, len(__temp)):
                 __value = __temp[j] - __temp[0]
-                __result = (__value/1000) * (SR[0] + SR[1] + 1.0)
-                __temp_1.append(__result)
+                __temp_1.append(__value)
             result.append(__temp_1)
             return result
         else:
@@ -325,7 +324,7 @@ def Get_Generate_State(time:str, plantname:str):
                 0,0,0,0,0,0,0
                 return [D_gen_amount, D_gen_fee, D_emit_amount, M_gen_amount, M_gen_fee, AC_gen_amount, AC_gen_fee]
 
-def Trans_DF(Data, Date, Time): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
+def Trans_DF(Data: pd.DataFrame, Date : str, Time : int): #캘린더에서 입력 받은 날짜를 시간, 일간, 월간에 맞춰서 날짜변환하는 함수
     if Time == 1 :# 예) 2021-08-01 그대로 사용
        pass
     elif Time == 2 :# 예) 2021-08로 -01 제거
@@ -335,11 +334,25 @@ def Trans_DF(Data, Date, Time): #캘린더에서 입력 받은 날짜를 시간,
     data = Data[Data['측정일시'].str.contains(Date)]# 측정일시를 위 조건문에 설정된 대로 필터링
     return data
 
-def sampleing(Data, time):
+def sampleing(Data : pd.DataFrame, time : int):
     __Data = Data
     __time = ['1H', '1D', '1M']
     __val = ['first()', 'max()', 'mean()']
     __Data["측정일시"] = pd.to_datetime(__Data["측정일시"])
     __Data = eval('__Data.set_index("측정일시").resample(__time[time - 1]).' + __val[time - 1])
     __Data.reset_index(drop=False, inplace=True)
+    return __Data
+
+def filtering(Data : pd.DataFrame):
+    __Data = Data
+    __Data["측정일시"] = pd.to_datetime(__Data["측정일시"])
+    __Data.set_index("측정일시")
+
+def Period_Date(Data : pd.DataFrame, strat_day, end_day):
+    __strat_day = strat_day + " 00:00"
+    __end_day = end_day + " 00:00"
+    print(__strat_day, __end_day)
+    __tmep = Data
+    __tmep["측정일시"] = pd.to_datetime(__tmep["측정일시"])
+    __Data = __tmep[__tmep["측정일시"].isin(pd.date_range(__strat_day, __end_day, freq='1T'))]
     return __Data
