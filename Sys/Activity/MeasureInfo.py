@@ -131,7 +131,6 @@ class MeasureinfoPage:
                                     month=self._day.month, day=self._day.day, date_pattern='yyyy/MM/dd',
                                     state='readonly')
         self._dayselect.pack(side='right')
-        self._dayselect.bind("<<DataEntrySelected>>")
 
         ##날짜 선택 text
         self._textlabel = ttk.Label(self._timeconfigframe, text="날짜 입력 :")
