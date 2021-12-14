@@ -55,7 +55,7 @@ class ReportinfoPage:
 
         print(f'in MeasureInfo; plantname : {self._plantname} check')
         self.str = CsvData.Csv_First_Date(self._plantname)
-        self._day = datetime.strptime(self.str, '%Y-%m-%d')
+        self._day = datetime.strptime(self.str[0], '%Y-%m-%d')
 
     def operate(self):
         self._baseframe = ttk.Frame(self._window)
@@ -129,6 +129,7 @@ class ReportinfoPage:
         self._Date = self._day_select.get_date()
         self._temp = CsvData.Trans_DF(self._plant_df, str(self._Date),self._i)
         self._place = CsvData.sampleing(self._temp, self._i)
+
         self.out_table()
 
     def _Get_Data(self):
@@ -148,7 +149,8 @@ class ReportinfoPage:
             self.data_table.destroy()
         else:
             pass
-        self.data_table = Table(self._report_frame, dataframe=self._place[
-            ['측정일시', '인버터전류(R상)', '인버터전류(S상)', '인버터전류(T상)', '인버터주파수', '인버팅후 인버터전력', '인버팅후 금일발전량', '인버팅후 누적발전량',
-             '외부온도(인버터단위)', '모듈온도(인버터단위)', '경사면일사량(인버터단위)', '수평면일사량(인버터단위)']], height=600)
+        self.data_table = Table(self._report_frame, dataframe=self._place[['측정일시', '인버터전류(R상)', '인버터전류(S상)',
+                                                                           '인버터전류(T상)', '인버터주파수', '인버팅후 인버터전력',
+                                                                           '인버팅후 금일발전량', '인버팅후 누적발전량','외부온도(인버터단위)',
+                                                                           '모듈온도(인버터단위)', '경사면일사량(인버터단위)', '수평면일사량(인버터단위)']], height=600)
         self.data_table.show()

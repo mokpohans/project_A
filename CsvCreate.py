@@ -11,7 +11,7 @@ def Date_list(Data : pd.DataFrame) -> list:
     year, month, day = 0, 0, 0
     __date_lsit :list = ['year', 'month']
 
-    __Days= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, None]
+    Days= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, None]
     __month_list : list = []
     Date_list : list = []
 
@@ -24,10 +24,10 @@ def Date_list(Data : pd.DataFrame) -> list:
     globals()['date_{}'.format(j)].append(__date[-1]) # for 문에서 append를 할때 마지막 일짜가 추가 되지않는 부분이 있어서 추가 (예 : 8월 ,9월 이있으면 리스트에는 8월만 들어가 있음)
     __conut = 0
 
-    for val in range(0, len(date_1)*len(__Days) - 1):
+    for val in range(0, len(date_1)*len(Days) - 1):
 
         try:
-            Year, Month, Day = str(date_0[year]), str(date_1[month]).zfill(2), str(__Days[day]).zfill(2)
+            Year, Month, Day = str(date_0[year]), str(date_1[month]).zfill(2), str(Days[day]).zfill(2)
         except IndexError:
             if Next_Date(year, month, day):
                 pass
@@ -35,13 +35,14 @@ def Date_list(Data : pd.DataFrame) -> list:
                 break
         time_1 = Year + "-" + Month + "-" + Day  # 년, 월, 일을 2021-08-01로 만드는 코드
         if Month ==  str(date_1[__conut]).zfill(2):
-            Date_list.append(time_1)
+            __month_list.append(time_1)
         else:
             Date_list.append(__month_list)
             __month_list = [] #여기서 clear를 쓰지 않는 이유는 clear가 list =[] 보다 약간 느리기 때문이다
+            __conut = __conut + 1
             __month_list.append(time_1)
-            conut = conut + 1
-        (year, month, day)
+
+        Next_Date(year, month, day)
     Date_list.append(__month_list)
     return Date_list
 

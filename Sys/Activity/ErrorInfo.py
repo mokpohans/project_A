@@ -18,11 +18,6 @@ class ErrorInfoPage:
     _plantname = ''
     _plant_df: pd.DataFrame = None
 
-    # _default_time = None
-    # _default_time_year = None
-    # _default_time_month = None
-    # _default_time_day = None
-
     cal_start = 'start'
     cal_end = 'end'
 
@@ -30,7 +25,6 @@ class ErrorInfoPage:
     data = None
 
     font_path = "C:/Windows/Fonts/GULIM.TTC"
-    # font = font_manager.FontProperties(fname=font_path).get_name()
 
     def __init__(self, window, windowtitle='', pagetitle='', plantname=''):
         self._window = window
@@ -54,10 +48,11 @@ class ErrorInfoPage:
             self._window.title(self._windowtitle)
 
         print(f'in MeasureInfo; plantname : {self._plantname} check')
-        self._str = CsvData.Csv_First_Date(self._plantname)
-        self._start_dayatetime.strptime(self.str, '%Y-%m-%d')
-        self._str = CsvData.Csv_Last_Date(self._plantname)
-        self._end_day = datetime.strptime(self.str, '%Y-%m-%d')
+
+        self._st_time = CsvData.Csv_First_Date(self._plantname)
+        self._start_day = datetime.strptime(self._st_time[0], '%Y-%m-%d')
+        self._ed_time = CsvData.Csv_Last_Date(self._plantname)
+        self._end_day = datetime.strptime(self._ed_time[-1], '%Y-%m-%d')
 
     def operate(self):
         self._baseframe = ttk.Frame(self._window)
@@ -75,7 +70,7 @@ class ErrorInfoPage:
         self._title_frame.pack(side='top', padx=10, fill='x', expand=True)
 
         # 발전소 명시 라벨 생성
-        self._placename_label = ttk.Label(self._title_frame, text=self._plantname + ' 보고서')
+        self._placename_label = ttk.Label(self._title_frame, text=self._plantname + ' 오류 목록')
         self._placename_label.pack(anchor='center', ipadx=5, ipady=5, fill='both', expand=True)
         # 폰트, 위치 등 설정
         self._placename_label.config(anchor='center', font=(self.font_path, 24))
@@ -92,7 +87,6 @@ class ErrorInfoPage:
         ##날짜 범위 끝
         self._day_end = DateEntry(self._confirm_frame,year=self._end_day.year,month=self._end_day.month, day=self._end_day.day,
                                     date_pattern='yyyy/MM/dd',state="readonly")
-        self._day_end.insert(0, self.cal_end)
         self._day_end.pack(side="right")
 
         ## "~"
@@ -103,7 +97,6 @@ class ErrorInfoPage:
         ##날짜 범위 시작
         self._day_start = DateEntry(self._confirm_frame,year=self._start_day.year,month=self._start_day.month, day=self._start_day.day,
                                     date_pattern='yyyy/MM/dd',state="readonly")
-        self._day_start.insert(0, self.cal_start)
         self._day_start.pack(side="right")
 
         ## 텍스트 라벨 생성

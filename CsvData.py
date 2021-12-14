@@ -14,18 +14,12 @@ __temp_storage_df = pd.DataFrame()
 def Csv_First_Date(plantname:str): #csv에서 가장 빠른 날짜를 추출하는 함수
     plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
     Date = CsvCreate.Date_list(plant_df)
-    try:
-        return Date[0][0]
-    except:
-        return Date[0]
+    return Date[0]
 
 def Csv_Last_Date(plantname:str): #csv에서 가장 빠른 날짜를 추출하는 함수
     plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
     Date = CsvCreate.Date_list(plant_df)
-    try:
-        return Date[-1][-1]
-    except:
-        return Date[-1]
+    return Date[-1]
 
 #그달의 마지막 일(day)를 출력하는 함수
 def Months(time):
@@ -120,4 +114,8 @@ def Trans_DF(Data, Date, Time): #캘린더에서 입력 받은 날짜를 시간,
 def sampleing(Data, time):
     __Data = Data
     __time = ['1H', '1D', '1M']
-    __Data.set_index("측정일시").resample(__time[time]).first()
+    __val = ['first()', 'max()', 'mean()']
+    __Data["측정일시"] = pd.to_datetime(__Data["측정일시"])
+    __Data = eval('__Data.set_index("측정일시").resample(__time[time - 1]).' + __val[time - 1])
+    __Data.reset_index(drop=False, inplace=True)
+    return __Data
