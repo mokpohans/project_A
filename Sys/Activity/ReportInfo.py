@@ -133,7 +133,7 @@ class ReportinfoPage:
         self.out_table()
 
     def _Get_Data(self):
-        self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
+        self._Data = CsvCreate.Date_Day(self._plant_df, str(self._Date))
         try:
             if len(self._Data) == 0:
                 messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")

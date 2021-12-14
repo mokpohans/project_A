@@ -22,6 +22,9 @@ class ErrorInfoPage:
     cal_end = 'end'
 
     data_table = None
+    __temp_1 = None
+    __temp_2 = None
+    result = None
     data = None
 
     font_path = "C:/Windows/Fonts/GULIM.TTC"
@@ -79,9 +82,19 @@ class ErrorInfoPage:
         self._confirm_frame = ttk.Frame(self._title_base_frame)
         self._confirm_frame.pack(side="top", fill='both', expand=True, padx=10, pady=5)
 
+        self._error_select = ttk.Combobox(self._confirm_frame, values=['모듈 과부화', '인버터 운전상태 오류'], width=20)
+        self._error_select.set('오류 종류 선택')
+        self._error_select.configure(state='readonly')
+        self._error_select.pack(side='left', padx=5)
+
+        self._applybtn = ttk.Button(self._confirm_frame, text='적용', width=15, command=self._btn1)
+        self._applybtn.pack(side='left', padx=5)
+
+
+
         ## 날짜 입력 위젯 생성
             # 출력 버튼 위젯 생성
-        self._printbtn = ttk.Button(self._confirm_frame, text='출력')
+        self._printbtn = ttk.Button(self._confirm_frame, text='출력', command=self._Get_Data)
         self._printbtn.pack(side='right', padx=5)
 
         ##날짜 범위 끝
@@ -110,15 +123,33 @@ class ErrorInfoPage:
         self.data_table = Table(self._print_frame, dataframe=self._plant_df, height=600)
         self.data_table.show()
 
-    def _Get_Data(self):
-        self._Date = self._day_start.get_date()
-        self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
-        self._Date = self._day_start.get_date()
-        self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
-        try:
-            if len(self._Data) == 0:
-                messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
-        except TypeError:
-            messagebox.showerror("기간 오류", "해당 기간의 데이터가 없습니다.\n 다시 선택해주세요.")
+    def _btn1(self):
+        if (self._error_select.get() == '모듈 과부화'):
+            self._f = 1
+        elif (self._error_select.get() == '인버터 운전상태 오류'):
+            self._f = 2
         else:
-            self._out_btn()
+            messagebox.showerror('선택 오류', '오류 종류를 선택을 해주세요')
+
+
+    def _Get_Data(self):
+        self._start_Date = self._day_start.get_date()
+        self._end_Date = self._day_end.get_date()
+        self._btn1()
+        self._place = CsvData.Period_Date(self._plant_df, str(self._start_Date), str(self._end_Date))
+        self._error_table = CsvCreate.Error_Table_Create(self._place, self._f)
+        self.out_btr()
+
+        ## 출력 버튼 메소드
+    def out_btr(self):
+        ##대신data 변수
+        ## 테이블 지우기
+        self.data_table.clearTable()
+        self.data_table.destroy()
+
+        ##테이블 작성 부분
+        self.data_table = Table(self._print_frame, dataframe=self._error_table.loc[
+            : , ["측정일시", "장소", "인버터전류(R상)", "인버터전류(S상)", "인버터전류(T상)", "인버팅후 금일발전량", '외부온도(인버터단위)',
+                           '모듈온도(인버터단위)']], height=600)
+
+        self.data_table.show()
