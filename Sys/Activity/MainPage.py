@@ -10,6 +10,8 @@ from Sys.Activity import ErrorInfo as eri
 import CsvData
 
 class Mainpage:
+    _inverts = []
+
     def __init__(self, page):
         self._mainpage = page
         self._mainpage.grid_propagate(False)
@@ -191,18 +193,18 @@ class Mainpage:
                                                key_text='index', value_text='state', width=self._mainpage.winfo_width())
         self.invertor1_content = adwz.KVlabel(self.invertor_1_label, type='showcase', key_text='invertor 1',
                                               images=['./Resources/images/invertor_light/invertor_null.png',
-                                                      './Resources/images/invertor_light/invertor_red.png',
-                                                      './Resources/images/invertor_light/invertor_green.png'],
+                                                      './Resources/images/invertor_light/invertor_green.png',
+                                                      './Resources/images/invertor_light/invertor_red.png'],
                                               width=self._mainpage.winfo_width())
         self.invertor2_content = adwz.KVlabel(self.invertor_2_label, type='showcase', key_text='invertor 2',
                                               images=['./Resources/images/invertor_light/invertor_null.png',
-                                                      './Resources/images/invertor_light/invertor_red.png',
-                                                      './Resources/images/invertor_light/invertor_green.png'],
+                                                      './Resources/images/invertor_light/invertor_green.png',
+                                                      './Resources/images/invertor_light/invertor_red.png'],
                                               width=self._mainpage.winfo_width())
         self.invertor3_content = adwz.KVlabel(self.invertor_3_label, type='showcase', key_text='invertor 3',
                                               images=['./Resources/images/invertor_light/invertor_null.png',
-                                                      './Resources/images/invertor_light/invertor_red.png',
-                                                      './Resources/images/invertor_light/invertor_green.png'],
+                                                      './Resources/images/invertor_light/invertor_green.png',
+                                                      './Resources/images/invertor_light/invertor_red.png'],
                                               width=self._mainpage.winfo_width())
         self.moduletemper_content = adwz.KVlabel(self.module_temper_label, type='readonly',
                                                  key_text='module temperature', value_text='state', width=self._mainpage.winfo_width())
@@ -246,7 +248,17 @@ class Mainpage:
 # 테스팅
     def test_live_timechecker(self):
         # print(f"live time checking : {self.timepart.getTimeInfo()} & live location chekcing : {self.plant_choose.getPlantName()}")
-        self.checking = CsvData.GetInvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        # self._invert_R, self._invert_S, self._invert_T = CsvData.Get_RST_InvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        self._inverts = CsvData.Get_RST_InvertState(time=self.timepart.getTimeInfo(), plantname=self.plant_choose.getPlantName())
+        # self.invertor1_content.showcase_configure(index=self._invert_R)
+        # self.invertor2_content.showcase_configure(index=self._invert_S)
+        # self.invertor3_content.showcase_configure(index=self._invert_T)
+        # print(self._inverts)
+        # print(self._invert_R)
+        self.invertor1_content.showcase_configure(index=self._inverts[0])
+        self.invertor2_content.showcase_configure(index=self._inverts[1])
+        self.invertor3_content.showcase_configure(index=self._inverts[2])
+
         self.test_live_timecheck = self.content_base_Frame.after(980, self.test_live_timechecker)
 
 
