@@ -55,7 +55,7 @@ class ReportinfoPage:
 
         print(f'in MeasureInfo; plantname : {self._plantname} check')
         self.str = CsvData.Csv_First_Date(self._plantname)
-        self._day = datetime.strptime(self.str, '%Y-%m-%d')
+        self._day = datetime.strptime(self.str[0], '%Y-%m-%d')
 
     def operate(self):
         self._baseframe = ttk.Frame(self._window)
@@ -104,7 +104,6 @@ class ReportinfoPage:
                                     date_pattern='yyyy/MM/dd',
                                state="readonly")
         self._day_select.pack(side="right")
-        self._day_select.bind("<<DateEntrySelected>>")
 
             ##날짜입력 라벨 생성
         self._lable_name = ttk.Label(self._confirm_frame, text="날짜입력 : ")
@@ -128,11 +127,12 @@ class ReportinfoPage:
         else:
             messagebox.showerror('선택 오류', '기간 선택을 해주세요')
         self._Date = self._day_select.get_date()
-        self._place = CsvData.Trans_DF(self._plant_df, str(self._Date),self._i)
+        self._temp = CsvData.Trans_DF(self._plant_df, str(self._Date),self._i)
+        self._place = CsvData.sampleing(self._temp, self._i)
+
         self.out_table()
 
     def _Get_Data(self):
-        # print(self._Date)
         self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
         try:
             if len(self._Data) == 0:
@@ -143,13 +143,14 @@ class ReportinfoPage:
             self._btn1()
 
     def out_table(self):
-        ##대신data 변수
-
         ## 테이블 지우기
         if self.data_table != None:
             self.data_table.clearTable()
             self.data_table.destroy()
         else:
             pass
-        self.data_table = Table(self._report_frame, dataframe= self._place, height=600)
+        self.data_table = Table(self._report_frame, dataframe=self._place[['측정일시', '인버터전류(R상)', '인버터전류(S상)',
+                                                                           '인버터전류(T상)', '인버터주파수', '인버팅후 인버터전력',
+                                                                           '인버팅후 금일발전량', '인버팅후 누적발전량','외부온도(인버터단위)',
+                                                                           '모듈온도(인버터단위)', '경사면일사량(인버터단위)', '수평면일사량(인버터단위)']], height=600)
         self.data_table.show()
