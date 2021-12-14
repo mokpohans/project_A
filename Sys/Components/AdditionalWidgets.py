@@ -548,3 +548,16 @@ class KVlabel:  # 키-값 형태 레이블(인버터1 : 인버터1 상태 등의
 
     def create(self, padx=0, pady=0, ipadx=0, ipady=0):
         self._kvframe.pack(expand=True, padx=padx, pady=pady, ipadx=ipadx, ipady=ipady)
+
+    def showcase_configure(self, key_config='', image=None, images=[], index=0):
+        if(key_config != ''):
+            self._keypart.configure(text=key_config)
+        if(image != None):
+            self._image_uri = image
+            self._makeimage(image=self._image_uri, images=self._images_uri)
+            self._valuepart_imglabel.configure(image=self._image)
+        if(images):
+            self._images_uri = images
+            self._makeimage(image=self._image_uri, images=self._images_uri)
+            self._valuepart_imglabel.configure(image=self._images[index])
+        self._valuepart_imglabel.configure(image=self._images[index])
