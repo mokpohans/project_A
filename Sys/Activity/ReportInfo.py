@@ -132,7 +132,6 @@ class ReportinfoPage:
         self.out_table()
 
     def _Get_Data(self):
-        # print(self._Date)
         self._Data = CsvCreate.Date_Day(CsvCreate.Matching_Place_csv(self._plantname), str(self._Date))
         try:
             if len(self._Data) == 0:
@@ -143,8 +142,6 @@ class ReportinfoPage:
             self._btn1()
 
     def out_table(self):
-        ##대신data 변수
-
         ## 테이블 지우기
         if self.data_table != None:
             self.data_table.clearTable()

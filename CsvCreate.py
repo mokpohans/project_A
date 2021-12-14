@@ -45,7 +45,7 @@ def Date_list(Data : pd.DataFrame) -> list:
     Date_list.append(__month_list)
     return Date_list
 
-def Date_Day(Data : pd.DataFrame, Day):
+def Date_Day(Data : pd.DataFrame, Day): # Date를 읽어들어와서 기준 날짜로 필터링한다
     try:
         data = Data[Data['측정일시'].str.contains(Day)]
         if len(data.index) == 0:
@@ -55,7 +55,7 @@ def Date_Day(Data : pd.DataFrame, Day):
     except:
         return
 
-def Next_Date(__Year : str,__Month : str, __Day):
+def Next_Date(__Year : str,__Month : str, __Day): #날짜 리스트를 만들때 월의 마지막날 등에 맞춰 년, 월, 일을 설정하는 함수
     global year, month, day, Days
     try:
         if Days[__Day] == calendar.monthrange(date_0[year], date_1[month])[1] : # Day

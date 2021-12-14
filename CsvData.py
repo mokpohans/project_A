@@ -11,7 +11,7 @@ pd.set_option('mode.chained_assignment',  None)
 global __temp_storage_df
 __temp_storage_df = pd.DataFrame()
 
-def Csv_First_Date(plantname:str):
+def Csv_First_Date(plantname:str): #csv에서 가장 빠른 날짜를 추출하는 함수
     plant_df: pd.DataFrame = CsvCreate.Matching_Place_csv(plantname)
     Date = CsvCreate.Date_list(plant_df)
     return Date[0]
@@ -58,8 +58,8 @@ def Data_list(Data : pd.DataFrame, type, Time):
         result.append(__temp_1)
     return result
 
-def coll_S_R():
-    __url = 'https://www.kpx.or.kr/'
+def coll_S_R(): #한국 전력 거래소에서 금일 SMP과 REC 평균값을 가져온다
+    __url = 'https://www.kpx.or.kr/'#한국 전력 거래소 사이트 주소
     __response = requests.get(__url)
 
     if __response.status_code == 200:
