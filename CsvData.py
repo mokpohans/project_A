@@ -65,23 +65,34 @@ def Data_list(Data : pd.DataFrame, type : str, Time : int):
     return result
 
 def coll_S_R(): #한국 전력 거래소에서 금일 SMP과 REC 평균값을 가져온다
-    __url = 'https://www.kpx.or.kr/'#한국 전력 거래소 사이트 주소
-    __response = requests.get(__url)
+    __url_1 = 'https://new.kpx.or.kr/smpInland.es?mid=a10606080100&device=pc'
+    __url_2 = 'https://new.kpx.or.kr/powerDemandPerform.es?nPage=1&mid=a10606060000&keyField=&keyWord=&srh_sdate=&srh_edate='
+    __response1 = requests.get(__url_1)
+    __response2 = requests.get(__url_2)
 
-    if __response.status_code == 200:
-        __html = __response.text
-        __soup = BeautifulSoup(__html, 'html.parser')
-        __tSMP = __soup.select_one('#smp_01 > table > tbody > tr:nth-child(4) > td')
-        __tREC = __soup.select_one(
-            '#m_contents > div.m_cont_rg > div.m_today_rec > div.rec > table > tbody > tr:nth-child(3) > td')
+    if __response1.status_code == 200 and __response2.status_code == 200:
+        __html_1 = __response1.text
+        __soup_1 = BeautifulSoup(__html_1, 'html.parser')
+        __html_2 = __response2.text
+        __soup_2 = BeautifulSoup(__html_2, 'html.parser')
+
+        __tSMP = __soup_1.select_one(
+            '#contents_body > div.content_style > div.conTableGroup.scroll > table > tbody > tr:nth-child(27) > td:nth-child(8)')
         __SMP = __tSMP.get_text()
-        __temp = __tREC.get_text()
-        __REC = __temp.replace(" ", "")
-        __REC = __REC.replace(",", "")
+        __tREC_1 = __soup_2.select_one(
+            '#contents_body > div > div.conTableGroup.scroll > table > tbody > tr:nth-child(1) > td:nth-child(3)')
+        __tREC_2 = __soup_2.select_one(
+            '#contents_body > div > div.conTableGroup.scroll > table > tbody > tr:nth-child(1) > td:nth-child(4)')
+        __REC_1 = __tREC_1.get_text()
+        __REC_2 = __tREC_2.get_text()
+        __REC = int(__REC_1.replace(",", "")) - int(__REC_2.replace(",", ""))
         result = [float(__SMP), float(__REC)]
         return result
+
     else:
-        print(__response.status_code)
+        print(__response1.status_code)
+        print(__response2.status_code)
+
 
 # CSV파일에서 시간('분'단위 까지), 발전소 이름 을 이용해 해당 시간의 데이터 행 불러와 검사.
 def Get_RST_InvertState(time:str, plantname:str):
